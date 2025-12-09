@@ -1,0 +1,38 @@
+[31-Mar-2014 20:11:05 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 42
+[31-Mar-2014 20:14:22 UTC] PHP Warning:  require_once(/home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email../../wp-includes/plugin.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 2
+[31-Mar-2014 20:14:22 UTC] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required '/home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email../../wp-includes/plugin.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 2
+[31-Mar-2014 20:15:08 UTC] PHP Fatal error:  Call to undefined function add_shortcode() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 312
+[31-Mar-2014 20:16:39 UTC] PHP Fatal error:  Class 'WP_Widget' not found in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 1345
+[31-Mar-2014 20:18:25 UTC] PHP Fatal error:  Class 'WP_Widget' not found in /home/mobilem/public_html/luxurydaily/wp-includes/default-widgets.php on line 14
+[31-Mar-2014 22:05:15 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 46
+[31-Mar-2014 22:11:13 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 46
+[31-Mar-2014 22:26:04 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 46
+[31-Mar-2014 22:36:35 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[01-Apr-2014 09:27:40 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[01-Apr-2014 16:00:20 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[06-Apr-2014 16:35:39 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[09-Apr-2014 19:07:56 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[10-Apr-2014 06:09:19 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[13-Apr-2014 19:43:15 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[15-Apr-2014 13:58:38 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[19-Apr-2014 03:33:24 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[24-Apr-2014 10:50:30 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[25-Apr-2014 09:36:59 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[25-Apr-2014 10:36:17 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[26-Apr-2014 02:33:15 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[27-Apr-2014 18:18:38 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[02-May-2014 18:17:14 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[04-May-2014 10:20:43 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[04-May-2014 19:50:13 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[07-May-2014 17:53:32 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[11-May-2014 00:23:48 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[12-May-2014 16:13:26 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[14-May-2014 07:48:37 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[15-May-2014 09:03:45 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[17-May-2014 16:31:05 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[17-May-2014 16:38:03 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[20-May-2014 23:58:31 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[29-May-2014 00:22:25 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[30-May-2014 23:03:17 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[01-Jun-2014 15:33:17 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47
+[03-Jun-2014 07:25:25 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/mobilem/public_html/luxurydaily/wp-content/plugins/wp-email/wp-email.php on line 47

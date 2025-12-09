@@ -1,0 +1,23 @@
+body{overflow-y: hidden;}
+
+body .pdf{display: block;}
+
+hr, .navbar, .promo, .col-lg-1, .tools, .like-this, .navigation, .related, footer, .sidebar, .band-container{display:none;}
+
+.promo, .band-container{position: absolute; top: -999999px}
+
+.pdf-header{padding: 10px 10px 10px 10px;}
+
+/*.pdf-header img{display: block; margin-top: 30px;}*/
+
+.pdf-header div{padding-top: 10px;}
+
+/*img{display: block; border: 1px solid #000;}*/
+
+#logo{display:none;}
+
+.headline-list.main ul li img, a.img-container.main img, .newsbox a.img-container img {
+
+    max-height: 100%;
+
+}

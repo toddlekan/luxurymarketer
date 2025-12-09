@@ -1,0 +1,36 @@
+[09-Dec-2012 21:44:30 UTC] PHP Fatal error:  SOAP-ERROR: Parsing WSDL: Couldn't load from 'http://store5.toddlekan5.vm-host.net/api/soap?wsdl' : failed to load external entity "http://store5.toddlekan5.vm-host.net/api/soap?wsdl"
+ in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php on line 2
+[09-Dec-2012 21:44:30 UTC] PHP Fatal error:  Uncaught SoapFault exception: [WSDL] SOAP-ERROR: Parsing WSDL: Couldn't load from 'http://store5.toddlekan5.vm-host.net/api/soap?wsdl' : failed to load external entity "http://store5.toddlekan5.vm-host.net/api/soap?wsdl"
+ in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php:2
+Stack trace:
+#0 /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php(2): SoapClient->SoapClient('http://store5.t...')
+#1 {main}
+  thrown in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php on line 2
+[09-Dec-2012 21:44:44 UTC] PHP Fatal error:  SOAP-ERROR: Parsing WSDL: Couldn't load from 'https://store5.toddlekan5.vm-host.net/api/soap?wsdl' : failed to load external entity "https://store5.toddlekan5.vm-host.net/api/soap?wsdl"
+ in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php on line 2
+[09-Dec-2012 21:44:44 UTC] PHP Fatal error:  Uncaught SoapFault exception: [WSDL] SOAP-ERROR: Parsing WSDL: Couldn't load from 'https://store5.toddlekan5.vm-host.net/api/soap?wsdl' : failed to load external entity "https://store5.toddlekan5.vm-host.net/api/soap?wsdl"
+ in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php:2
+Stack trace:
+#0 /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php(2): SoapClient->SoapClient('https://store5....')
+#1 {main}
+  thrown in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php on line 2
+[09-Dec-2012 21:45:31 UTC] PHP Fatal error:  SOAP-ERROR: Parsing WSDL: Couldn't load from 'https://store5.toddlekan5.vm-host.net/magento/api/soap?wsdl' : failed to load external entity "https://store5.toddlekan5.vm-host.net/magento/api/soap?wsdl"
+ in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php on line 2
+[09-Dec-2012 21:45:31 UTC] PHP Fatal error:  Uncaught SoapFault exception: [WSDL] SOAP-ERROR: Parsing WSDL: Couldn't load from 'https://store5.toddlekan5.vm-host.net/magento/api/soap?wsdl' : failed to load external entity "https://store5.toddlekan5.vm-host.net/magento/api/soap?wsdl"
+ in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php:2
+Stack trace:
+#0 /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php(2): SoapClient->SoapClient('https://store5....')
+#1 {main}
+  thrown in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php on line 2
+[09-Dec-2012 21:46:23 UTC] PHP Fatal error:  Uncaught SoapFault exception: [2] Access denied. in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php:6
+Stack trace:
+#0 /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php(6): SoapClient->__call('login', Array)
+#1 /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php(6): SoapClient->login('plugin', 'ksed4mS#')
+#2 {main}
+  thrown in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php on line 6
+[09-Dec-2012 21:49:16 UTC] PHP Fatal error:  Uncaught SoapFault exception: [2] Access denied. in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php:6
+Stack trace:
+#0 /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php(6): SoapClient->__call('login', Array)
+#1 /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php(6): SoapClient->login('plugin', 'ksed4mS#')
+#2 {main}
+  thrown in /home/mobilem/public_html/luxurydaily/wp-content/plugins/magento/test/connect.php on line 6

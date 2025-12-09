@@ -1,0 +1,139 @@
+.mobile{display:block;}
+.mobile.divider{    height: 10px; clear: both;}
+
+body{padding-top:0px;}
+
+.navbar, .navbar-form {
+    border: 0px solid transparent;
+    margin-bottom: 2px;
+}
+
+.search form div, #mw-sub-cont form div {
+    border: 0px solid #ececec!important;
+}
+
+.navbar.navbar-default.navbar-fixed-top{position: relative;}
+
+.form-control {
+    width: 300px;
+}
+
+.no-bullet.mobile-menu li{padding-bottom: 3px;}
+
+#logo{display: none;}
+
+#logo-mobile{display: block; width:230px; margin: 12px auto 15px auto;}
+
+#logo-mobile img{width:230px;}
+
+.initials{display: none;}
+
+.magnify{
+
+	position: absolute; top: 0; right: 5px; width: 36px; height: 32px;
+	border: 0px solid #e8e8e8;
+    background-color: transparent;
+	margin-top: 9px;
+    border-radius: 4px;
+}
+
+.magnify .magnify-inner{
+	width: 17px;
+	height: 16px;
+    background: url('../img/mobile/glass-grey.png') no-repeat 0 0px;
+	margin-left: -1px;
+    margin-top: -3px;
+}
+
+.magnify.red .magnify-inner{
+	background: url('../img/mobile/glass-red.png') no-repeat 0 0px;
+
+}
+
+.rss, .make-us{display:none;}
+
+
+
+.navbar-collapse.collapse.in {
+  display: block!important;
+}
+
+
+.lead-story h2{font-size: 21px; padding-top: 3px;}
+
+.comment-button, .comment-link{display: none;}
+
+/*.section.videos, .section.photos, .sidebar-videos{display: none;}
+
+.section.videos.main{display: block;}
+
+.section.photos{display: none;}
+*/
+
+#mobile-sub-menu{display: block; border-top: 1px solid #f3f3f3;}
+
+#popular-mobile{color: #1169aa; font-family: Verdana,Geneva,Tahoma,sans-serif; font-size: 12px;}
+
+.popular-inner ul{list-style-type: none; margin-left: -13px;}
+
+#date-mobile{display: block; width: 120px; margin: 3px auto 15px auto; color: #444444; font-family: Verdana,Geneva,Tahoma,sans-serif; font-size: 12px; font-weight: normal;}
+
+.label.subscribe{
+  display: block;
+  margin-bottom: 7px;
+}
+
+.label.subscribe a{color: #1169aa; font-family: Verdana,Geneva,Tahoma,sans-serif; font-size: 12px;}
+
+.page-header.logo {
+	border-top: 2px solid #f3f3f3;
+    border-bottom: 0px solid #f3f3f3;
+    padding-top: 0px;
+}
+
+.col-lg-8, .col-lg-4{padding-left: 5px;}
+
+.lead-story ul {
+    margin-left: 15px;
+}
+
+.newsbox a.img-container {
+    text-align: left;
+}
+
+.photos .headline-list.main ul, .videos .headline-list.main ul {
+    padding-left: 5px;
+}
+
+.headline-list .heading {
+    margin-top: 25px;
+    margin-left: 5px;
+}
+
+.sidebar ol, .sidebar ul{margin-left: -20px;}
+
+.viewer {
+    margin-left: 0;
+}
+
+/*IMAGES*/
+
+html, body{
+
+    overflow-x:hidden;
+    width:100%;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+body{position: relative;}
+
+body:not(.pdf) .headline-list.main ul li img, body:not(.pdf) a.img-container.main img, body:not(.pdf) .newsbox a.img-container img {
+	visibility: hidden;
+	max-width: inherit;
+    max-height: inherit;
+
+}
+
+footer{border: 1px solid #fff;}

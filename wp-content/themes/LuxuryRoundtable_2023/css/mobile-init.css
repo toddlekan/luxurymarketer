@@ -1,0 +1,33 @@
+#logo-mobile, #mobile-sub-menu{display: none;}
+.fold{margin-bottom: 0;}
+.mobile{display:none;}
+
+@media only screen and (max-width: 728px) {
+
+  .container.main .section.main .headline-list.main {
+    margin-left: -20px;
+  }
+
+  .container.main .section.main .headline-list.main .mobile.newsbox{
+    display: block;
+    padding-top: 10px;
+    top: 10px;
+  }
+
+  .container.main .section.main .headline-list.main .desktop.newsbox{
+    display: none;
+  }
+
+  .container.main .section.main.desktop{
+    display: none;
+  }
+
+  .container.main .section.categories.mobile{
+    display: block;
+  }
+
+  .container.main .section.categories.mobile a.reverse.first{
+    font-size: 22px;
+  }
+
+}

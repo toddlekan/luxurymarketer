@@ -1,0 +1,154 @@
+/* =Reset default browser CSS. Based on work by Eric Meyer: http://meyerweb.com/eric/tools/css/reset/index.html
+-------------------------------------------------------------- */
+/*
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	background: transparent;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	vertical-align: baseline;
+}
+
+a, a span{zoom:1; cursor:pointer;}
+
+
+h1, h2, h3, h4, h5, h6 {
+	clear: both;
+	font-weight: normal;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote {
+	quotes: none;
+}
+blockquote:before, blockquote:after {
+	content: '';
+	content: none;
+}
+del {
+	text-decoration: line-through;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+a img {
+	border: none;
+	vertical-align: bottom;
+}
+
+body {
+	line-height: 1;
+}*/
+
+ul.clr{list-style-type: none; clear: both;}
+ul.clr:after { content:"."; display:block; clear:both; visibility:hidden; line-height:0; height:0;}
+ul.clr li{float: left;}
+
+#ajax_loader{}
+
+.ui-widget-overlay{
+
+    background:none repeat scroll 0 0 #000000;
+    height:300%;
+    left:0;
+    opacity:0.7;
+    position:absolute;
+    top:0;
+    width:100%;
+    z-index:2010;
+}
+
+.magento .heading {
+	border-bottom: 4px solid #F3F3F3;
+	margin-bottom: 0.8em;
+	padding-bottom: 0.4em;
+}
+
+.magento .heading .title{color:#EC1D25;font-family:Rockwell;font-weight:bold;}
+
+.magento .details li{margin-bottom: 3px;}
+
+.magento .errors{margin-top: 10px;}
+
+.magento .errors div{color: red; font-weight: bold;}
+
+.magento .errors .requiredLabelRight{display: none;}
+
+.magento #processing{color: green; display:none;}
+
+.magento #processing .text{padding: 10px 0 0 0;}
+
+.magento fieldset{margin:0 0 10px 0;}
+
+.magento legend, .magento .legend {
+    color: gray;
+    font-size: 1.3em;
+    margin: 0 0 10px;
+    padding: 1em 0 0;
+    text-indent: 0;
+}
+
+.magento ul{margin-left: -36px;}
+.magento ul.slide-right{margin-left: 0;}
+
+/*.magento ul{margin-left: 0;}*/
+
+/*.magento #cc_exp_month, .magento #cc_cid {
+    margin-left: 36px;
+}*/
+
+.magento label, .magento button, .magento img{display:block; float:none; margin: 10px 0;}
+
+.magento img{border:none;}
+
+.magento input, .magento select{float: none; width: 300px; border: 1px solid gray;}
+
+.magento #cc_exp_year{width: 100px;}
+
+.magento #cc_exp_month{width: 100px;}
+
+.magento #cc_cid{width: 100px;}
+
+.magento .cvv-what-is-this{
+	cursor: help;
+    font-size: 11px;
+    margin-left: 10px;
+	color: #1E7EC8;
+    text-decoration: underline;
+}
+
+.tool-tip {
+    background: none repeat scroll 0 0 #EAF6FF;
+    border: 1px solid #7BA7C9;
+    padding: 15px 20px;
+    position: absolute;
+    z-index: 9999;
+}
+
+.tool-tip .btn-close a {
+    background: url("/wp-content/themes/LD2016/img/btn_window_close.gif") no-repeat scroll 100% 0 transparent;
+    display: block;
+    height: 15px;
+    margin: 0 0 0 auto;
+    overflow: hidden;
+    text-align: left;
+    text-indent: -999em;
+    width: 15px;
+    color: #1E7EC8;
+    text-decoration: underline;
+}
+
+.magento .paragraph div{margin: 3px 0;}
+
+.magento .paragraph{margin: 10px 0;}

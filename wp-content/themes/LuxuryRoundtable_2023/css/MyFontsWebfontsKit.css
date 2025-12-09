@@ -1,0 +1,115 @@
+/**
+ * @license
+ * MyFonts Webfont Build ID 3726702, 2019-02-27T16:50:07-0500
+ * 
+ * The fonts listed in this notice are subject to the End User License
+ * Agreement(s) entered into by the website owner. All other parties are 
+ * explicitly restricted from using the Licensed Webfonts(s).
+ * 
+ * You may obtain a valid license at the URLs below.
+ * 
+ * Webfont: CheltenhamStd-Bold by ITC
+ * URL: https://www.myfonts.com/fonts/itc/cheltenham/std-bold/
+ * Copyright: Copyright &#x00A9; 1986, 1990, 2001 Adobe Systems Incorporated.  All Rights Reserved.
+ * Licensed pageviews: 500,000
+ * 
+ * Webfont: CheltenhamStd-BoldItalic by ITC
+ * URL: https://www.myfonts.com/fonts/itc/cheltenham/std-bold-italic/
+ * Copyright: Copyright &#x00A9; 1986, 1990, 2001 Adobe Systems Incorporated.  All Rights Reserved.
+ * Licensed pageviews: 250,000
+ * 
+ * Webfont: CheltenhamStd-Book by ITC
+ * URL: https://www.myfonts.com/fonts/itc/cheltenham/std-book/
+ * Copyright: Copyright &#x00A9; 1986, 1990, 2001, 2002 Adobe Systems Incorporated.  All Rights Reserved.
+ * Licensed pageviews: 250,000
+ * 
+ * Webfont: CheltenhamStd-BookItalic by ITC
+ * URL: https://www.myfonts.com/fonts/itc/cheltenham/std-book-italic/
+ * Copyright: Copyright &#x00A9; 1986, 1990, 2001 Adobe Systems Incorporated.  All Rights Reserved.
+ * Licensed pageviews: 250,000
+ * 
+ * Webfont: CheltenhamStd-Light by ITC
+ * URL: https://www.myfonts.com/fonts/itc/cheltenham/std-light/
+ * Copyright: Copyright &#x00A9; 1990, 2001 Adobe Systems Incorporated.  All Rights Reserved.
+ * Licensed pageviews: 500,000
+ * 
+ * Webfont: CheltenhamStd-LightItalic by ITC
+ * URL: https://www.myfonts.com/fonts/itc/cheltenham/std-light-italic/
+ * Copyright: Copyright &#x00A9; 1990, 2001 Adobe Systems Incorporated.  All Rights Reserved.
+ * Licensed pageviews: 500,000
+ * 
+ * Webfont: CheltenhamStd-Ultra by ITC
+ * URL: https://www.myfonts.com/fonts/itc/cheltenham/std-ultra/
+ * Copyright: Copyright &#x00A9; 1990, 2001 Adobe Systems Incorporated.  All Rights Reserved.
+ * Licensed pageviews: 250,000
+ * 
+ * Webfont: CheltenhamStd-UltraItalic by ITC
+ * URL: https://www.myfonts.com/fonts/itc/cheltenham/std-ultra-italic/
+ * Copyright: Copyright &#x00A9; 1990, 2001 Adobe Systems Incorporated.  All Rights Reserved.
+ * Licensed pageviews: 250,000
+ * 
+ * 
+ * License: https://www.myfonts.com/viewlicense?type=web&buildid=3726702
+ * 
+ * © 2019 MyFonts Inc
+*/
+
+
+/* @import must be at top of file, otherwise CSS will not work */
+@import url("//hello.myfonts.net/count/38dd6e");
+
+
+@font-face {
+    font-family: 'CheltenhamStd-Bold';
+    src: url('webfonts/38DD6E_0_0.eot');
+    src: url('webfonts/38DD6E_0_0.eot?#iefix') format('embedded-opentype'), url('webfonts/38DD6E_0_0.woff2') format('woff2'), url('webfonts/38DD6E_0_0.woff') format('woff'), url('webfonts/38DD6E_0_0.ttf') format('truetype');
+}
+
+
+@font-face {
+    font-family: 'CheltenhamStd-BoldItalic';
+    src: url('webfonts/38DD6E_1_0.eot');
+    src: url('webfonts/38DD6E_1_0.eot?#iefix') format('embedded-opentype'), url('webfonts/38DD6E_1_0.woff2') format('woff2'), url('webfonts/38DD6E_1_0.woff') format('woff'), url('webfonts/38DD6E_1_0.ttf') format('truetype');
+}
+
+
+@font-face {
+    font-family: 'CheltenhamStd-Book';
+    src: url('webfonts/38DD6E_2_0.eot');
+    src: url('webfonts/38DD6E_2_0.eot?#iefix') format('embedded-opentype'), url('webfonts/38DD6E_2_0.woff2') format('woff2'), url('webfonts/38DD6E_2_0.woff') format('woff'), url('webfonts/38DD6E_2_0.ttf') format('truetype');
+}
+
+
+@font-face {
+    font-family: 'CheltenhamStd-BookItalic';
+    src: url('webfonts/38DD6E_3_0.eot');
+    src: url('webfonts/38DD6E_3_0.eot?#iefix') format('embedded-opentype'), url('webfonts/38DD6E_3_0.woff2') format('woff2'), url('webfonts/38DD6E_3_0.woff') format('woff'), url('webfonts/38DD6E_3_0.ttf') format('truetype');
+}
+
+
+@font-face {
+    font-family: 'CheltenhamStd-Light';
+    src: url('webfonts/38DD6E_4_0.eot');
+    src: url('webfonts/38DD6E_4_0.eot?#iefix') format('embedded-opentype'), url('webfonts/38DD6E_4_0.woff2') format('woff2'), url('webfonts/38DD6E_4_0.woff') format('woff'), url('webfonts/38DD6E_4_0.ttf') format('truetype');
+}
+
+
+@font-face {
+    font-family: 'CheltenhamStd-LightItalic';
+    src: url('webfonts/38DD6E_5_0.eot');
+    src: url('webfonts/38DD6E_5_0.eot?#iefix') format('embedded-opentype'), url('webfonts/38DD6E_5_0.woff2') format('woff2'), url('webfonts/38DD6E_5_0.woff') format('woff'), url('webfonts/38DD6E_5_0.ttf') format('truetype');
+}
+
+
+@font-face {
+    font-family: 'CheltenhamStd-Ultra';
+    src: url('webfonts/38DD6E_6_0.eot');
+    src: url('webfonts/38DD6E_6_0.eot?#iefix') format('embedded-opentype'), url('webfonts/38DD6E_6_0.woff2') format('woff2'), url('webfonts/38DD6E_6_0.woff') format('woff'), url('webfonts/38DD6E_6_0.ttf') format('truetype');
+}
+
+
+@font-face {
+    font-family: 'CheltenhamStd-UltraItalic';
+    src: url('webfonts/38DD6E_7_0.eot');
+    src: url('webfonts/38DD6E_7_0.eot?#iefix') format('embedded-opentype'), url('webfonts/38DD6E_7_0.woff2') format('woff2'), url('webfonts/38DD6E_7_0.woff') format('woff'), url('webfonts/38DD6E_7_0.ttf') format('truetype');
+}
