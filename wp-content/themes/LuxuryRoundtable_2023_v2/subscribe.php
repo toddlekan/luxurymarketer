@@ -60,7 +60,7 @@ header("Location: $redirect");
 include(dirname(__FILE__)."/MailChimp.php");
 use \DrewM\MailChimp\MailChimp;
 
-$MailChimp = new MailChimp('getenv('MAILCHIMP_API_KEY') ?: 'YOUR_MAILCHIMP_API_KEY_HERE'');
+$MailChimp = new MailChimp(getenv('MAILCHIMP_API_KEY') ?: 'YOUR_MAILCHIMP_API_KEY_HERE');
 
 $list_id = 'e40241a98c';
 
