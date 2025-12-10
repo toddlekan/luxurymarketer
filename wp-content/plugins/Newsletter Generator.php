@@ -69,7 +69,7 @@ $text=rtrim($text);
  echo "
 <ol>
 	<li>1) Copy the Newsletter HTML Above</li>
-	<li>2) Create a New Page <strong><a href=\"https://www.luxuryroundtable.com/wp-admin/post-new.php?post_type=page\">here</a></strong>,  Input the Newsletter Title and Paste the Newsletter HTML</li>
+	<li>2) Create a New Page <strong><a href=\"/wp-admin/post-new.php?post_type=page\">here</a></strong>,  Input the Newsletter Title and Paste the Newsletter HTML</li>
 	<li>3) In the right sidebar \"Attributes\" select \"Newsletter Archive\" for the Parent and  \"Newsletter Archive Placeholder\" for the Template</li>
 	<li>4) Publish</li>
 </ol> </div></td></tr></table> ";
@@ -86,7 +86,7 @@ $text=rtrim($text);
 
  echo "<h2>Newsletter Preview</h2>";
  echo "<p>Use this preview to check that the ads and articles are as expected.</p>";
- echo "<iframe style='width:1200px;height:400px' src='https://www.luxuryroundtable.com/newsletter-preview/?".time()."'></iframe</div>>";
+ echo "<iframe style='width:1200px;height:400px' src='/newsletter-preview/?".time()."'></iframe</div>>";
 
  echo "</div>";
 

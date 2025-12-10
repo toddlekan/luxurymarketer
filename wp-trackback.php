@@ -1,4 +1,4 @@
-<?php
+f<?php
 /**
  * Handle Trackbacks and Pingbacks Sent to WordPress
  *

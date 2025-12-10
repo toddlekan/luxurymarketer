@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Luxury Roundtable</title>
+<title>Luxury Marketer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="shortcut icon" href="<?=ld16_cdn($url_root) ?>/favicon.ico" type="image/x-icon" />
