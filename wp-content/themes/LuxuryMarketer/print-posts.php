@@ -52,12 +52,12 @@ $url_root = get_template_directory_uri();
 			<span id="mobile-back" class="mobile-back" style="top:0px; margin-top:10px;">
 				<div class="glyphicon glyphicon-menu-left"></div>
 			</span>
-			<img style="float:right; margin-right:15px; margin-top:15px; width:180px; height:auto;" width="180" src=<?php echo $url_root . "/img/LuxuryRoundtable.png" ?> />
+			<img style="float:right; margin-right:15px; margin-top:15px; width:180px; height:auto;" width="180" src=<?php echo $url_root . "/img/LuxuryMarketer.png" ?> />
 		</div>
 	<?php
 	} else {
 	?>
-		<center><img width="400" src=<?php echo $url_root . "/img/LuxuryRoundtable.png" ?> /></center>
+		<center><img width="400" src=<?php echo $url_root . "/img/LuxuryMarketer.png" ?> /></center>
 	<?php
 	}
 	?>

@@ -605,7 +605,7 @@ if (array_key_exists('date', $_GET)) {
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/subscription-form/">Free Newsletter</a> |
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/category/luxury-class">Luxury Class</a> |
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/partners/">Partners</a> |
-                          <a style="text-decoration:none;" target="_blank" href="https://join.luxurymarketer.com/LXR/?f=paid">JOIN</a> |
+                          <a style="text-decoration:none;" target="_blank" href="https://www.cambeywest.com/subscribe2/?p=LXM&f=paid">SUBSCRIBE</a> |
                         </p>
 
 
@@ -651,7 +651,7 @@ if (array_key_exists('date', $_GET)) {
 
                           <br />
 
-                          590 Madison Avenue, 21st Floor, New York, NY 10022
+                          1100 Madison Avenue, Ste. 10F, New York, NY 10028
 
                         </p>
 

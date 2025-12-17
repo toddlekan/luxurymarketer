@@ -163,10 +163,10 @@ $url_root = get_template_directory_uri();
                       <li class="reverse"><a href="/category/research/fashion-and-leather-goods" class="grey">Fashion &amp; Leather Goods</a></li>
                       <li class="reverse"><a href="/category/research/real-estate" class="grey">Real Estate &amp; Design</a></li>
                       <li class="reverse"><a href="/category/research/retail" class="grey">Retail</a></li>
-                      <li class="reverse"><a href="/category/research/cars-jets-and-yachts/">Cars, jets and yachts</a></li>
-                      <li class="reverse"><a href="/category/research/travel-and-hospitality/" title="View all posts filed under Travel and hospitality">Travel and hospitality</a></li>
-                      <li class="reverse"><a href="/category/research/watches-and-jewelry/" title="View all posts filed under Watches and jewelry">Watches and jewelry</a></li>
-                      <li class="reverse"><a href="/category/research/wealth-management/" title="View all posts filed under Wealth management">Wealth management</a></li>
+                      <li class="reverse"><a href="/category/research/cars-jets-and-yachts/">Cars, Jets &amp; Yachts</a></li>
+                      <li class="reverse"><a href="/category/research/travel-and-hospitality/" title="View all posts filed under Travel and hospitality">Travel &amp; Hospitality</a></li>
+                      <li class="reverse"><a href="/category/research/watches-and-jewelry/" title="View all posts filed under Watches and jewelry">Watches &amp; Jewelry</a></li>
+
                       <li class="reverse"><a href="/category/research">Research</a></li>
                       <li class="reverse"><a href="/category/news/columns">Columns</a></li>
                       <li><a href="/category/networking-and-events">Events</a></li>
@@ -203,16 +203,37 @@ $url_root = get_template_directory_uri();
             </center>
           </div>
           <div class="col-lg-2 logo-side">
-              <br />
 
+
+              <br />
               <ul class="nav navbar-nav" style="float: right;">
+                
                 <li class="label subscribe">
 
-                  <a class="sign-in-subscribe loggedout pop-subscribe grey bold" href="/subscription-form" style="">
-                    Subscribe</a>
+                  <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="" style="color: #000;">
+                    Log In &nbsp;</a>
+                </li>
+                <li class="label subscribe">
+
+                  <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="https://www.cambeywest.com/subscribe2/?p=LXM&f=paid" style="">
+                    SUBSCRIBE</a>
                 </li>
 
               </ul>
+              
+                <br />
+                <ul class="nav navbar-nav" style="float: right;margin-left: 32px;margin-top: -12px;">
+                
+                <li class="label subscribe">
+
+                  <a class="sign-in-subscribe loggedout pop-subscribe grey bold" href="/category/networking-and-events/master-class" style="">
+                    Master Class</a>
+                </li>
+  
+
+              </ul>
+              
+              
           </div>
         </div>
 
@@ -222,15 +243,16 @@ $url_root = get_template_directory_uri();
             <li class="reverse"><a href="/category/research/fashion-and-leather-goods" class="grey">Fashion &amp; Leather Goods</a></li>
             <li class="reverse"><a href="/category/research/real-estate" class="grey">Real Estate &amp; Design</a></li>
             <li class="reverse"><a href="/category/research/retail" class="grey">Retail</a></li>
-            <li class="reverse"><a href="/category/research/cars-jets-and-yachts/">Cars, jets and yachts</a></li>
-            <li class="reverse"><a href="/category/research/travel-and-hospitality/" title="View all posts filed under Travel and hospitality">Travel and hospitality</a></li>
-            <li class="reverse"><a href="/category/research/watches-and-jewelry/" title="View all posts filed under Watches and jewelry">Watches and jewelry</a></li>
-            <li class="reverse"><a href="/category/research/wealth-management/" title="View all posts filed under Wealth management">Wealth management</a></li>
+            <li class="reverse"><a href="/category/research/cars-jets-and-yachts/">Cars, Jets &amp; Yachts</a></li>
+            <li class="reverse"><a href="/category/research/travel-and-hospitality/" title="View all posts filed under Travel and hospitality">Travel &amp; Hospitality</a></li>
+            <li class="reverse"><a href="/category/research/watches-and-jewelry/" title="View all posts filed under Watches and jewelry">Watches &amp; Jewelry</a></li>
+            
             <li class="reverse"><a href="/category/research">Research</a></li>
             <li class="reverse"><a href="/category/news/columns">Columns</a></li>
             <li><a href="/category/networking-and-events">Events</a></li>
             <li><a class="reverse join" href="<?php
-                                              echo ($isMobileApp ? 'https://join.luxurymarketer.com/LXR/?f=paid' : 'https://join.luxurymarketer.com/LXR/?f=paid'); ?>">Subscribe</a></li>
+                                              echo ($isMobileApp ? 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
+' : 'https://https://www.cambeywest.com/subscribe2/?p=LXM&f=paid'); ?>">Subscribe</a></li>
           </ul>
         </div>
 
@@ -251,20 +273,32 @@ $url_root = get_template_directory_uri();
         <li class="item"><a href="/category/research/fashion-and-leather-goods" class="grey">Fashion &amp; Leather Goods</a></li>
         <li class="item"><a href="/category/research/real-estate" class="grey">Real Estate &amp; Design</a></li>
         <li class="item"><a href="/category/research/retail" class="grey">Retail</a></li>
-        <li class="item"><a href="/category/research/cars-jets-and-yachts/" class="grey">Cars, jets and yachts</a></li>
-        <li class="item"><a href="/category/research/travel-and-hospitality/" class="grey" title="View all posts filed under Travel and hospitality">Travel and hospitality</a></li>
-        <li class="item"><a href="/category/research/watches-and-jewelry/" class="grey" title="View all posts filed under Watches and jewelry">Watches and jewelry</a></li>
+        <li class="item">
+            <a href="/category/research/cars-jets-and-yachts/" class="grey">
+                Cars, Jets &amp; Yachts
+            </a>
+        </li>
+        
+        <li class="item">
+            <a href="/category/research/marketing/" class="grey">
+                Marketing
+            </a>
+        </li>
+        
+        <li class="item">
+            <a href="/category/research/art-and-auctions/" class="grey">
+                Art
+            </a>
+        </li>
+        
 
-                      
-      </ul>
-    </div>
-  </div>
-  <div class="page-header logo">
-    <div class="navbar collapse navbar-collapse menu">
+        <li class="item"><a href="/category/research/travel-and-hospitality/" class="grey">Travel &amp; Hospitality</a></li>
+        <li class="item"><a href="/category/research/watches-and-jewelry/" class="grey" title="View all posts filed under Watches and jewelry">Watches &amp; Jewelry</a></li>
+        <li class="item"><a href="/category/research/perfumes-and-cosmetics/" class="grey" title="View all posts filed under Watches and jewelry">Beauty</a></li>
+        <li class="item"><a href="/category/research/food-fine-dining-wines-and-spirits/" class="grey" title="View all posts filed under Watches and jewelry">Wines &amp; Spirits</a></li>
 
-       <ul class="nav navbar-nav" style="float: none; margin: 0 auto; width: auto; gap:1rem; display:flex; justify-content: center;">
-    
-          <li class="item"><a href="/category/research/wealth-management/" class="grey" title="View all posts filed under Wealth management">Wealth management</a></li>
+
+  
 
           <li class="item"><a href="/category/research" class="grey">Research</a></li>
           <li class="item"><a href="/category/news/columns" class="grey">Columns</a></li>
@@ -275,30 +309,35 @@ $url_root = get_template_directory_uri();
           <li><a href="/category/research/china">China</a></li>
             <li><a href="/category/research/education">Education</a></li>
             <li><a href="/category/research/entertainment">Entertainment</a></li>
-            <li><a href="/category/research/health-and-wellness/" title="View all posts filed under Health and wellness">Health &amp wellness</a></li>
-            <li><a href="/category/news/legal-and-regulation">Legal & Regulation</a></li>
-            <li><a href="/category/research/media-and-publishing">Media & Publishing</a></li>
+            <li><a href="/category/research/health-and-wellness/" title="View all posts filed under Health and wellness">Health &amp; Wellness</a></li>
+            <li><a href="/category/news/legal-and-regulation">Legal &amp: Regulation</a></li>
+            
+            <li><a href="/category/research/media-and-publishing">Media &amp; Publishing</a></li>
             <li><a href="/category/research/outlook">Outlook</a></li>
-            <li><a href="/category/research/philanthropy-foundations-and-nonprofits/" title="View all posts filed under Philanthropy, foundations and nonprofits">Philanthropy, foundations and nonprofits</a></li>
-            <li><a href="/category/research/software-and-technology">Tech</a></li>
-            <li><a href="/category/research/ai-and-automation">AI & Automation</a></li>
+            <li><a href="/category/research/philanthropy-foundations-and-nonprofits/" title="View all posts filed under Philanthropy, foundations and nonprofits">Philanthropy</a></li>
+            
+            <li class="item"><a href="/category/networking-and-events/profiles" >Profiles</a></li>
+  
             <li><a href="/category/research/sports">Sports</a></li>
             <li><a href="/category/research/environment-and-sustainability">Sustainability</a></li> 
+          <li><a href="/category/research/ai-and-automation">Tech, AI &amp; Automation</a></li>
+          <li class="item"><a href="/category/research/wealth-management/" title="View all posts filed under Wealth management">Wealth Management</a></li>
           </ul>
         </li>
         <li class="dropdown item"> <a href="/category/networking-and-events" class="dropdown-toggle grey" data-toggle="dropdown" role="button" aria-expanded="false">
             Events <span class="caret"></span></a>
           <ul class="dropdown-menu">
+              
+            <li><a href="/category/networking-and-events/awards-honors">Awards &amp; Honors</a></li>
           <li><a href="/category/networking-and-events/webinars">Webinars</a></li>
           <li><a href="/category/networking-and-events/podcasts">Podcasts</a></li>
           <li><a href="/category/networking-and-events/conferences">Conferences</a></li>
-          </ul>
-        </li>
-
-        <li class="dropdown item most-read"> <a href="#" class="dropdown-toggle grey" data-toggle="dropdown" role="button" aria-expanded="false">
+        </ul>
+        
+                <li class="dropdown item most-read"> <a href="#" class="dropdown-toggle grey" data-toggle="dropdown" role="button" aria-expanded="false">
             Most Read<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <?php include('/tmp/most_popular_2016.lr.cache'); ?>
+            <?php include('/home/i9o51hwyv6wy/tmp/most_popular_2016.lr.cache'); ?>
           </ul>
         </li>
 
@@ -309,13 +348,14 @@ $url_root = get_template_directory_uri();
           </ul>
         </li>
 
-        <li class="item"><a href="/category/networking-and-events/profiles" class="grey">Profiles</a></li>
-        <li class="item"><a href="/category/master-class" class="grey">Master Class</a></li>
         
-                      
+                                    
       </ul>
+      
+      
     </div>
   </div>
+  
   <div class="navbar collapse navbar-collapse sections">
 
     <ul class="nav navbar-nav">
@@ -335,15 +375,16 @@ $url_root = get_template_directory_uri();
           <li class="reverse"><a href="/category/research/fashion-and-leather-goods" class="grey">Fashion &amp; Leather Goods</a></li>
           <li class="reverse"><a href="/category/research/real-estate" class="grey">Real Estate &amp; Design</a></li>
           <li class="reverse"><a href="/category/research/retail" class="grey">Retail</a></li>
-          <li class="reverse"><a href="/category/research/cars-jets-and-yachts/">Cars, jets and yachts</a></li>
-          <li class="reverse"><a href="/category/research/travel-and-hospitality/" title="View all posts filed under Travel and hospitality">Travel and hospitality</a></li>
-          <li class="reverse"><a href="/category/research/watches-and-jewelry/" title="View all posts filed under Watches and jewelry">Watches and jewelry</a></li>
-          <li class="reverse"><a href="/category/research/wealth-management/" title="View all posts filed under Wealth management">Wealth management</a></li>
+          <li class="reverse"><a href="/category/research/cars-jets-and-yachts/">Cars, Jets &amp Yachts</a></li>
+          <li class="reverse"><a href="/category/research/travel-and-hospitality/" title="View all posts filed under Travel and hospitality">Travel &amp Hospitality</a></li>
+          <li class="reverse"><a href="/category/research/watches-and-jewelry/" title="View all posts filed under Watches and jewelry">Watches &amp Jewelry</a></li>
           <li class="reverse"><a href="/category/research">Research</a></li>
           <li class="reverse"><a href="/category/news/columns">Columns</a></li>
           <li><a href="/category/networking-and-events">Events</a></li>
           <li><a class="reverse join" href="<?php
-                                          echo ($isMobileApp ? 'https://join.luxurymarketer.com/LXR/?f=paid' : 'https://join.luxurymarketer.com/LXR/?f=paid'); ?>">Subscribe</a></li>
+                                          echo ($isMobileApp ? 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
+' : 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
+'); ?>">Subscribe</a></li>
         </ul>
       </li>
     </li>
@@ -378,7 +419,9 @@ $url_root = get_template_directory_uri();
       <li><a class="reverse" href="/category/luxury-class">Luxury Class</a></li>
       <li><a class="reverse" href="/partners">Partners</a></li>
       <li><a class="reverse join" href="<?php
-                                        echo ($isMobileApp ? 'https://join.luxurymarketer.com/LXR/?f=paid' : 'https://join.luxurymarketer.com/LXR/?f=paid'); ?>">Join Our Luxury Program</a></li>
+                                        echo ($isMobileApp ? 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
+' : 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
+'); ?>">Subscribe</a></li>
     </ul>
   </div>
   <div id="mobile-sub-menu">
@@ -388,7 +431,8 @@ $url_root = get_template_directory_uri();
 
       <a class="sign-in-subscribe pop-subscribe loggedout" 
       style="display: none;" href="<?php
-        echo ($isMobileApp ? '#' : 'https://join.luxurymarketer.com/LXR/?f=paid'); ?>" 
+        echo ($isMobileApp ? '#' : 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
+'); ?>" 
         id="subscribe-mobile">
         Subscribe
       </a>
@@ -433,7 +477,7 @@ $url_root = get_template_directory_uri();
 
 
 
-
+<div class="newswell-divider section divider"></div>
 
 
 

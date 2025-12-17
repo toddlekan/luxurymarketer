@@ -58,9 +58,10 @@ get_header();
                             </div>
 
                             <div class="form-group login status" style="color: green">
+                                
 
                                 <div class="col-lg-10 forgot unlocked">
-                                    <a href="https://join.luxurymarketer.com/LXR/?f=pa">Forgot password?</a>
+                                    <a href="https://https://www.cambeywest.com/subscribe2/LXM/?f=pa">Forgot password?</a>
                                 </div>
 
                                 <div class="col-lg-10 msg" style="display:none;">

@@ -1,0 +1,134 @@
+[12-Dec-2025 18:13:56 UTC] Mailchimp API Error: 403: API Access has been disabled for this account. Please contact customer support.
+[12-Dec-2025 18:21:30 UTC] Mailchimp API Key Check: bc82eef87f...
+[12-Dec-2025 18:21:30 UTC] Mailchimp API Error Details:
+[12-Dec-2025 18:21:30 UTC] Error String: 403: API Access has been disabled for this account. Please contact customer support.
+[12-Dec-2025 18:21:30 UTC] Formatted Response: Array
+(
+    [type] => https://mailchimp.com/developer/marketing/docs/errors/
+    [title] => User Disabled
+    [status] => 403
+    [detail] => API Access has been disabled for this account. Please contact customer support.
+    [instance] => 1f35b3ef-411c-5268-b759-be220111ec3e
+)
+
+[12-Dec-2025 18:21:30 UTC] HTTP Status: 403
+[12-Dec-2025 18:21:30 UTC] API Key (first 10 chars): bc82eef87f...
+[12-Dec-2025 18:21:30 UTC] List ID: 066a49a9fa
+[12-Dec-2025 18:21:30 UTC] Subscriber Data: Array
+(
+    [email_address] => todd.lekan@gmail.com
+    [status] => subscribed
+    [merge_fields] => Array
+        (
+            [FNAME] => Todd
+            [LNAME] => Lekan
+            [TITLE] => cto
+            [COMPANY] => Todd Lekan LLC
+            [CITY] => Milwaukee
+            [STATE] => WI
+            [ZIPCODE] => 53217
+            [COUNTRY] => USA
+            [PHONE] => 6085129876
+            [CATEGORY] => Advertising, marketing and PR
+        )
+
+)
+
+[12-Dec-2025 18:44:06 UTC] Mailchimp API Key Check: bc82eef87f...
+[12-Dec-2025 18:44:06 UTC] Mailchimp API Error Details:
+[12-Dec-2025 18:44:06 UTC] Error String: 403: API Access has been disabled for this account. Please contact customer support.
+[12-Dec-2025 18:44:06 UTC] Formatted Response: Array
+(
+    [type] => https://mailchimp.com/developer/marketing/docs/errors/
+    [title] => User Disabled
+    [status] => 403
+    [detail] => API Access has been disabled for this account. Please contact customer support.
+    [instance] => e4e8ded2-26a3-883d-bae7-34b2df6005b2
+)
+
+[12-Dec-2025 18:44:06 UTC] HTTP Status: 403
+[12-Dec-2025 18:44:06 UTC] API Key (first 10 chars): bc82eef87f...
+[12-Dec-2025 18:44:06 UTC] List ID: 066a49a9fa
+[12-Dec-2025 18:44:06 UTC] Subscriber Data: Array
+(
+    [email_address] => todd.lekan@gmail.com
+    [status] => subscribed
+    [merge_fields] => Array
+        (
+            [FNAME] => Todd
+            [LNAME] => Lekan
+            [TITLE] => casdf
+            [COMPANY] => Todd Lekan LLC
+            [CITY] => Milwaukee
+            [STATE] => WI
+            [ZIPCODE] => 53217
+            [COUNTRY] => USA
+            [PHONE] => 6085129876
+            [CATEGORY] => Architecture, home and design
+        )
+
+)
+
+[12-Dec-2025 18:57:13 UTC] Mailchimp API Key Check: bc82eef87f...
+[12-Dec-2025 18:57:34 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function ld16_get_file_root() in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/index.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/index.php on line 18
+[12-Dec-2025 19:07:17 UTC] Mailchimp API Key Check: bc82eef87f...
+[12-Dec-2025 19:07:18 UTC] Mailchimp API Error Details:
+[12-Dec-2025 19:07:18 UTC] Error String: 403: API Access has been disabled for this account. Please contact customer support.
+[12-Dec-2025 19:07:18 UTC] Formatted Response: Array
+(
+    [type] => https://mailchimp.com/developer/marketing/docs/errors/
+    [title] => User Disabled
+    [status] => 403
+    [detail] => API Access has been disabled for this account. Please contact customer support.
+    [instance] => 30555b2b-c33f-8ba0-4c4b-b83c869fb0da
+)
+
+[12-Dec-2025 19:07:18 UTC] HTTP Status: 403
+[12-Dec-2025 19:07:18 UTC] API Key (first 10 chars): bc82eef87f...
+[12-Dec-2025 19:07:18 UTC] List ID: 066a49a9fa
+[12-Dec-2025 19:07:18 UTC] Subscriber Data: Array
+(
+    [email_address] => mc-campaignexamples@intuit.com
+    [status] => subscribed
+    [merge_fields] => Array
+        (
+            [FNAME] => Mail
+            [LNAME] => Chimp
+            [TITLE] => mailchimp
+            [COMPANY] => mailchimp
+            [CITY] => new york
+            [STATE] => NY
+            [ZIPCODE] => 10001
+            [COUNTRY] => USA
+            [PHONE] => +1234567890
+            [CATEGORY] => Advertising, marketing and PR
+        )
+
+)
+
+[12-Dec-2025 19:32:08 UTC] Mailchimp API Key Check: bc82eef87f...
+[12-Dec-2025 20:11:43 UTC] Mailchimp API Key Check: e0c63f5c93...
+[12-Dec-2025 20:15:06 UTC] PHP Warning:  require_once(/home/i9o51hwyv6wy/public_html/wp-content/themes/plugins/wp-recaptcha/recaptchalib.php): Failed to open stream: No such file or directory in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/subscribe.php on line 16
+[12-Dec-2025 20:15:06 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/i9o51hwyv6wy/public_html/wp-content/themes/plugins/wp-recaptcha/recaptchalib.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/subscribe.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/subscribe.php on line 16
+[13-Dec-2025 18:57:34 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function ld16_get_file_root() in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/index.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/index.php on line 18
+[14-Dec-2025 19:07:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function ld16_get_file_root() in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/index.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/index.php on line 18
+[15-Dec-2025 18:57:34 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function ld16_get_file_root() in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/index.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/index.php on line 18
+[16-Dec-2025 18:57:34 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function ld16_get_file_root() in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/index.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/i9o51hwyv6wy/public_html/wp-content/themes/LuxuryMarketer/index.php on line 18

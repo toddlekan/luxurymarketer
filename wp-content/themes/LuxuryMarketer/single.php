@@ -145,7 +145,7 @@ if (have_posts()) :
 									<div class="col-lg-12">
 
 										<center>
-											This content is accessible only to members of Luxury Marketer. We would love for you to become a member and enjoy the many benefits soon after. <a href="https://join.luxurymarketer.com/LXR/?f=paid" target="_blank">Please click here to enroll as a member of Luxury Marketer.</a> Already a member?
+											This content is accessible only to members of Luxury Marketer. We would love for you to become a member and enjoy the many benefits soon after. <a href="https://www.cambeywest.com/subscribe2/?p=LXM&f=paid" target="_blank">Please click here to enroll as a member of Luxury Marketer.</a> Already a member?
 											<a href="/log-in?redirect=<?= get_the_permalink() ?>" class="pop-login">Please log in.</a><!--https://subscribe.luxurydaily.com/LUX/?f=12for12&s=IARTICLE-->
 
 										</center>
@@ -346,7 +346,7 @@ if (have_posts()) :
 
 				<ol class="thicken most-popular">
 
-					<?php include('/tmp/most_popular_2016.lr.cache'); ?>
+					<?php include('/home/i9o51hwyv6wy/tmp/most_popular_2016.lr.cache'); ?>
 
 				</ol>
 				<br />

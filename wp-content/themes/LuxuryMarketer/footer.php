@@ -13,8 +13,9 @@
 $url_root = ld16_cdn(get_template_directory_uri());
 ?>
 
+<section id="hero-section-7">
 <div id="footer-divider" class="section divider"></div>
-<footer class="thicken container">
+<footer class="">
 
 	<div class="row sharing">
 
@@ -128,6 +129,10 @@ $url_root = ld16_cdn(get_template_directory_uri());
 				<li>
 					<a href="/contact-us">Contact Us</a>
 				</li>
+				<li><a href="<?php
+                                        echo ($isMobileApp ? 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
+' : 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
+'); ?>">Subscribe</a></li>
 			</ul>
 
 		</div>
@@ -151,6 +156,7 @@ $url_root = ld16_cdn(get_template_directory_uri());
 		</p>
 	</div>
 </footer>
+</section>
 
 <?php $url_root = get_template_directory_uri(); ?>
 

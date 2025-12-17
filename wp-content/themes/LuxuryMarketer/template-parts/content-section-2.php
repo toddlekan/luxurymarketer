@@ -8,7 +8,7 @@
 			</a>
 		</p>
 
-		<h1><a href="<?php the_permalink() ?>" class="reverse"><?= the_title() ?><?= ld16_showkey() ?></a></h1>
+		<h1 class="smaller"><a href="<?php the_permalink() ?>" class="reverse"><?= the_title() ?><?= ld16_showkey() ?></a></h1>
 
 		<div class="blurb">
 			<?php the_excerpt(); ?>

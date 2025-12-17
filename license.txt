@@ -1,4 +1,4 @@
-WordPress - Web publishing software
+HIWordPress - Web publishing software
 
 Copyright 2011-2023 by the contributors
 

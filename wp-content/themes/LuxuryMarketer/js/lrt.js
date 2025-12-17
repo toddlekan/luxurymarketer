@@ -206,10 +206,10 @@ $(document).ready(function () {
       //handle my account links
       var acctno = getCookie("luxuryroundtable_acctno");
       var acctno_href =
-        "https://join.luxuryroundtable.com/LXR/?f=custcare&a=" + acctno;
+        "https://www.cambeywest.com/LXM/?f=custcare&a=" + acctno;
 
       if (!acctno) {
-        acctno_href = "https://join.luxuryroundtable.com/LXR/?f=pa";
+        acctno_href = "https://www.cambeywest.com/subscribe2/LXM/?f=pa";
         $(".label.subscribe .my").html("Forgot Password");
       }
 
@@ -421,6 +421,7 @@ $(document).ready(function () {
     $(".comment-form").show();
   });
 
+
   $(document).on("click", "a.comment-button, a.comment-link", function (e) {
     e.preventDefault();
     $("a.share .click").hide();
@@ -432,6 +433,7 @@ $(document).ready(function () {
       1
     );
   });
+
 
   if (window.location.search.indexOf("mobile=true") > -1) {
     // Get the comment form
@@ -559,7 +561,7 @@ $(document).ready(function () {
     var val = $(this).closest(".clr").find(".form-control").val();
 
     //location.href="/newsletter?email=" + encodeURI(val);
-    location.href = "/subscription-form?f=newsletter&email=" + encodeURI(val);
+    location.href = "/subscription-form-2?f=newsletter&email=" + encodeURI(val);
   });
 
   $(".subscribe .form-control").keypress(function (e) {
@@ -572,7 +574,7 @@ $(document).ready(function () {
 
       //location.href="/subscribe?email=" + encodeURI(val);
       location.href =
-        "/subscription-form/?f=newsletter&email=" + encodeURI(val);
+        "/subscription-form-2/?f=newsletter&email=" + encodeURI(val);
     }
   });
 
@@ -628,6 +630,7 @@ $(document).ready(function () {
   });
 
   /*UTIL FUNCTIONS*/
+  /*
   function toggleUtil(sel, caller) {
     if (!animating) {
       animating = true;
@@ -728,8 +731,10 @@ $(document).ready(function () {
       );
     }
   }
+  */
 
   /* VIDEOS */
+  /*
   $(document).on("click", ".videos .collapsed a", function (e) {
     e.preventDefault();
 
@@ -784,6 +789,7 @@ $(document).ready(function () {
 
     $("body").scrollTop(offset.top - 30);
   });
+*/
 
   /* GALLERIES */
   $(document).on("load", ".viewer.main", function (e) {

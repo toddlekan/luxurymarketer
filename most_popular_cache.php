@@ -8,20 +8,13 @@ ini_set('display_errors', 1);
 //print "none";
 //die();
 //}
-$url_root = 'https://www.luxuryroundtable.com/wp-content/themes/LuxuryRoundtable_2023';
+$url_root = 'https://www.luxurymarketer.com/wp-content/themes/LuxuryMarketer';
 $conn = mysqli_connect(
-  'luxurydaily-aurora-cluster.cluster-cvjnrujklarl.us-east-1.rds.amazonaws.com',
-  'luxurydaily',
-  'thaTe2AG',
-  'luxury_roundtable'
+  'localhost',
+  'i10802538_mm961',
+  'M.kKFhFBjSDBdW7bZur73',
+  'i10802538_mm961'
 );
-
-// $conn = mysqli_connect(
-//   'mysql.luxuryroundtable.ouranostech.com',
-//   'luxuryroundtable',
-//   'UCysNTWs',
-//   'luxury_roundtable'
-// );
 
 echo '\r\n\r\n*****************\r\n\r\n';
 
@@ -37,8 +30,8 @@ mysqli_query($conn, "set character_set_results='utf8'");
 mysqli_query($conn, "set collation_connection='utf8_general_ci'");
 
 $sql = "SELECT p.*
-FROM wp_most_popular mp
-INNER JOIN wp_posts p ON mp.post_id = p.ID
+FROM yxdtlw_most_popular mp
+INNER JOIN yxdtlw_posts p ON mp.post_id = p.ID
 WHERE
 p.post_type = 'post' AND
 p.post_status = 'publish' AND
@@ -74,7 +67,7 @@ while ($row = mysqli_fetch_array($result)) {
 
   $unlocked_sql = "
     SELECT meta_value
-    FROM wp_postmeta
+    FROM yxdtlw_postmeta
     WHERE meta_key = 'unlocked' and post_id = $ID;
        ";
 
@@ -117,10 +110,10 @@ while ($row = mysqli_fetch_array($result)) {
             $thumbnail = substr($caption, $start, $end - $start + 4);
 
             $category_sql = "
-              SELECT wp_term_taxonomy.term_id FROM wp_term_relationships, wp_term_taxonomy
-              WHERE wp_term_relationships.object_id = $ID
-              AND wp_term_taxonomy.taxonomy = 'category'
-              AND wp_term_relationships.term_taxonomy_id = wp_term_taxonomy.term_taxonomy_id
+              SELECT yxdtlw_term_taxonomy.term_id FROM yxdtlw_term_relationships, yxdtlw_term_taxonomy
+              WHERE yxdtlw_term_relationships.object_id = $ID
+              AND yxdtlw_term_taxonomy.taxonomy = 'category'
+              AND yxdtlw_term_relationships.term_taxonomy_id = yxdtlw_term_taxonomy.term_taxonomy_id
             ";
 
             $category_result = mysqli_query($conn, $category_sql);
@@ -135,8 +128,8 @@ while ($row = mysqli_fetch_array($result)) {
               $carousel_categories[] = $category_id;
 
               $category_sql = "
-                SELECT wp_terms.name
-                FROM wp_terms
+                SELECT yxdtlw_terms.name
+                FROM yxdtlw_terms
                 WHERE term_id = $category_id;
                    ";
 
@@ -150,13 +143,13 @@ while ($row = mysqli_fetch_array($result)) {
               $carousel_content .= '
                 <li>
                   <div class="redcategory">
-                    <a href="https://www.luxurydaily.com/?cat=' . $category_id . '">' . $category_name . '</a>
+                    <a href="https://www.luxurymarketer.com/?cat=' . $category_id . '">' . $category_name . '</a>
                   </div>
                   <div>
                     ' . $thumbnail . '
                   </div>
                   <div class="headline">
-                    <a class="title="' . $post_title . '" rel="bookmark" href="https://www.luxurydaily.com/' . $post_name . '">
+                    <a class="title="' . $post_title . '" rel="bookmark" href="https://www.luxurymarketer.com/' . $post_name . '">
                       ' . $post_title . '
                     </a>&nbsp;' . ($unlocked ? '<img src="' . $url_root . '/img/ic_unlock.png"/>' : '')  . '
                   </div>
@@ -176,7 +169,7 @@ while ($row = mysqli_fetch_array($result)) {
 
 
     if ($post_name && $post_title) {
-      $content .= '<li><a href="https://www.luxuryroundtable.com/' . 
+      $content .= '<li><a href="https://www.luxurymarketer.com/' . 
         $post_name . 
         '" title="' . 
         $post_title . '">' . 
@@ -193,7 +186,7 @@ while ($row = mysqli_fetch_array($result)) {
 
     if ($post_name && $post_title) {
       
-      $content_2016 .= '<li><a href="https://www.luxuryroundtable.com/' . 
+      $content_2016 .= '<li><a href="https://www.luxurymarketer.com/' . 
         $post_name . 
         '" title="' . $post_title . 
         '">' . $post_title . 
@@ -217,7 +210,7 @@ while ($row = mysqli_fetch_array($result)) {
 
 print $content_2016;
 
-$base = "/tmp";
+$base = "/home/i9o51hwyv6wy/tmp";
 $cache_file_json = "$base/most_popular_json.lr.cache";
 $cache_file = "$base/most_popular.lr.cache";
 $cache_file_2016 = "$base/most_popular_2016.lr.cache";

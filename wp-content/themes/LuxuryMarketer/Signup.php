@@ -16,7 +16,9 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 	<title>
 		Luxury Marketer
 	</title>
-	<link href="/wp-content/themes/LuxuryRoundtable_2023_v2/css/general.css" type="text/css" rel="stylesheet" />
+	<link rel="shortcut icon" href="https://www.luxurymarketer.com/wp-content/themes/LuxuryMarketer/favicon.ico" type="image/x-icon" />
+
+	<link href="/wp-content/themes/LuxuryMarketer/css/general.css" type="text/css" rel="stylesheet" />
 
 	<style>
 		@media only screen and (max-width: 43em) {
@@ -101,7 +103,7 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 		}
 	</style>
 
-	<script src="/wp-content/themes/LuxuryRoundtable_2023_v2/js/jquery.js" type="text/javascript"></script>
+	<script src="/wp-content/themes/LuxuryMarketer/js/jquery.js" type="text/javascript"></script>
 
 	<script>
 		$(document).ready(function() {
@@ -199,12 +201,12 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 	<header>
 		<div class="header">
 			<a href="https://www.luxurymarketer.com/">
-				<img id="logo-image" alt="Home" src="https://www.luxurymarketer.com/wp-content/themes/LuxuryRoundtable_2023_v2/img/LuxuryRoundtable.png" border="0" style="width: 700px;" />
+				<img id="logo-image" alt="Home" src="https://www.luxurymarketer.com/wp-content/themes/LuxuryMarketer/img/LuxuryMarketer.png" border="0" style="width: 700px;" />
 			</a>
 		</div>
 	</header>
 
-	<form style="display: none;" action="https://luxurymarketer.us12.list-manage.com/subscribe?u=562830d59472392acd3d9f25a&id=e40241a98c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" novalidate>
+	<form style="display: none;" action="<?php echo esc_url(get_template_directory_uri() . '/subscribe.php'); ?>" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" novalidate>
 
 		<table class="tblMain">
 			<tr>
@@ -671,7 +673,7 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 									<tr>
 										<td>
 											<div id="demos_question_0" class="demos_question">
-												<span>Please check the ONE category that best describes your Research:</span>
+												<span>Please check the ONE category that best describes your industry sector:</span>
 												<span id="bcode_req" class="reqmsg" style="color:Red;display:none;"> Required</span>
 											</div>
 											<div id="demos_answer_0" class="demos_answer">
@@ -771,7 +773,7 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 					&nbsp;
 					<span class="mr_social_sharing">
 						<a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Fwww.luxurymarketer.com" class="mr_social_sharing_popup_link" rel="nofollow">
-							<img src="/wp-content/themes/LuxuryRoundtable_2023_v2/img/sharing/linkedin.png" class="nopin" alt="Share on LinkedIn" title="Share on LinkedIn"> </a>
+							<img src="/wp-content/themes/LuxuryMarketer/img/sharing/linkedin.png" class="nopin" alt="Share on LinkedIn" title="Share on LinkedIn"> </a>
 					</span>
 
 				</td>

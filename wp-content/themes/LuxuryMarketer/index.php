@@ -53,7 +53,7 @@ if (have_posts()) {
 					<div class="newswell-divider section divider"></div>
 					<div class="newswell">
 				
-						<div class="col-lg-3">
+						<div class="col-lg-3 above-fold-left-top-col">
 			
 							<?php
 
@@ -70,7 +70,7 @@ if (have_posts()) {
 							?>
 
 						</div>
-						<div class="col-lg-6">
+						<div class="col-lg-6 above-fold-center-top-col">
 					
 							<?php
 
@@ -153,7 +153,8 @@ if (have_posts()) {
 
 								} else {
 									$divider_set = true;
-									print "<div class='newswell-divider section divider' style='clear:both;'></div>";
+									print "<div style='clear:both;'></div>";
+									// print "<div class='newswell-divider section divider' style='clear:both;'></div>";
 								}
 
 							}
@@ -162,18 +163,7 @@ if (have_posts()) {
 					?>
 
 					</div>
-					<?php
-					if (count($post_arr_2) >= 5) { ?>
-					<footer class="thicken container">
-						<div class="row copyright">
-							<div class="pull-right">
-								<a class="more reverse" href="/more-stories"><span class="gt-label">More Articles</span> <span class="glyphicon glyphicon-menu-right gt-one"></span><span class="glyphicon glyphicon-menu-right gt-two"></span></a>
-							</div>
-					</div>
-					</footer>
-					<?php } ?>
-					<br />
-					<br />
+	
 				</div>
 
 				<div class="col-lg-3 headline-list sidebar">
@@ -189,15 +179,46 @@ if (have_posts()) {
 
 					<div style="clear: both;"></div>
 
-					<div class="heading">
+					<div class="heading most-read">
 						MOST READ
 					</div>
 
 					<ol class="thicken most-popular">
 
-						<?php include('/tmp/most_popular_2016.am.cache');?>
+						<?php include('/home/i9o51hwyv6wy/tmp/most_popular.lr.cache');?>
 
 					</ol>
+					
+					<div class="ad large rectangle ad-2">
+			
+						<div id='large-rectangle-1-home' style='height:280px; width:336px;'>
+						<a href="https://americanmarketer.com/subscription-form/" target="_blank" alt="American Marketer 336x280 large rectangle banner">
+							<img src="https://americanmarketer.com/wp-content/uploads/2024/03/American-Marketer-336x280-large-rectangle-banner.png" width="">
+						</a>
+						</div>
+					</div>
+
+					<div style="clear: both;"></div>
+	
+					<div class="ad large rectangle ad-3">
+			
+						<div id='large-rectangle-1-home' style='height:280px; width:336px;'>
+						<a href="https://americanmarketer.com/subscription-form/" target="_blank" alt="American Marketer 336x280 large rectangle banner">
+							<img src="https://americanmarketer.com/wp-content/uploads/2024/03/American-Marketer-336x280-large-rectangle-banner.png" width="">
+						</a>
+						</div>
+					</div>
+					
+					<div style="clear: both;"></div>
+					
+					<footer class="">
+						<div class="row copyright">
+						
+							<a class="more articles reverse " href="/more-stories"><span class="gt-label">More Articles</span> <span class="glyphicon glyphicon-menu-right gt-one"></span><span class="glyphicon glyphicon-menu-right gt-two"></span></a>
+			
+					    </div>
+					</footer>
+					
 				</div>
 			</div>
 		</section>
@@ -335,7 +356,7 @@ if (have_posts()) {
 				<div class="col-lg-12">
 					<div class="newswell-divider section divider"></div>
 				</div>
-				<div class="col-lg-12">
+				<div class="col-lg-12 inner">
 
 					<div class="newswell">
 
@@ -375,8 +396,8 @@ if (have_posts()) {
 							'real-estate-and-design', 'research', 'retail', 'sports', 'sustainability', 'tech-ai-and-automation', 
 							'travel-and-hospitality', 'watches-and-jewelry', 'wealth-management', 'wines-and-spirits');
 
-						// Limit to 5 rows × 4 columns = 20 categories
-						$category_arr = array_slice($category_arr, 0, 20);
+						// Limit to 6 rows × 4 columns = 24 categories
+						$category_arr = array_slice($category_arr, 0, 24);
 						
 						$column_count = 0;
 						foreach ($category_arr as $category) {
@@ -399,22 +420,27 @@ if (have_posts()) {
 							// Get category object for proper name
 							$category_obj = get_category_by_slug($category);
 							$category_name = $category_obj ? $category_obj->name : ucwords(str_replace('-', ' ', $category));
+							
+						    $category_name = str_replace(' And ', ' &amp; ', $category_name);
+						    
 							$category_link = get_category_link($category_obj ? $category_obj->term_id : 0);
 
 							print '<div class="col-lg-3 section-7">';	
-							print '<div class="heading"><a href="'.esc_url($category_link).'">'.esc_html($category_name).'</a></div>';
+							print '<div class="heading sector"><a href="'.esc_url($category_link).'">'.esc_html($category_name).'</a></div>';
 
 							$count = 0;
 							while (have_posts()) : the_post();
 								$count++;
 								if ($count > 1) {
 									$mobile_only = 'mobile-only';
+									$bold = 'thin';
 									
 								} else {
+								    $bold = 'bold';
 									$mobile_only = '';
 								}
 								print '<a class="img-container main '.$mobile_only.'" href="'.get_the_permalink().'"><img src="'.ld16_get_image().'"></a>';
-								print '<h1><a href="'.get_the_permalink().'" class="reverse">'.get_the_title().ld16_showkey().'</a></h1>';
+								print '<h1 class="smallest"><a href="'.get_the_permalink().'" class="reverse '.$bold.'">'.get_the_title().ld16_showkey().'</a></h1>';
 
 							endwhile;
 							print '</div>';

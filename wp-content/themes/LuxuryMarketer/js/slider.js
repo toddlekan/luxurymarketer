@@ -15,7 +15,7 @@ $(document).ready(function () {
   
   // Keep checking and hiding (in case it's added dynamically)
   setInterval(hideWatermark, 100);
-
+/*
   $(".scroll a[href*=#]").on("click", function (e) {
     var element = e.target;
     if (element.href.split("/").slice(-1) != "#top") {
@@ -26,7 +26,9 @@ $(document).ready(function () {
       window.scrollTo({top: 0, behavior: 'smooth'});
     }
   });
-
+  */
+  
+/*
   $("#homePage").fullpage({
     navigation: false,
     showActiveTooltip: false,
@@ -38,6 +40,7 @@ $(document).ready(function () {
       "#lr-header, footer, #hero-section-6, #hero-section-7, #hero-section-8, #footer-divider", 
   });
 });
+*/
 
 function checkInView(elem, partial) {
   var container = $(".home-page.slides");
