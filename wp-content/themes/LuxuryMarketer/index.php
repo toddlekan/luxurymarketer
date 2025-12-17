@@ -59,7 +59,7 @@ if (have_posts()) {
 
 
 
-							for ($i = 2; $i < 4; $i++) {
+							for ($i = 1; $i < 3; $i++) {
 								if (isset($post_arr_2[$i])) {
 									$post = get_post($post_arr_2[$i]);
 									setup_postdata($post);
@@ -75,7 +75,7 @@ if (have_posts()) {
 							<?php
 
 
-							for ($i = 1; $i < 2; $i++) {
+							for ($i = 0; $i < 1; $i++) {
 								if (isset($post_arr_2[$i])) {
 									$post = get_post($post_arr_2[$i]);
 									setup_postdata($post);
@@ -83,7 +83,7 @@ if (have_posts()) {
 								}
 							};
 
-							for ($i = 6; $i < 7; $i++) {
+							for ($i = 5; $i < 6; $i++) {
 								if (isset($post_arr_2[$i])) {
 									$post = get_post($post_arr_2[$i]);
 									setup_postdata($post);
@@ -98,7 +98,7 @@ if (have_posts()) {
 							<?php
 
 
-							for ($i = 4; $i < 6; $i++) {
+							for ($i = 3; $i < 5; $i++) {
 								if (isset($post_arr_2[$i])) {
 									$post = get_post($post_arr_2[$i]);
 									setup_postdata($post);
