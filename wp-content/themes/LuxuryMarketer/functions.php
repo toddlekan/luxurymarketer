@@ -4,6 +4,38 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
+// Override any coming soon redirects - prevents cached redirects in browsers
+add_action('template_redirect', 'prevent_coming_soon_redirect', 1);
+function prevent_coming_soon_redirect() {
+	// Check if we're being redirected to a coming soon page
+	$request_uri = $_SERVER['REQUEST_URI'] ?? '';
+	$query_string = $_SERVER['QUERY_STRING'] ?? '';
+	
+	// If someone tries to access coming soon page, redirect them away
+	if (strpos($request_uri, 'coming-soon') !== false || strpos($query_string, 'coming-soon') !== false) {
+		wp_redirect(home_url('/'), 301);
+		exit;
+	}
+	
+	// Prevent any redirects to coming soon pages
+	if (!headers_sent()) {
+		// Add cache-busting headers to help clear browser cache
+		header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0');
+		header('Pragma: no-cache');
+		header('Expires: 0');
+	}
+}
+
+// Also hook into wp_redirect to prevent redirects to coming soon
+add_filter('wp_redirect', 'prevent_coming_soon_redirect_url', 10, 2);
+function prevent_coming_soon_redirect_url($location, $status) {
+	if (strpos($location, 'coming-soon') !== false) {
+		// Redirect to home instead
+		return home_url('/');
+	}
+	return $location;
+}
+
 add_filter('acf/settings/remove_wp_meta_box', '__return_false');
 add_filter('wp_get_attachment_url', 'am19_url_change');
 update_option('image_default_size', 'full' );

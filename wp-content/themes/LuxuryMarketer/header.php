@@ -87,6 +87,32 @@ $url_root = get_template_directory_uri();
   <?php require_once($file_root . "/inc/head.php"); ?>
 
   <?php $url_root = ld16_cdn(get_template_directory_uri()); ?>
+  
+  <!-- Override any coming soon redirects - prevents cached JavaScript redirects -->
+  <script>
+    (function() {
+      // Immediately check and redirect away from coming soon page
+      var currentUrl = window.location.href.toLowerCase();
+      if (currentUrl.indexOf('coming-soon') !== -1) {
+        window.location.replace('/');
+        return;
+      }
+      
+      // Monitor for any redirects to coming soon (runs before other scripts)
+      var checkRedirect = setInterval(function() {
+        var url = window.location.href.toLowerCase();
+        if (url.indexOf('coming-soon') !== -1) {
+          clearInterval(checkRedirect);
+          window.location.replace('/');
+        }
+      }, 100);
+      
+      // Clear the interval after 10 seconds to avoid performance issues
+      setTimeout(function() {
+        clearInterval(checkRedirect);
+      }, 10000);
+    })();
+  </script>
 
 
 </head>
