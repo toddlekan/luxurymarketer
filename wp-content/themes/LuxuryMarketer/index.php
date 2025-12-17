@@ -59,7 +59,7 @@ if (have_posts()) {
 
 
 
-							for ($i = 1; $i < 3; $i++) {
+							for ($i = 2; $i < 4; $i++) {
 								if (isset($post_arr_2[$i])) {
 									$post = get_post($post_arr_2[$i]);
 									setup_postdata($post);
@@ -75,7 +75,7 @@ if (have_posts()) {
 							<?php
 
 
-							for ($i = 3; $i < 4; $i++) {
+							for ($i = 1; $i < 2; $i++) {
 								if (isset($post_arr_2[$i])) {
 									$post = get_post($post_arr_2[$i]);
 									setup_postdata($post);
