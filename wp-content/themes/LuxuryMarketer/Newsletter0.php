@@ -294,7 +294,7 @@ if(array_key_exists('date', $_GET)){
 														<td align="center"><span style="font-size: 14px; font-weight: bold; color: #ACACAC;"> | </span></td>
 
 														<td align="center">
-															<a href="https://subscribe.luxurydaily.com/LUX/?f=annualnsm&s=18ANNMISCA" target="_blank" style="font-size: 12px; font-weight: bold; color:#1169aa; font-family: 'CheltenhamStd-Light', Georgia, 'Times New Roman', Times, serif; text-decoration:none;">Subscribe</a><!--https://subscribe.luxurydaily.com/LUX/?f=12for12&s=NHEADER-->
+															<a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" target="_blank" style="font-size: 12px; font-weight: bold; color:#1169aa; font-family: 'CheltenhamStd-Light', Georgia, 'Times New Roman', Times, serif; text-decoration:none;">Subscribe</a><!--https://subscribe.luxurydaily.com/LUX/?f=12for12&s=NHEADER-->
 														</td>
 
 														<td align="center"><span style="font-size: 14px; font-weight: bold; color: #ACACAC;"> | </span></td>

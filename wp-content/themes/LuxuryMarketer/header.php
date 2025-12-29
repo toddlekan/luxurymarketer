@@ -186,16 +186,15 @@ $url_root = get_template_directory_uri();
 
                     <ul class="dropdown-menu">
                       <li><a class="reverse" href="/">Home</a></li>
-                      <li class="reverse"><a href="/category/research/fashion-and-leather-goods" class="grey">Fashion &amp; Leather Goods</a></li>
-                      <li class="reverse"><a href="/category/research/real-estate" class="grey">Real Estate &amp; Design</a></li>
-                      <li class="reverse"><a href="/category/research/retail" class="grey">Retail</a></li>
-                      <li class="reverse"><a href="/category/research/cars-jets-and-yachts/">Cars, Jets &amp; Yachts</a></li>
-                      <li class="reverse"><a href="/category/research/travel-and-hospitality/" title="View all posts filed under Travel and hospitality">Travel &amp; Hospitality</a></li>
-                      <li class="reverse"><a href="/category/research/watches-and-jewelry/" title="View all posts filed under Watches and jewelry">Watches &amp; Jewelry</a></li>
+                      <li class="reverse"><a href="/category/research" class="grey">Sectors</a></li>
+                      <li class="reverse"><a href="/category/networking-and-events" class="grey">Events</a></li>
+                      <li class="reverse"><a href="/about-us" class="grey">About Us</a></li>
+                      <li class="reverse"><a href="/category/research/cars-jets-and-yachts/" class="grey">Contact Us</a></li>
+                      <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" class="grey">Master Class</a></li>
+                      
+                      <li class="reverse"><a href="/category/research/watches-and-jewelry/" class="grey">Subscribe</a></li>
 
-                      <li class="reverse"><a href="/category/research">Research</a></li>
-                      <li class="reverse"><a href="/category/news/columns">Columns</a></li>
-                      <li><a href="/category/networking-and-events">Events</a></li>
+              
                     </ul>
 
                   </li>
@@ -263,25 +262,6 @@ $url_root = get_template_directory_uri();
           </div>
         </div>
 
-
-        <div class="navbar-collapse collapse" id="navbar-main">
-          <ul class="no-bullet mobile-menu" style="float: left;">
-            <li class="reverse"><a href="/category/research/fashion-and-leather-goods" class="grey">Fashion &amp; Leather Goods</a></li>
-            <li class="reverse"><a href="/category/research/real-estate" class="grey">Real Estate &amp; Design</a></li>
-            <li class="reverse"><a href="/category/research/retail" class="grey">Retail</a></li>
-            <li class="reverse"><a href="/category/research/cars-jets-and-yachts/">Cars, Jets &amp; Yachts</a></li>
-            <li class="reverse"><a href="/category/research/travel-and-hospitality/" title="View all posts filed under Travel and hospitality">Travel &amp; Hospitality</a></li>
-            <li class="reverse"><a href="/category/research/watches-and-jewelry/" title="View all posts filed under Watches and jewelry">Watches &amp; Jewelry</a></li>
-            
-            <li class="reverse"><a href="/category/research">Research</a></li>
-            <li class="reverse"><a href="/category/news/columns">Columns</a></li>
-            <li><a href="/category/networking-and-events">Events</a></li>
-            <li><a class="reverse join" href="<?php
-                                              echo ($isMobileApp ? 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
-' : 'https://https://www.cambeywest.com/subscribe2/?p=LXM&f=paid'); ?>">Subscribe</a></li>
-          </ul>
-        </div>
-
     </div>
 
   </div>
@@ -331,23 +311,28 @@ $url_root = get_template_directory_uri();
     
           <li class="dropdown item"> <a href="/category/news" class="dropdown-toggle grey" data-toggle="dropdown" role="button" aria-expanded="false">
             More <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-          <li><a href="/category/research/china">China</a></li>
-            <li><a href="/category/research/education">Education</a></li>
-            <li><a href="/category/research/entertainment">Entertainment</a></li>
-            <li><a href="/category/research/health-and-wellness/" title="View all posts filed under Health and wellness">Health &amp; Wellness</a></li>
-            <li><a href="/category/news/legal-and-regulation">Legal &amp: Regulation</a></li>
+            <ul class="dropdown-menu">
+              <li><a href="/category/research/china">China</a></li>
+
+              <li><a href="/category/news/editorial-calendar">Editorial Calendar</a></li>
+              <li><a href="/category/news/editorials">Editorials</a></li>
+              
             
-            <li><a href="/category/research/media-and-publishing">Media &amp; Publishing</a></li>
-            <li><a href="/category/research/outlook">Outlook</a></li>
-            <li><a href="/category/research/philanthropy-foundations-and-nonprofits/" title="View all posts filed under Philanthropy, foundations and nonprofits">Philanthropy</a></li>
-            
-            <li class="item"><a href="/category/networking-and-events/profiles" >Profiles</a></li>
-  
-            <li><a href="/category/research/sports">Sports</a></li>
-            <li><a href="/category/research/environment-and-sustainability">Sustainability</a></li> 
-          <li><a href="/category/research/ai-and-automation">Tech, AI &amp; Automation</a></li>
-          <li class="item"><a href="/category/research/wealth-management/" title="View all posts filed under Wealth management">Wealth Management</a></li>
+              <li><a href="/category/research/education">Education</a></li>
+              <li><a href="/category/research/entertainment">Entertainment</a></li>
+              <li><a href="/category/research/health-and-wellness/" title="View all posts filed under Health and wellness">Health &amp; Wellness</a></li>
+              <li><a href="/category/news/legal-and-regulation">Legal &amp: Regulation</a></li>
+              
+              <li><a href="/category/research/media-and-publishing">Media &amp; Publishing</a></li>
+              <li><a href="/category/research/outlook">Outlook</a></li>
+              <li><a href="/category/research/philanthropy-foundations-and-nonprofits/" title="View all posts filed under Philanthropy, foundations and nonprofits">Philanthropy</a></li>
+              
+              <li class="item"><a href="/category/networking-and-events/profiles" >Profiles</a></li>
+
+              <li><a href="/category/research/sports">Sports</a></li>
+              <li><a href="/category/research/environment-and-sustainability">Sustainability</a></li> 
+              <li><a href="/category/research/ai-and-automation">Tech, AI &amp; Automation</a></li>
+              <li class="item"><a href="/category/research/wealth-management/" title="View all posts filed under Wealth management">Wealth Management</a></li>
           </ul>
         </li>
         <li class="dropdown item"> <a href="/category/networking-and-events" class="dropdown-toggle grey" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -420,17 +405,7 @@ $url_root = get_template_directory_uri();
 
   </div>
 
-
-
-
-
-
-
-
-
-
-
-  <a href="#" class="mobile magnify" target="search">
+  <a href="/?s=" class="mobile magnify" target="search">
     <div class="magnify-inner"></div>
   </a>
   <div class="navbar-collapse collapse" id="navbar-main">
@@ -444,21 +419,20 @@ $url_root = get_template_directory_uri();
       <li><a class="reverse" href="/subscription-form">Free Newsletter</a></li>
       <li><a class="reverse" href="/category/luxury-class">Luxury Class</a></li>
       <li><a class="reverse" href="/partners">Partners</a></li>
-      <li><a class="reverse join" href="<?php
-                                        echo ($isMobileApp ? 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
-' : 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
-'); ?>">Subscribe</a></li>
+      <li><a class="reverse join" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">Subscribe</a></li>
     </ul>
   </div>
+
+
+
+  
   <div id="mobile-sub-menu">
     <span class="label subscribe">
       <a href="#" id="popular-mobile" target="popular">Most Read</a>
       <span style="color: #ccc;"> &nbsp; &nbsp; </span>
 
       <a class="sign-in-subscribe pop-subscribe loggedout" 
-      style="display: none;" href="<?php
-        echo ($isMobileApp ? '#' : 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
-'); ?>" 
+      style="display: none;" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" 
         id="subscribe-mobile">
         Subscribe
       </a>

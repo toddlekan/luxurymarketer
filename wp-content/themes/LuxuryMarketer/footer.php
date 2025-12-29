@@ -127,12 +127,12 @@ $url_root = ld16_cdn(get_template_directory_uri());
 					<a href="/terms">Member Agreement and Terms of Use</a>
 				</li>
 				<li>
+					<a href="/about-us">About Us</a>
+				</li>
+				<li>
 					<a href="/contact-us">Contact Us</a>
 				</li>
-				<li><a href="<?php
-                                        echo ($isMobileApp ? 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
-' : 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
-'); ?>">Subscribe</a></li>
+				<li><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">Subscribe</a></li>
 			</ul>
 
 		</div>

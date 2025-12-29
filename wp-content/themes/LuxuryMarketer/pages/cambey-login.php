@@ -70,7 +70,8 @@ get_header();
 
                                 <div class="col-lg-10 action">
 
-                                    <a href="https://join.luxurymarketer.com/LXR/?f=paid">Click here to enroll</a><!--https://subscribe.luxurymarketer.com/LUX/?f=12for12&s=ILOGIN-->
+                                    <a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">
+                                        Click here to enroll</a>
 
                                 </div>
 
