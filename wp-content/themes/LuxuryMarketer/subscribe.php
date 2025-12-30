@@ -4,10 +4,17 @@
  * Processes subscription form submissions and adds subscribers to Mailchimp via API
  */
 
-// Enable error reporting for debugging
+// Enable error reporting for debugging (but don't display if AJAX)
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+$is_ajax_check = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || 
+                 (!empty($_POST['ajax']) && $_POST['ajax'] == '1');
+if (!$is_ajax_check) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+} else {
+    ini_set('display_errors', 0);
+    ini_set('display_startup_errors', 0);
+}
 
 // Detect if this is an AJAX request
 $is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || 
@@ -15,7 +22,11 @@ $is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HT
 
 // Function to send JSON response
 function send_json_response($success, $message, $errors = array(), $data = array()) {
-    header('Content-Type: application/json');
+    // Clear any previous output
+    if (ob_get_length()) {
+        ob_clean();
+    }
+    header('Content-Type: application/json; charset=utf-8');
     $response = array(
         'success' => $success,
         'message' => $message,
@@ -59,7 +70,9 @@ $mailchimp_api_key = defined('MAILCHIMP_API_KEY') ? MAILCHIMP_API_KEY : (getenv(
 // Log API key status for debugging (first 10 chars only for security)
 $api_key_status = empty($mailchimp_api_key) ? 'NOT SET' : substr($mailchimp_api_key, 0, 10) . '...';
 error_log('Mailchimp API Key Check: ' . $api_key_status);
-echo "<!-- Mailchimp API Key Check: " . htmlspecialchars($api_key_status) . " -->\n";
+if (!$is_ajax) {
+    echo "<!-- Mailchimp API Key Check: " . htmlspecialchars($api_key_status) . " -->\n";
+}
 
 if (empty($mailchimp_api_key) || $mailchimp_api_key === 'YOUR_MAILCHIMP_API_KEY_HERE') {
     $error_msg = 'Mailchimp API Key not configured properly';
@@ -67,7 +80,9 @@ if (empty($mailchimp_api_key) || $mailchimp_api_key === 'YOUR_MAILCHIMP_API_KEY_
     if ($is_ajax) {
         send_json_response(false, 'Subscription service is temporarily unavailable. Please try again later.', array('config'));
     } else {
-        echo "<!-- ERROR: " . htmlspecialchars($error_msg) . " -->\n";
+        if (!$is_ajax) {
+            echo "<!-- ERROR: " . htmlspecialchars($error_msg) . " -->\n";
+        }
         header("Location: " . home_url('/subscription-form/') . "?error=config");
         exit;
     }
@@ -237,7 +252,9 @@ if (!empty($errors)) {
     if ($is_ajax) {
         send_json_response(false, 'Please check the following fields: ' . implode(', ', $error_messages), $errors);
     } else {
-        echo "<!-- VALIDATION ERROR: " . htmlspecialchars($validation_error) . " -->\n";
+        if (!$is_ajax) {
+            echo "<!-- VALIDATION ERROR: " . htmlspecialchars($validation_error) . " -->\n";
+        }
         header("Location: " . home_url('/subscription-form/') . "?error=validation&fields=" . urlencode($error_params));
         exit;
     }
@@ -352,8 +369,10 @@ try {
                 if ($is_ajax) {
                     send_json_response(false, 'There was an error updating your subscription. Please try again.', array('update'));
                 } else {
-                    echo "<!-- UPDATE ERROR: " . htmlspecialchars($update_error_msg) . " -->\n";
-                    echo "<!-- " . htmlspecialchars($update_http_code) . " -->\n";
+                    if (!$is_ajax) {
+                        echo "<!-- UPDATE ERROR: " . htmlspecialchars($update_error_msg) . " -->\n";
+                        echo "<!-- " . htmlspecialchars($update_http_code) . " -->\n";
+                    }
                     header("Location: " . home_url('/subscription-form/') . "?error=update");
                     exit;
                 }
@@ -372,7 +391,9 @@ try {
             error_log('Mailchimp API Error Details:');
             foreach ($api_error_details as $key => $value) {
                 error_log($key . ': ' . print_r($value, true));
-                echo "<!-- API ERROR - " . htmlspecialchars($key) . ": " . htmlspecialchars(print_r($value, true)) . " -->\n";
+                if (!$is_ajax) {
+                    echo "<!-- API ERROR - " . htmlspecialchars($key) . ": " . htmlspecialchars(print_r($value, true)) . " -->\n";
+                }
             }
             
             // Extract error message from formatted response
@@ -405,8 +426,10 @@ try {
     if ($is_ajax) {
         send_json_response(false, 'An unexpected error occurred. Please try again.', array('exception'));
     } else {
-        echo "<!-- EXCEPTION: " . htmlspecialchars($exception_msg) . " -->\n";
-        echo "<!-- EXCEPTION TRACE: " . htmlspecialchars($exception_trace) . " -->\n";
+        if (!$is_ajax) {
+            echo "<!-- EXCEPTION: " . htmlspecialchars($exception_msg) . " -->\n";
+            echo "<!-- EXCEPTION TRACE: " . htmlspecialchars($exception_trace) . " -->\n";
+        }
         header("Location: " . home_url('/subscription-form/') . "?error=exception");
         exit;
     }

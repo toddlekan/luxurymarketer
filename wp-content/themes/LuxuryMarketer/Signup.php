@@ -222,6 +222,10 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							}
 						},
 						error: function(xhr, status, error) {
+							console.log('AJAX Error:', status, error);
+							console.log('Response Text:', xhr.responseText);
+							console.log('Status Code:', xhr.status);
+							
 							// Try to parse JSON error response
 							var errorMessage = 'There was an error submitting your subscription. Please try again.';
 							try {
@@ -230,7 +234,14 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 									errorMessage = errorResponse.message;
 								}
 							} catch (e) {
-								// Not JSON, use default message
+								// Not JSON, check if it's HTML with error info
+								if (xhr.responseText && xhr.responseText.indexOf('<!--') !== -1) {
+									// Try to extract error from HTML comments
+									var match = xhr.responseText.match(/<!--\s*(?:ERROR|EXCEPTION|VALIDATION ERROR):\s*([^>]+)\s*-->/);
+									if (match && match[1]) {
+										errorMessage = 'Server error: ' + match[1].substring(0, 100);
+									}
+								}
 							}
 							
 							var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
