@@ -3029,6 +3029,8 @@ ul.no-bullet {
 
 @media (max-width:768px) {
 
+  h1{text-align: center;}
+
   #logo-mobile, #mobile-sub-menu {
     margin-top: 10px;
   }
@@ -3072,7 +3074,7 @@ ul.no-bullet {
   }
 
   #hero-section-1 {
-    margin: 14px auto 0 auto;
+    margin: 20px auto 0 auto;
   }
 
 }
