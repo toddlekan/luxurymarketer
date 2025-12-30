@@ -72,7 +72,14 @@ class ReCaptcha
     {
         $req = "";
         foreach ($data as $key => $value) {
-            $req .= $key . '=' . urlencode(stripslashes($value)) . '&';
+            // Only stripslashes if value is not null and is a string
+            if ($value !== null && is_string($value)) {
+                $req .= $key . '=' . urlencode(stripslashes($value)) . '&';
+            } elseif ($value !== null) {
+                // For non-string, non-null values, just urlencode
+                $req .= $key . '=' . urlencode($value) . '&';
+            }
+            // Skip null values
         }
 
         // Cut the last '&'

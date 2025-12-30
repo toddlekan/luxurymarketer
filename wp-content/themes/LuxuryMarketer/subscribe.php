@@ -347,8 +347,15 @@ if (empty($category)) {
 // Validate reCAPTCHA if configured
 if (!empty($recaptcha_secret)) {
     // Get the token and ensure it's properly decoded (wp_unslash handles magic quotes if enabled)
-    $recaptcha_token = isset($_POST['g-recaptcha-response']) ? wp_unslash($_POST['g-recaptcha-response']) : '';
-    $recaptcha_token = trim($recaptcha_token); // Remove any whitespace
+    $recaptcha_token = isset($_POST['g-recaptcha-response']) ? $_POST['g-recaptcha-response'] : '';
+    // Don't use wp_unslash here - the token should be URL-encoded from the form, PHP will decode it automatically
+    // Just trim whitespace
+    $recaptcha_token = trim($recaptcha_token);
+    
+    // Log the raw token before any processing
+    subscribe_debug_log('reCAPTCHA token raw POST value length: ' . strlen($recaptcha_token));
+    subscribe_debug_log('reCAPTCHA token raw POST value (first 50): ' . substr($recaptcha_token, 0, 50));
+    subscribe_debug_log('reCAPTCHA token raw POST value (last 50): ' . substr($recaptcha_token, -50));
     
     subscribe_debug_log('reCAPTCHA validation - Token received: ' . (!empty($recaptcha_token) ? 'Yes (length: ' . strlen($recaptcha_token) . ', first 30 chars: ' . substr($recaptcha_token, 0, 30) . ')' : 'No'));
     subscribe_debug_log('reCAPTCHA validation - Secret key: ' . (!empty($recaptcha_secret) ? 'Yes (length: ' . strlen($recaptcha_secret) . ')' : 'No'));
