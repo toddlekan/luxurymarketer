@@ -223,28 +223,42 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 					// Remove any existing error/success messages
 					formContainer.find('.ajax-message').remove();
 					
-					// Serialize form data
+					// Get reCAPTCHA token using the API (most reliable method)
+					var recaptchaToken = '';
+					if (recaptchaWidget.length > 0 && typeof grecaptcha !== 'undefined') {
+						try {
+							// Use grecaptcha.getResponse() to get the current token
+							// Widget ID 0 is the default for the first widget
+							recaptchaToken = grecaptcha.getResponse(0);
+							if (!recaptchaToken) {
+								// If getResponse(0) fails, try to find widget ID from the element
+								var widgetId = recaptchaWidget.data('widget-id');
+								if (widgetId !== undefined) {
+									recaptchaToken = grecaptcha.getResponse(widgetId);
+								} else {
+									// Fallback to textarea if API method fails
+									recaptchaToken = $('textarea[name="g-recaptcha-response"]').val();
+								}
+							}
+						} catch (e) {
+							console.log('Error getting reCAPTCHA token from API:', e);
+							// Fallback to textarea
+							recaptchaToken = $('textarea[name="g-recaptcha-response"]').val();
+						}
+					}
+					
+					// Serialize form data (this will include the textarea if it's in the form)
 					var formData = form.serialize();
 					
-					// Ensure reCAPTCHA token is included (it might be outside the form)
-					if (recaptchaWidget.length > 0) {
-						var recaptchaToken = $('textarea[name="g-recaptcha-response"]').val();
-						if (!recaptchaToken && typeof grecaptcha !== 'undefined') {
-							try {
-								recaptchaToken = grecaptcha.getResponse(0);
-							} catch (e) {
-								console.log('Error getting reCAPTCHA token:', e);
-							}
-						}
-						
-						if (recaptchaToken) {
-							// Remove any existing g-recaptcha-response and add the current one
-							formData = formData.replace(/g-recaptcha-response=[^&]*/g, '');
-							formData += '&g-recaptcha-response=' + encodeURIComponent(recaptchaToken);
-							console.log('reCAPTCHA token added to form data');
-						} else {
-							console.log('Warning: reCAPTCHA token not found for form submission');
-						}
+					// Always replace the token with the one from the API to ensure we have the latest/active token
+					if (recaptchaToken) {
+						// Remove any existing g-recaptcha-response from serialized data
+						formData = formData.replace(/[&]?g-recaptcha-response=[^&]*/g, '');
+						// Add the fresh token from the API
+						formData += '&g-recaptcha-response=' + encodeURIComponent(recaptchaToken);
+						console.log('reCAPTCHA token added from API (first 30 chars):', recaptchaToken.substring(0, 30));
+					} else {
+						console.log('Warning: reCAPTCHA token not found for form submission');
 					}
 					
 					formData += '&ajax=1';
@@ -277,6 +291,24 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 								var errorMessage = response && response.message ? response.message : 'There was an error submitting your subscription. Please try again.';
 								var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
 								errorHtml += '<strong>Error:</strong> ' + errorMessage;
+								
+								// Display debug log if available
+								if (response && response.data && response.data.debug_log && response.data.debug_log.length > 0) {
+									errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#fff3cd; border:1px solid #ffc107; border-radius:4px; font-size:12px; font-family:monospace; max-height:300px; overflow-y:auto;">';
+									errorHtml += '<strong>Debug Log:</strong><br>';
+									response.data.debug_log.forEach(function(logEntry) {
+										errorHtml += '<div>' + logEntry.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+									});
+									errorHtml += '</div>';
+								}
+								
+								// Display full response data for debugging
+								if (response && response.data) {
+									errorHtml += '<details style="margin-top:10px;"><summary style="cursor:pointer; color:#666; font-size:12px;">Show Debug Info</summary>';
+									errorHtml += '<pre style="margin-top:10px; padding:10px; background-color:#f5f5f5; border:1px solid #ddd; border-radius:4px; font-size:11px; max-height:400px; overflow-y:auto;">' + JSON.stringify(response.data, null, 2) + '</pre>';
+									errorHtml += '</details>';
+								}
+								
 								errorHtml += '</div>';
 								formContainer.prepend(errorHtml);
 							
@@ -296,8 +328,9 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							
 							// Try to parse JSON error response
 							var errorMessage = 'There was an error submitting your subscription. Please try again.';
+							var errorResponse = null;
 							try {
-								var errorResponse = JSON.parse(xhr.responseText);
+								errorResponse = JSON.parse(xhr.responseText);
 								if (errorResponse && errorResponse.message) {
 									errorMessage = errorResponse.message;
 								}
@@ -314,6 +347,24 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							
 							var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
 							errorHtml += '<strong>Error:</strong> ' + errorMessage;
+							
+							// Display debug log if available
+							if (errorResponse && errorResponse.data && errorResponse.data.debug_log && errorResponse.data.debug_log.length > 0) {
+								errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#fff3cd; border:1px solid #ffc107; border-radius:4px; font-size:12px; font-family:monospace; max-height:300px; overflow-y:auto;">';
+								errorHtml += '<strong>Debug Log:</strong><br>';
+								errorResponse.data.debug_log.forEach(function(logEntry) {
+									errorHtml += '<div>' + logEntry.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+								});
+								errorHtml += '</div>';
+							}
+							
+							// Display full response data for debugging
+							if (errorResponse && errorResponse.data) {
+								errorHtml += '<details style="margin-top:10px;"><summary style="cursor:pointer; color:#666; font-size:12px;">Show Debug Info</summary>';
+								errorHtml += '<pre style="margin-top:10px; padding:10px; background-color:#f5f5f5; border:1px solid #ddd; border-radius:4px; font-size:11px; max-height:400px; overflow-y:auto;">' + JSON.stringify(errorResponse.data, null, 2) + '</pre>';
+								errorHtml += '</details>';
+							}
+							
 							errorHtml += '</div>';
 							formContainer.prepend(errorHtml);
 							
