@@ -444,7 +444,7 @@ $url_root = get_template_directory_uri();
   </a>
   <div class="navbar-collapse collapse" id="navbar-main">
   <ul class="no-bullet mobile-menu" style="float: left;">
-  <li><a class="reverse" href="/">Home</a></li>
+  <li><a class="reverse grey" href="/">Home</a></li>
                   
                   <li class="reverse dropdown item">
                     <a href="/category/research" class="dropdown-toggle grey" data-toggle="dropdown" role="button" 
