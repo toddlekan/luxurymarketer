@@ -18,7 +18,22 @@ if (!defined('ABSPATH')) {
 $recaptcha_options = get_option('recaptcha_options', array());
 $recaptcha_secret = isset($recaptcha_options['secret']) ? $recaptcha_options['secret'] : '';
 if (!empty($recaptcha_secret)) {
-    require_once(dirname(dirname(__FILE__)) . '/plugins/wp-recaptcha/recaptchalib.php');
+    // Path: from wp-content/themes/LuxuryMarketer to wp-content/plugins/wp-recaptcha
+    $recaptcha_lib_path = dirname(dirname(dirname(__FILE__))) . '/plugins/wp-recaptcha/recaptchalib.php';
+    if (file_exists($recaptcha_lib_path)) {
+        require_once($recaptcha_lib_path);
+    } else {
+        error_log('reCAPTCHA library not found at: ' . $recaptcha_lib_path);
+        // Try alternative path using WP_CONTENT_DIR if available
+        if (defined('WP_CONTENT_DIR')) {
+            $alt_path = WP_CONTENT_DIR . '/plugins/wp-recaptcha/recaptchalib.php';
+            if (file_exists($alt_path)) {
+                require_once($alt_path);
+            } else {
+                error_log('reCAPTCHA library not found at alternative path: ' . $alt_path);
+            }
+        }
+    }
 }
 
 // Get Mailchimp API key from wp-config or environment variable
