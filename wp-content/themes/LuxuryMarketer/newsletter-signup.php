@@ -546,6 +546,99 @@ Template Name: Newsletter Signup Template
 								
 								<span class='input_button'><input name="Submit" value="Subscribe" border="0" name="imageField" width="78" height="29" type="submit"></span>
 							</form>
+							
+							<script type="text/javascript">
+							jQuery(document).ready(function($) {
+								$('#newsletter-form').on('submit', function(e) {
+									e.preventDefault();
+									
+									var form = $(this);
+									var formContainer = $('#newsletterlist');
+									var submitButton = form.find('input[type="submit"]');
+									var originalButtonValue = submitButton.val();
+									
+									// Validate reCAPTCHA
+									var recaptchaResponse = form.find('[name="g-recaptcha-response"]').val();
+									if (!recaptchaResponse || recaptchaResponse === '') {
+										var errorHtml = '<div style="color:#d32f2f; background-color:#ffebee; margin-bottom:15px; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px;">';
+										errorHtml += '<strong>Error:</strong> Please complete the reCAPTCHA verification.';
+										errorHtml += '</div>';
+										formContainer.prepend(errorHtml);
+										return false;
+									}
+									
+									// Disable submit button and show loading state
+									submitButton.prop('disabled', true).val('Subscribing...');
+									
+									// Remove any existing error/success messages
+									formContainer.find('div[style*="background-color:#ffebee"], div[style*="background-color:#e8f5e9"]').remove();
+									
+									// Serialize form data and add AJAX flag
+									var formData = form.serialize() + '&ajax=1';
+									
+									// Submit via AJAX
+									$.ajax({
+										url: form.attr('action'),
+										type: 'POST',
+										data: formData,
+										dataType: 'json',
+										beforeSend: function(xhr) {
+											xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+										},
+										success: function(response) {
+											if (response && response.success) {
+												// Success - replace form with success message
+												var successHtml = '<div style="color:#2e7d32; background-color:#e8f5e9; padding:30px; border:2px solid #4caf50; border-radius:4px; text-align:center;">';
+												successHtml += '<h2 style="color:#2e7d32; margin-top:0;">Success!</h2>';
+												successHtml += '<p style="font-size:16px; margin-bottom:0;">' + (response.message || 'Thank you! Your subscription has been confirmed.') + '</p>';
+												successHtml += '</div>';
+												formContainer.html(successHtml);
+											} else {
+												// Error - show error message above form
+												var errorMessage = response && response.message ? response.message : 'There was an error submitting your subscription. Please try again.';
+												var errorHtml = '<div style="color:#d32f2f; background-color:#ffebee; margin-bottom:15px; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px;">';
+												errorHtml += '<strong>Error:</strong> ' + errorMessage;
+												errorHtml += '</div>';
+												formContainer.prepend(errorHtml);
+												
+												// Re-enable submit button
+												submitButton.prop('disabled', false).val(originalButtonValue);
+												
+												// Reset reCAPTCHA if it exists
+												if (typeof grecaptcha !== 'undefined') {
+													grecaptcha.reset();
+												}
+											}
+										},
+										error: function(xhr, status, error) {
+											// Try to parse JSON error response
+											var errorMessage = 'There was an error submitting your subscription. Please try again.';
+											try {
+												var errorResponse = JSON.parse(xhr.responseText);
+												if (errorResponse && errorResponse.message) {
+													errorMessage = errorResponse.message;
+												}
+											} catch (e) {
+												// Not JSON, use default message
+											}
+											
+											var errorHtml = '<div style="color:#d32f2f; background-color:#ffebee; margin-bottom:15px; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px;">';
+											errorHtml += '<strong>Error:</strong> ' + errorMessage;
+											errorHtml += '</div>';
+											formContainer.prepend(errorHtml);
+											
+											// Re-enable submit button
+											submitButton.prop('disabled', false).val(originalButtonValue);
+											
+											// Reset reCAPTCHA if it exists
+											if (typeof grecaptcha !== 'undefined') {
+												grecaptcha.reset();
+											}
+										}
+									});
+								});
+							});
+							</script>
 						</div>
 
 

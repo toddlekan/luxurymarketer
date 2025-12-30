@@ -9,6 +9,23 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
+// Detect if this is an AJAX request
+$is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || 
+           (!empty($_POST['ajax']) && $_POST['ajax'] == '1');
+
+// Function to send JSON response
+function send_json_response($success, $message, $errors = array(), $data = array()) {
+    header('Content-Type: application/json');
+    $response = array(
+        'success' => $success,
+        'message' => $message,
+        'errors' => $errors,
+        'data' => $data
+    );
+    echo json_encode($response);
+    exit;
+}
+
 // Load WordPress if not already loaded
 if (!defined('ABSPATH')) {
     require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php');
@@ -45,12 +62,15 @@ error_log('Mailchimp API Key Check: ' . $api_key_status);
 echo "<!-- Mailchimp API Key Check: " . htmlspecialchars($api_key_status) . " -->\n";
 
 if (empty($mailchimp_api_key) || $mailchimp_api_key === 'YOUR_MAILCHIMP_API_KEY_HERE') {
-    // Redirect with error if API key is not configured
     $error_msg = 'Mailchimp API Key not configured properly';
     error_log($error_msg);
-    echo "<!-- ERROR: " . htmlspecialchars($error_msg) . " -->\n";
-    header("Location: " . home_url('/subscription-form/') . "?error=config");
-    exit;
+    if ($is_ajax) {
+        send_json_response(false, 'Subscription service is temporarily unavailable. Please try again later.', array('config'));
+    } else {
+        echo "<!-- ERROR: " . htmlspecialchars($error_msg) . " -->\n";
+        header("Location: " . home_url('/subscription-form/') . "?error=config");
+        exit;
+    }
 }
 
 // Extract data center from API key (format: xxxxxxxx-us12)
@@ -189,14 +209,38 @@ if (!empty($recaptcha_secret)) {
     }
 }
 
-// If there are validation errors, redirect back to form
+// If there are validation errors, return error response
 if (!empty($errors)) {
     $error_params = implode(',', $errors);
     $validation_error = 'Validation errors: ' . $error_params;
     error_log($validation_error);
-    echo "<!-- VALIDATION ERROR: " . htmlspecialchars($validation_error) . " -->\n";
-    header("Location: " . home_url('/subscription-form/') . "?error=validation&fields=" . urlencode($error_params));
-    exit;
+    
+    $field_labels = array(
+        'email' => 'Email Address',
+        'email_mismatch' => 'Email addresses do not match',
+        'first_name' => 'First Name',
+        'last_name' => 'Last Name',
+        'title' => 'Title',
+        'company' => 'Company',
+        'city' => 'City',
+        'state' => 'State',
+        'zipcode' => 'ZIP/Post Code',
+        'country' => 'Country',
+        'category' => 'Industry',
+        'captcha' => 'reCAPTCHA verification'
+    );
+    $error_messages = array();
+    foreach ($errors as $error) {
+        $error_messages[] = isset($field_labels[$error]) ? $field_labels[$error] : ucfirst(str_replace('_', ' ', $error));
+    }
+    
+    if ($is_ajax) {
+        send_json_response(false, 'Please check the following fields: ' . implode(', ', $error_messages), $errors);
+    } else {
+        echo "<!-- VALIDATION ERROR: " . htmlspecialchars($validation_error) . " -->\n";
+        header("Location: " . home_url('/subscription-form/') . "?error=validation&fields=" . urlencode($error_params));
+        exit;
+    }
 }
 
 // Use "Other" category value if category is "Other"
@@ -253,9 +297,13 @@ try {
     
     // Check if the request was successful
     if ($response['success']) {
-        // Success - redirect to confirmation page
-        header("Location: " . home_url('/subscription-form/') . "?step=thankyou");
-        exit;
+        // Success
+        if ($is_ajax) {
+            send_json_response(true, 'Thank you! Your subscription has been confirmed.');
+        } else {
+            header("Location: " . home_url('/subscription-form/') . "?step=thankyou");
+            exit;
+        }
     } else {
         // Get error details
         $formatted_response = json_decode($response['body'], true);
@@ -287,20 +335,28 @@ try {
             $update_response = mailchimp_api_request($update_url, 'PATCH', $mailchimp_api_key, $subscriber_data);
             
             if ($update_response['success']) {
-                // Success - redirect to confirmation page
-                header("Location: " . home_url('/subscription-form/') . "?step=thankyou");
-                exit;
+                // Success
+                if ($is_ajax) {
+                    send_json_response(true, 'Thank you! Your subscription has been confirmed.');
+                } else {
+                    header("Location: " . home_url('/subscription-form/') . "?step=thankyou");
+                    exit;
+                }
             } else {
-                // Log error and redirect
+                // Log error
                 $update_error_response = json_decode($update_response['body'], true);
                 $update_error_msg = 'Mailchimp Update Error: ' . print_r($update_error_response, true);
                 $update_http_code = 'HTTP Code: ' . $update_response['http_code'];
                 error_log($update_error_msg);
                 error_log($update_http_code);
-                echo "<!-- UPDATE ERROR: " . htmlspecialchars($update_error_msg) . " -->\n";
-                echo "<!-- " . htmlspecialchars($update_http_code) . " -->\n";
-                header("Location: " . home_url('/subscription-form/') . "?error=update");
-                exit;
+                if ($is_ajax) {
+                    send_json_response(false, 'There was an error updating your subscription. Please try again.', array('update'));
+                } else {
+                    echo "<!-- UPDATE ERROR: " . htmlspecialchars($update_error_msg) . " -->\n";
+                    echo "<!-- " . htmlspecialchars($update_http_code) . " -->\n";
+                    header("Location: " . home_url('/subscription-form/') . "?error=update");
+                    exit;
+                }
             }
         } else {
             // Other error occurred - log detailed error information
@@ -332,19 +388,27 @@ try {
                 $error_message = urlencode($curl_error);
             }
             
-            header("Location: " . home_url('/subscription-form/') . "?error=api&msg=" . $error_message);
-            exit;
+            if ($is_ajax) {
+                send_json_response(false, 'There was an error submitting your subscription. Please try again.', array('api'));
+            } else {
+                header("Location: " . home_url('/subscription-form/') . "?error=api&msg=" . $error_message);
+                exit;
+            }
         }
     }
 } catch (Exception $e) {
-    // Log exception and redirect
+    // Log exception
     $exception_msg = 'Mailchimp Exception: ' . $e->getMessage();
     $exception_trace = $e->getTraceAsString();
     error_log($exception_msg);
     error_log('Exception Trace: ' . $exception_trace);
-    echo "<!-- EXCEPTION: " . htmlspecialchars($exception_msg) . " -->\n";
-    echo "<!-- EXCEPTION TRACE: " . htmlspecialchars($exception_trace) . " -->\n";
-    header("Location: " . home_url('/subscription-form/') . "?error=exception");
-    exit;
+    if ($is_ajax) {
+        send_json_response(false, 'An unexpected error occurred. Please try again.', array('exception'));
+    } else {
+        echo "<!-- EXCEPTION: " . htmlspecialchars($exception_msg) . " -->\n";
+        echo "<!-- EXCEPTION TRACE: " . htmlspecialchars($exception_trace) . " -->\n";
+        header("Location: " . home_url('/subscription-form/') . "?error=exception");
+        exit;
+    }
 }
 ?>
