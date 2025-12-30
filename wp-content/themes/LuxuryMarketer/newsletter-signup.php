@@ -53,27 +53,6 @@ Template Name: Newsletter Signup Template
 
 
 
-						<script language="javascript">
-							<!--
-							// Sync email2 field with email field for email confirmation
-							document.addEventListener('DOMContentLoaded', function() {
-								var emailField = document.getElementById('email');
-								var email2Field = document.getElementById('email2');
-								
-								if (emailField && email2Field) {
-									// Sync on load
-									if (emailField.value) {
-										email2Field.value = emailField.value;
-									}
-									
-									// Sync on change
-									emailField.addEventListener('input', function() {
-										email2Field.value = emailField.value;
-									});
-								}
-							});
-							-->
-						</script>
 
 
 
@@ -82,9 +61,21 @@ Template Name: Newsletter Signup Template
 
 							<div style="color:red"><?= isset($_GET['status']) ? htmlspecialchars($_GET['status']) : ''; ?></div>
 							<?php 
-							// Get email from GET parameter and sanitize it
-							$prefill_email = isset($_GET['email']) ? sanitize_email($_GET['email']) : '';
-							$prefill_email = !empty($prefill_email) && is_email($prefill_email) ? $prefill_email : '';
+							// Get email from GET parameter - preserve plus signs
+							$prefill_email = '';
+							if (isset($_GET['email'])) {
+								// PHP's $_GET automatically converts + to space, so we need to parse the raw query string
+								$raw_email = $_GET['email'];
+								// If email contains space, check if replacing with + makes it a valid email
+								if (strpos($raw_email, ' ') !== false) {
+									$test_email = str_replace(' ', '+', $raw_email);
+									if (is_email($test_email)) {
+										$raw_email = $test_email;
+									}
+								}
+								// Only sanitize if it's a valid email (sanitize_email preserves plus signs)
+								$prefill_email = is_email($raw_email) ? sanitize_email($raw_email) : '';
+							}
 							?>
 							<form method="POST" action="<?php echo esc_url(get_template_directory_uri() . '/subscribe.php'); ?>" id="newsletter-form">
 
@@ -104,11 +95,14 @@ Template Name: Newsletter Signup Template
 
 									<tr>
 										<td width=130> <label for="email">Email address<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='EMAIL' id='email' class='form_element' style='' value='<?php echo !empty($prefill_email) ? htmlspecialchars($prefill_email, ENT_QUOTES) : (isset($_POST['EMAIL']) ? htmlspecialchars(stripslashes($_POST['EMAIL']), ENT_QUOTES) : ''); ?>' /></span> </td>
+										<td> <span class='input_left'><input type='textbox' name='EMAIL' id='email' class='form_element' style='' value='<?php echo !empty($prefill_email) ? htmlspecialchars($prefill_email, ENT_QUOTES) : (isset($_POST['EMAIL']) ? htmlspecialchars(wp_unslash($_POST['EMAIL']), ENT_QUOTES) : ''); ?>' /></span> </td>
 									</tr>
 									
-									<!-- Hidden email2 field for email confirmation - synced with email field via JavaScript -->
-									<input type='hidden' name='email2' id='email2' value='<?php echo !empty($prefill_email) ? htmlspecialchars($prefill_email, ENT_QUOTES) : (isset($_POST['email2']) ? htmlspecialchars(stripslashes($_POST['email2']), ENT_QUOTES) : ''); ?>' />
+									<!-- Email2 field for email confirmation - user must enter manually -->
+									<tr>
+										<td width=130> <label for="email2">Confirm Email<span class='requiredLabelRight'>*</span></label> </td>
+										<td> <span class='input_left'><input type='textbox' name='email2' id='email2' class='form_element' style='' value='<?php echo isset($_POST['email2']) ? htmlspecialchars(wp_unslash($_POST['email2']), ENT_QUOTES) : ''; ?>' /></span> </td>
+									</tr>
 
 
 									<tr>

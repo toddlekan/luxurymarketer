@@ -107,8 +107,12 @@ function mailchimp_subscriber_hash($email) {
 }
 
 // Sanitize and validate form data
-$email = isset($_POST['EMAIL']) ? sanitize_email($_POST['EMAIL']) : '';
-$email2 = isset($_POST['email2']) ? sanitize_email($_POST['email2']) : '';
+// Preserve plus signs by getting raw POST data first, then sanitizing
+$email_raw = isset($_POST['EMAIL']) ? wp_unslash($_POST['EMAIL']) : '';
+$email2_raw = isset($_POST['email2']) ? wp_unslash($_POST['email2']) : '';
+// Sanitize email addresses (sanitize_email preserves plus signs in valid emails)
+$email = sanitize_email($email_raw);
+$email2 = sanitize_email($email2_raw);
 $first_name = isset($_POST['FNAME']) ? sanitize_text_field($_POST['FNAME']) : '';
 $last_name = isset($_POST['LNAME']) ? sanitize_text_field($_POST['LNAME']) : '';
 $title = isset($_POST['TITLE']) ? sanitize_text_field($_POST['TITLE']) : '';
