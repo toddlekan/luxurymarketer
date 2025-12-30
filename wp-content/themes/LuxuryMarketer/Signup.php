@@ -188,10 +188,26 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 					}
 
 					// Validate reCAPTCHA if it exists
-					var recaptchaResponse = form.find('[name="g-recaptcha-response"]').val();
-					if (recaptchaResponse === undefined || recaptchaResponse === '') {
-						// Check if reCAPTCHA widget exists on page
-						if ($('.g-recaptcha').length > 0) {
+					var recaptchaWidget = $('.g-recaptcha');
+					if (recaptchaWidget.length > 0) {
+						// For reCAPTCHA v2, the token is stored in a hidden textarea
+						// It can be anywhere in the DOM, not necessarily in the form
+						var recaptchaResponse = $('textarea[name="g-recaptcha-response"]').val();
+						
+						console.log('reCAPTCHA token from textarea:', recaptchaResponse ? 'Found (' + recaptchaResponse.substring(0, 20) + '...)' : 'Not found');
+						
+						// Also try using grecaptcha.getResponse() if available
+						if ((!recaptchaResponse || recaptchaResponse === '') && typeof grecaptcha !== 'undefined') {
+							try {
+								// Try with widget ID 0 (default for first widget)
+								recaptchaResponse = grecaptcha.getResponse(0);
+								console.log('reCAPTCHA token from getResponse(0):', recaptchaResponse ? 'Found (' + recaptchaResponse.substring(0, 20) + '...)' : 'Not found');
+							} catch (e) {
+								console.log('reCAPTCHA getResponse error:', e);
+							}
+						}
+						
+						if (!recaptchaResponse || recaptchaResponse === '') {
 							var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
 							errorHtml += '<strong>Error:</strong> Please complete the reCAPTCHA verification.';
 							errorHtml += '</div>';
@@ -207,8 +223,31 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 					// Remove any existing error/success messages
 					formContainer.find('.ajax-message').remove();
 					
-					// Serialize form data and add AJAX flag
-					var formData = form.serialize() + '&ajax=1';
+					// Serialize form data
+					var formData = form.serialize();
+					
+					// Ensure reCAPTCHA token is included (it might be outside the form)
+					if (recaptchaWidget.length > 0) {
+						var recaptchaToken = $('textarea[name="g-recaptcha-response"]').val();
+						if (!recaptchaToken && typeof grecaptcha !== 'undefined') {
+							try {
+								recaptchaToken = grecaptcha.getResponse(0);
+							} catch (e) {
+								console.log('Error getting reCAPTCHA token:', e);
+							}
+						}
+						
+						if (recaptchaToken) {
+							// Remove any existing g-recaptcha-response and add the current one
+							formData = formData.replace(/g-recaptcha-response=[^&]*/g, '');
+							formData += '&g-recaptcha-response=' + encodeURIComponent(recaptchaToken);
+							console.log('reCAPTCHA token added to form data');
+						} else {
+							console.log('Warning: reCAPTCHA token not found for form submission');
+						}
+					}
+					
+					formData += '&ajax=1';
 					
 					// Submit via AJAX
 					$.ajax({

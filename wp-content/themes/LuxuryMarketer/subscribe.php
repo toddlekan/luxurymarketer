@@ -329,16 +329,34 @@ if (empty($category)) {
 
 // Validate reCAPTCHA if configured
 if (!empty($recaptcha_secret)) {
-    if (empty($_POST['g-recaptcha-response'])) {
+    $recaptcha_token = isset($_POST['g-recaptcha-response']) ? $_POST['g-recaptcha-response'] : '';
+    
+    if (empty($recaptcha_token)) {
+        error_log('reCAPTCHA validation failed: Token is empty');
         $errors[] = 'captcha';
     } else {
-        $recaptcha = new ReCaptcha($recaptcha_secret);
-        $recaptcha_response = $recaptcha->verifyResponse(
-            $_SERVER['REMOTE_ADDR'],
-            $_POST['g-recaptcha-response']
-        );
-        
-        if (!$recaptcha_response->success) {
+        try {
+            if (!class_exists('ReCaptcha')) {
+                error_log('reCAPTCHA validation failed: ReCaptcha class not found');
+                $errors[] = 'captcha';
+            } else {
+                $recaptcha = new ReCaptcha($recaptcha_secret);
+                $remote_ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+                $recaptcha_response = $recaptcha->verifyResponse($remote_ip, $recaptcha_token);
+                
+                if (!$recaptcha_response || !$recaptcha_response->success) {
+                    $error_codes = isset($recaptcha_response->errorCodes) ? $recaptcha_response->errorCodes : 'unknown';
+                    error_log('reCAPTCHA validation failed: ' . print_r($error_codes, true));
+                    $errors[] = 'captcha';
+                } else {
+                    error_log('reCAPTCHA validation successful');
+                }
+            }
+        } catch (Exception $e) {
+            error_log('reCAPTCHA validation exception: ' . $e->getMessage());
+            $errors[] = 'captcha';
+        } catch (Error $e) {
+            error_log('reCAPTCHA validation error: ' . $e->getMessage());
             $errors[] = 'captcha';
         }
     }
