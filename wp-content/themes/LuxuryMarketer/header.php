@@ -187,8 +187,11 @@ g
                     <ul class="dropdown-menu">
                       <li><a class="reverse" href="/">Home</a></li>
                       <li class="reverse"><a href="/category/research" class="grey">Sectors</a>
-                    
-                        <ul class="dropdown-menu">
+                      <li class="reverse dropdown item">
+                        <a href="/category/research" class="dropdown-toggle grey" data-toggle="dropdown" role="button" 
+                          aria-expanded="false">
+                          Sectors <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
                             <li class="reverse"><a href="/category/research/fashion-and-leather-goods" class="grey">Fashion &amp; Leather Goods</a></li>
                             <li class="reverse"><a href="/category/research/real-estate" class="grey">Real Estate &amp; Design</a></li>
                             <li class="reverse"><a href="/category/research/retail" class="grey">Retail</a></li>
