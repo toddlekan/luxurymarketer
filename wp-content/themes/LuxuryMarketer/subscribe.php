@@ -16,6 +16,23 @@ if (!$is_ajax_check) {
     ini_set('display_startup_errors', 0);
 }
 
+// Load WordPress if not already loaded (must be first!)
+if (!defined('ABSPATH')) {
+    $wp_load_path = dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php';
+    if (file_exists($wp_load_path)) {
+        require_once($wp_load_path);
+    } else {
+        // If WordPress can't be loaded, send error response
+        if ($is_ajax_check) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(array('success' => false, 'message' => 'System error: WordPress could not be loaded', 'errors' => array('config')));
+            exit;
+        } else {
+            die('Error: WordPress could not be loaded');
+        }
+    }
+}
+
 // Detect if this is an AJAX request
 $is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || 
            (!empty($_POST['ajax']) && $_POST['ajax'] == '1');
@@ -37,13 +54,8 @@ function send_json_response($success, $message, $errors = array(), $data = array
     exit;
 }
 
-// Load WordPress if not already loaded
-if (!defined('ABSPATH')) {
-    require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php');
-}
-
 // Include reCAPTCHA library for validation
-$recaptcha_options = get_option('recaptcha_options', array());
+$recaptcha_options = function_exists('get_option') ? get_option('recaptcha_options', array()) : array();
 $recaptcha_secret = isset($recaptcha_options['secret']) ? $recaptcha_options['secret'] : '';
 if (!empty($recaptcha_secret)) {
     // Path: from wp-content/themes/LuxuryMarketer to wp-content/plugins/wp-recaptcha
@@ -83,7 +95,8 @@ if (empty($mailchimp_api_key) || $mailchimp_api_key === 'YOUR_MAILCHIMP_API_KEY_
         if (!$is_ajax) {
             echo "<!-- ERROR: " . htmlspecialchars($error_msg) . " -->\n";
         }
-        header("Location: " . home_url('/subscription-form/') . "?error=config");
+        $redirect_url = function_exists('home_url') ? home_url('/subscription-form/') : '/subscription-form/';
+        header("Location: " . $redirect_url . "?error=config");
         exit;
     }
 }
@@ -148,22 +161,31 @@ $email2_raw = isset($_POST['email2']) ? wp_unslash($_POST['email2']) : '';
 // Sanitize email addresses (sanitize_email preserves plus signs in valid emails)
 $email = sanitize_email($email_raw);
 $email2 = sanitize_email($email2_raw);
-$first_name = isset($_POST['FNAME']) ? sanitize_text_field($_POST['FNAME']) : '';
-$last_name = isset($_POST['LNAME']) ? sanitize_text_field($_POST['LNAME']) : '';
-$title = isset($_POST['TITLE']) ? sanitize_text_field($_POST['TITLE']) : '';
-$company = isset($_POST['COMPANY']) ? sanitize_text_field($_POST['COMPANY']) : '';
-$city = isset($_POST['CITY']) ? sanitize_text_field($_POST['CITY']) : '';
-$state = isset($_POST['STATE']) ? sanitize_text_field($_POST['STATE']) : '';
-$zipcode = isset($_POST['ZIPCODE']) ? sanitize_text_field($_POST['ZIPCODE']) : '';
-$country = isset($_POST['COUNTRY']) ? sanitize_text_field($_POST['COUNTRY']) : '';
-$phone = isset($_POST['PHONE']) ? sanitize_text_field($_POST['PHONE']) : '';
-$category = isset($_POST['CATEGORY']) ? sanitize_text_field($_POST['CATEGORY']) : '';
-$category_other = isset($_POST['MMERGE7']) ? sanitize_text_field($_POST['MMERGE7']) : '';
+// Helper function to sanitize text fields
+function subscribe_sanitize_text_field($value) {
+    if (function_exists('sanitize_text_field')) {
+        return sanitize_text_field($value);
+    } else {
+        return htmlspecialchars(strip_tags(stripslashes($value)), ENT_QUOTES, 'UTF-8');
+    }
+}
+
+$first_name = isset($_POST['FNAME']) ? subscribe_sanitize_text_field($_POST['FNAME']) : '';
+$last_name = isset($_POST['LNAME']) ? subscribe_sanitize_text_field($_POST['LNAME']) : '';
+$title = isset($_POST['TITLE']) ? subscribe_sanitize_text_field($_POST['TITLE']) : '';
+$company = isset($_POST['COMPANY']) ? subscribe_sanitize_text_field($_POST['COMPANY']) : '';
+$city = isset($_POST['CITY']) ? subscribe_sanitize_text_field($_POST['CITY']) : '';
+$state = isset($_POST['STATE']) ? subscribe_sanitize_text_field($_POST['STATE']) : '';
+$zipcode = isset($_POST['ZIPCODE']) ? subscribe_sanitize_text_field($_POST['ZIPCODE']) : '';
+$country = isset($_POST['COUNTRY']) ? subscribe_sanitize_text_field($_POST['COUNTRY']) : '';
+$phone = isset($_POST['PHONE']) ? subscribe_sanitize_text_field($_POST['PHONE']) : '';
+$category = isset($_POST['CATEGORY']) ? subscribe_sanitize_text_field($_POST['CATEGORY']) : '';
+$category_other = isset($_POST['MMERGE7']) ? subscribe_sanitize_text_field($_POST['MMERGE7']) : '';
 
 // Basic validation
 $errors = array();
 
-if (empty($email) || !is_email($email)) {
+if (empty($email) || !(function_exists('is_email') ? is_email($email) : filter_var($email, FILTER_VALIDATE_EMAIL))) {
     $errors[] = 'email';
 }
 
