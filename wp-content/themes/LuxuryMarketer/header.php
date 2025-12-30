@@ -186,7 +186,7 @@ $url_root = get_template_directory_uri();
                       <li><a class="reverse" href="/">Home</a></li>
                   
                       <li class="reverse dropdown item">
-                        <a href="/category/research" class="dropdown-toggle grey" data-toggle="dropdown" role="button" 
+                        <a href="/category/research" class="dropdown-toggle grey sectors-dropdown" data-toggle="dropdown" role="button" 
                           aria-expanded="false">
                           Sectors <span class="caret"></span></a>
                           <ul class="dropdown-menu">
