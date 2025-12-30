@@ -20,11 +20,6 @@ $is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HT
 // Global debug array to collect log messages
 $GLOBALS['subscribe_debug_log'] = array();
 
-// TEMPORARY: reCAPTCHA bypass flag for testing
-// SET TO false TO RE-ENABLE reCAPTCHA VALIDATION
-// WARNING: This bypass should be removed or set to false before going to production!
-define('BYPASS_RECAPTCHA', true);
-
 // Custom error log function that also stores to debug array
 function subscribe_debug_log($message) {
     if (!isset($GLOBALS['subscribe_debug_log'])) {
@@ -221,33 +216,6 @@ if (!defined('ABSPATH')) {
     }
 }
 
-// Include reCAPTCHA library for validation
-$recaptcha_options = function_exists('get_option') ? get_option('recaptcha_options', array()) : array();
-$recaptcha_secret = isset($recaptcha_options['secret']) ? $recaptcha_options['secret'] : '';
-$recaptcha_site_key = isset($recaptcha_options['site_key']) ? $recaptcha_options['site_key'] : '';
-
-// Log reCAPTCHA configuration for debugging
-subscribe_debug_log('reCAPTCHA configuration - Site key: ' . (!empty($recaptcha_site_key) ? $recaptcha_site_key : 'NOT SET'));
-subscribe_debug_log('reCAPTCHA configuration - Secret key: ' . (!empty($recaptcha_secret) ? substr($recaptcha_secret, 0, 10) . '...' . substr($recaptcha_secret, -4) : 'NOT SET'));
-if (!empty($recaptcha_secret)) {
-    // Path: from wp-content/themes/LuxuryMarketer to wp-content/plugins/wp-recaptcha
-    $recaptcha_lib_path = dirname(dirname(dirname(__FILE__))) . '/plugins/wp-recaptcha/recaptchalib.php';
-    if (file_exists($recaptcha_lib_path)) {
-        @require_once($recaptcha_lib_path);
-    } else {
-        error_log('reCAPTCHA library not found at: ' . $recaptcha_lib_path);
-        // Try alternative path using WP_CONTENT_DIR if available
-        if (defined('WP_CONTENT_DIR')) {
-            $alt_path = WP_CONTENT_DIR . '/plugins/wp-recaptcha/recaptchalib.php';
-            if (file_exists($alt_path)) {
-                require_once($alt_path);
-            } else {
-                error_log('reCAPTCHA library not found at alternative path: ' . $alt_path);
-            }
-        }
-    }
-}
-
 // Get Mailchimp API key from wp-config or environment variable
 $mailchimp_api_key = defined('MAILCHIMP_API_KEY') ? MAILCHIMP_API_KEY : (getenv('MAILCHIMP_API_KEY') ?: '');
 
@@ -401,113 +369,6 @@ if (empty($category)) {
     $errors[] = 'category';
 }
 
-// Validate reCAPTCHA if configured
-if (defined('BYPASS_RECAPTCHA') && BYPASS_RECAPTCHA === true) {
-    subscribe_debug_log('WARNING: reCAPTCHA validation is BYPASSED (BYPASS_RECAPTCHA is set to true). This should only be used for testing!');
-} elseif (!empty($recaptcha_secret)) {
-    // Get the token and ensure it's properly decoded (wp_unslash handles magic quotes if enabled)
-    $recaptcha_token = isset($_POST['g-recaptcha-response']) ? $_POST['g-recaptcha-response'] : '';
-    // Don't use wp_unslash here - the token should be URL-encoded from the form, PHP will decode it automatically
-    // Just trim whitespace
-    $recaptcha_token = trim($recaptcha_token);
-    
-    // Log the raw token before any processing
-    subscribe_debug_log('reCAPTCHA token raw POST value length: ' . strlen($recaptcha_token));
-    subscribe_debug_log('reCAPTCHA token raw POST value (first 50): ' . substr($recaptcha_token, 0, 50));
-    subscribe_debug_log('reCAPTCHA token raw POST value (last 50): ' . substr($recaptcha_token, -50));
-    
-    subscribe_debug_log('reCAPTCHA validation - Token received: ' . (!empty($recaptcha_token) ? 'Yes (length: ' . strlen($recaptcha_token) . ', first 30 chars: ' . substr($recaptcha_token, 0, 30) . ')' : 'No'));
-    subscribe_debug_log('reCAPTCHA validation - Secret key: ' . (!empty($recaptcha_secret) ? 'Yes (length: ' . strlen($recaptcha_secret) . ')' : 'No'));
-    
-    if (empty($recaptcha_token)) {
-        subscribe_debug_log('reCAPTCHA validation failed: Token is empty');
-        if ($is_ajax) {
-            send_json_response(false, 'reCAPTCHA token is missing. Please complete the reCAPTCHA verification.', array('captcha'), array('debug' => 'Token empty', 'post_keys' => array_keys($_POST)));
-        }
-        $errors[] = 'captcha';
-    } else {
-        try {
-            if (!class_exists('ReCaptcha')) {
-                subscribe_debug_log('reCAPTCHA validation failed: ReCaptcha class not found');
-                if ($is_ajax) {
-                    send_json_response(false, 'reCAPTCHA class not found', array('captcha'), array('debug' => 'ReCaptcha class missing'));
-                }
-                $errors[] = 'captcha';
-            } else {
-                $recaptcha = new ReCaptcha($recaptcha_secret);
-                $remote_ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
-                subscribe_debug_log('reCAPTCHA validation - Calling verifyResponse with IP: ' . $remote_ip);
-                subscribe_debug_log('reCAPTCHA validation - Token (first 50 chars): ' . substr($recaptcha_token, 0, 50));
-                subscribe_debug_log('reCAPTCHA validation - Current domain: ' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'NOT SET'));
-                subscribe_debug_log('reCAPTCHA validation - Request URI: ' . (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'NOT SET'));
-                
-                // Create a wrapper to capture the API response
-                $recaptcha_api_response_capture = array();
-                
-                $recaptcha_response = $recaptcha->verifyResponse($remote_ip, $recaptcha_token);
-                
-                subscribe_debug_log('reCAPTCHA validation - Response object: ' . print_r($recaptcha_response, true));
-                
-                // Log the raw API response if available
-                if (isset($recaptcha_response->rawResponse)) {
-                    subscribe_debug_log('reCAPTCHA validation - Raw API response: ' . $recaptcha_response->rawResponse);
-                }
-                
-                // Log the decoded API response if available
-                if (isset($recaptcha_response->decodedResponse)) {
-                    subscribe_debug_log('reCAPTCHA validation - Decoded API response: ' . json_encode($recaptcha_response->decodedResponse, JSON_PRETTY_PRINT));
-                }
-                
-                // Also log the error codes if available
-                if (isset($recaptcha_response->errorCodes) && is_array($recaptcha_response->errorCodes)) {
-                    subscribe_debug_log('reCAPTCHA validation - Error codes: ' . implode(', ', $recaptcha_response->errorCodes));
-                    
-                    // Check server error log for the actual API response (it's logged there)
-                    // For now, log what we know
-                    subscribe_debug_log('reCAPTCHA validation - Note: Check server error logs for detailed API response from Google');
-                    subscribe_debug_log('reCAPTCHA validation - Common causes of invalid-input-response:');
-                    subscribe_debug_log('  1. Token expired (tokens expire after ~2 minutes)');
-                    subscribe_debug_log('  2. Token already used (tokens are single-use)');
-                    subscribe_debug_log('  3. Token format corrupted during transmission');
-                    subscribe_debug_log('  4. Domain mismatch (even if domain looks correct)');
-                    subscribe_debug_log('  5. Secret key mismatch (even if keys look correct)');
-                }
-                
-                if (!$recaptcha_response) {
-                    subscribe_debug_log('reCAPTCHA validation failed: Response object is null');
-                    if ($is_ajax) {
-                        send_json_response(false, 'reCAPTCHA verification failed: No response from server', array('captcha'), array('debug' => 'Response null'));
-                    }
-                    $errors[] = 'captcha';
-                } elseif (!isset($recaptcha_response->success) || !$recaptcha_response->success) {
-                    $error_codes = isset($recaptcha_response->errorCodes) ? $recaptcha_response->errorCodes : 'unknown';
-                    subscribe_debug_log('reCAPTCHA validation failed: ' . print_r($error_codes, true));
-                    if ($is_ajax) {
-                        send_json_response(false, 'reCAPTCHA verification failed: ' . (is_array($error_codes) ? implode(', ', $error_codes) : $error_codes), array('captcha'), array('debug' => 'Validation failed', 'error_codes' => $error_codes));
-                    }
-                    $errors[] = 'captcha';
-                } else {
-                    subscribe_debug_log('reCAPTCHA validation successful');
-                }
-            }
-        } catch (Exception $e) {
-            subscribe_debug_log('reCAPTCHA validation exception: ' . $e->getMessage());
-            subscribe_debug_log('reCAPTCHA validation exception trace: ' . $e->getTraceAsString());
-            if ($is_ajax) {
-                send_json_response(false, 'reCAPTCHA verification error: ' . $e->getMessage(), array('captcha'), array('debug' => 'Exception', 'message' => $e->getMessage()));
-            }
-            $errors[] = 'captcha';
-        } catch (Error $e) {
-            subscribe_debug_log('reCAPTCHA validation error: ' . $e->getMessage());
-            subscribe_debug_log('reCAPTCHA validation error trace: ' . $e->getTraceAsString());
-            if ($is_ajax) {
-                send_json_response(false, 'reCAPTCHA verification error: ' . $e->getMessage(), array('captcha'), array('debug' => 'Error', 'message' => $e->getMessage()));
-            }
-            $errors[] = 'captcha';
-        }
-    }
-}
-
 // If there are validation errors, return error response
 if (!empty($errors)) {
     $error_params = implode(',', $errors);
@@ -525,8 +386,7 @@ if (!empty($errors)) {
         'state' => 'State',
         'zipcode' => 'ZIP/Post Code',
         'country' => 'Country',
-        'category' => 'Industry',
-        'captcha' => 'reCAPTCHA verification'
+        'category' => 'Industry'
     );
     $error_messages = array();
     foreach ($errors as $error) {

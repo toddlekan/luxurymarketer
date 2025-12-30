@@ -193,36 +193,6 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 						$('#bcode_other').val(bcode);
 					}
 
-					// Validate reCAPTCHA if it exists
-					var recaptchaWidget = $('.g-recaptcha');
-					if (recaptchaWidget.length > 0) {
-						// For reCAPTCHA v2, the token is stored in a hidden textarea
-						// It can be anywhere in the DOM, not necessarily in the form
-						var recaptchaResponse = $('textarea[name="g-recaptcha-response"]').val();
-						
-						console.log('reCAPTCHA token from textarea:', recaptchaResponse ? 'Found (' + recaptchaResponse.substring(0, 20) + '...)' : 'Not found');
-						
-						// Also try using grecaptcha.getResponse() if available
-						if ((!recaptchaResponse || recaptchaResponse === '') && typeof grecaptcha !== 'undefined') {
-							try {
-								// Try with widget ID 0 (default for first widget)
-								recaptchaResponse = grecaptcha.getResponse(0);
-								console.log('reCAPTCHA token from getResponse(0):', recaptchaResponse ? 'Found (' + recaptchaResponse.substring(0, 20) + '...)' : 'Not found');
-							} catch (e) {
-								console.log('reCAPTCHA getResponse error:', e);
-							}
-						}
-						
-						if (!recaptchaResponse || recaptchaResponse === '') {
-							var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
-							errorHtml += '<strong>Error:</strong> Please complete the reCAPTCHA verification.';
-							errorHtml += '</div>';
-							formContainer.find('.ajax-message').remove();
-							formContainer.prepend(errorHtml);
-							return false;
-						}
-					}
-
 					// Disable submit button and show loading state
 					console.log('Disabling submit button and clearing messages');
 					submitButton.prop('disabled', true).val('Submitting...');
@@ -232,44 +202,8 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 					
 					console.log('About to call $.ajax()');
 					
-					// Get reCAPTCHA token using the API (most reliable method)
-					var recaptchaToken = '';
-					if (recaptchaWidget.length > 0 && typeof grecaptcha !== 'undefined') {
-						try {
-							// Use grecaptcha.getResponse() to get the current token
-							// Widget ID 0 is the default for the first widget
-							recaptchaToken = grecaptcha.getResponse(0);
-							if (!recaptchaToken) {
-								// If getResponse(0) fails, try to find widget ID from the element
-								var widgetId = recaptchaWidget.data('widget-id');
-								if (widgetId !== undefined) {
-									recaptchaToken = grecaptcha.getResponse(widgetId);
-								} else {
-									// Fallback to textarea if API method fails
-									recaptchaToken = $('textarea[name="g-recaptcha-response"]').val();
-								}
-							}
-						} catch (e) {
-							console.log('Error getting reCAPTCHA token from API:', e);
-							// Fallback to textarea
-							recaptchaToken = $('textarea[name="g-recaptcha-response"]').val();
-						}
-					}
-					
-					// Serialize form data (this will include the textarea if it's in the form)
+					// Serialize form data
 					var formData = form.serialize();
-					
-					// Always replace the token with the one from the API to ensure we have the latest/active token
-					if (recaptchaToken) {
-						// Remove any existing g-recaptcha-response from serialized data
-						formData = formData.replace(/[&]?g-recaptcha-response=[^&]*/g, '');
-						// Add the fresh token from the API
-						formData += '&g-recaptcha-response=' + encodeURIComponent(recaptchaToken);
-						console.log('reCAPTCHA token added from API (first 30 chars):', recaptchaToken.substring(0, 30));
-					} else {
-						console.log('Warning: reCAPTCHA token not found for form submission');
-					}
-					
 					formData += '&ajax=1';
 					
 					console.log('Submitting form data to:', url);
@@ -323,7 +257,7 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 								// Display error log file entries if available
 								if (response && response.data && response.data.error_log_file && response.data.error_log_file.length > 0) {
 									errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#ffe0e0; border:1px solid #ff9999; border-radius:4px;">';
-									errorHtml += '<strong style="display:block; margin-bottom:10px; color:#666; font-size:12px;">Server Error Log (reCAPTCHA entries):</strong>';
+									errorHtml += '<strong style="display:block; margin-bottom:10px; color:#666; font-size:12px;">Server Error Log:</strong>';
 									errorHtml += '<pre style="margin:0; padding:10px; background-color:#fff; border:1px solid #ccc; border-radius:4px; font-size:11px; max-height:300px; overflow-y:auto; white-space:pre-wrap; word-wrap:break-word; font-family:monospace;">';
 									response.data.error_log_file.forEach(function(logEntry) {
 										errorHtml += logEntry.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n';
@@ -345,13 +279,8 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							
 							// Re-enable submit button
 							submitButton.prop('disabled', false).val(originalButtonValue);
-							
-							// Reset reCAPTCHA if it exists
-							if (typeof grecaptcha !== 'undefined' && $('.g-recaptcha').length > 0) {
-								grecaptcha.reset();
-							}
 						}
-						},
+					},
 						complete: function(xhr, status) {
 							console.log('AJAX complete callback called. Status:', status, 'after', (new Date().getTime() - ajaxStartTime) + 'ms');
 						},
@@ -397,7 +326,7 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							// Display error log file entries if available
 							if (errorResponse && errorResponse.data && errorResponse.data.error_log_file && errorResponse.data.error_log_file.length > 0) {
 								errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#ffe0e0; border:1px solid #ff9999; border-radius:4px;">';
-								errorHtml += '<strong style="display:block; margin-bottom:10px; color:#666; font-size:12px;">Server Error Log (reCAPTCHA entries):</strong>';
+								errorHtml += '<strong style="display:block; margin-bottom:10px; color:#666; font-size:12px;">Server Error Log:</strong>';
 								errorHtml += '<pre style="margin:0; padding:10px; background-color:#fff; border:1px solid #ccc; border-radius:4px; font-size:11px; max-height:300px; overflow-y:auto; white-space:pre-wrap; word-wrap:break-word; font-family:monospace;">';
 								errorResponse.data.error_log_file.forEach(function(logEntry) {
 									errorHtml += logEntry.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n';
@@ -418,11 +347,6 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							
 							// Re-enable submit button
 							submitButton.prop('disabled', false).val(originalButtonValue);
-							
-							// Reset reCAPTCHA if it exists
-							if (typeof grecaptcha !== 'undefined' && $('.g-recaptcha').length > 0) {
-								grecaptcha.reset();
-							}
 						}
 					});
 					} catch (ajaxError) {
@@ -980,20 +904,6 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 
 							</div>
 							<div class="module_submit">
-								<?php 
-								// Display reCAPTCHA if configured
-								$recaptcha_options = get_option('recaptcha_options', array());
-								$recaptcha_site_key = isset($recaptcha_options['site_key']) ? $recaptcha_options['site_key'] : '';
-								$recaptcha_theme = isset($recaptcha_options['comments_theme']) ? $recaptcha_options['comments_theme'] : 'light';
-								$recaptcha_language = isset($recaptcha_options['recaptcha_language']) ? $recaptcha_options['recaptcha_language'] : 'en';
-								
-								if (!empty($recaptcha_site_key)) {
-									echo '<div style="margin: 15px 0;">';
-									echo '<div class="g-recaptcha" data-sitekey="' . esc_attr($recaptcha_site_key) . '" data-theme="' . esc_attr($recaptcha_theme) . '"></div>';
-									echo '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=' . esc_attr($recaptcha_language) . '"></script>';
-									echo '</div>';
-								}
-								?>
 								<input type="submit" name="submit_btn" value="Submit" id="submit_btn" />
 							</div>
 							<div id="module_submit_bottom" class="module-submit-bottom">
