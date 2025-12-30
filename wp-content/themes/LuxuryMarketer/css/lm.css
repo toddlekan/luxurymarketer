@@ -1753,9 +1753,15 @@ a.reverse.grey {
 }
 
 .main .newsbox {
-  top: 0;
+  top: -6px;
   position: relative;
 }
+
+.main .above-fold-rail .newsbox {
+  top: 0;
+}
+
+
 
 .main .newsbox .background {
   background-repeat: no-repeat; background-size: cover;
