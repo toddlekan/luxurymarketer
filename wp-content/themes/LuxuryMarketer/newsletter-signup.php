@@ -59,7 +59,32 @@ Template Name: Newsletter Signup Template
 						<h2 class="signup">Subscription details</h2>
 						<div id="newsletterlist">
 
-							<div style="color:red"><?= isset($_GET['status']) ? htmlspecialchars($_GET['status']) : ''; ?></div>
+							<?php 
+							// Display error messages
+							$error_message = '';
+							if (isset($_GET['error'])) {
+								$error_type = $_GET['error'];
+								if ($error_type === 'validation' && isset($_GET['fields'])) {
+									$error_fields = explode(',', $_GET['fields']);
+									$error_message = 'Please check the following fields: ' . implode(', ', $error_fields);
+								} elseif ($error_type === 'api' && isset($_GET['msg'])) {
+									$error_message = 'There was an error submitting your subscription. Please try again.';
+								} elseif ($error_type === 'config') {
+									$error_message = 'Subscription service is temporarily unavailable. Please try again later.';
+								} elseif ($error_type === 'update') {
+									$error_message = 'There was an error updating your subscription. Please try again.';
+								} elseif ($error_type === 'exception') {
+									$error_message = 'An unexpected error occurred. Please try again.';
+								}
+							} elseif (isset($_GET['status'])) {
+								$error_message = htmlspecialchars($_GET['status']);
+							} elseif (isset($_GET['step']) && $_GET['step'] === 'thankyou') {
+								$error_message = '<div style="color:green; font-weight:bold;">Thank you! Your subscription has been confirmed.</div>';
+							}
+							if (!empty($error_message)) {
+								echo '<div style="color:red; margin-bottom:15px; padding:10px; border:1px solid #ff0000;">' . $error_message . '</div>';
+							}
+							?>
 							<?php 
 							// Get email from GET parameter - preserve plus signs
 							$prefill_email = '';
