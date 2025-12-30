@@ -229,7 +229,8 @@ if (have_posts()) :
 
 
 
-					<form action="<?= $GLOBALS['server_name'] ?>/wp-comments-post.php" method="post" id="commentform" class="comment-form" style="display: none;">
+					<form action="<?php echo esc_url(admin_url('admin-ajax.php')); ?>" method="post" id="commentform" class="comment-form" style="display: none;">
+						<input type="hidden" name="action" value="submit_comment">
 
 
 						<p><input type="text" name="author" id="author" value="" size="22" tabindex="1" class="form-control input-box placeholder" placeholder="NAME"></p>

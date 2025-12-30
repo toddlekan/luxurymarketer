@@ -459,35 +459,38 @@ $(document).ready(function () {
           type: "post",
           url: formurl,
           data: formdata,
+          dataType: "json", // Expect JSON response from admin-ajax
           error: function (XMLHttpRequest, textStatus, errorThrown) {
             posting = false;
 
-            var err = XMLHttpRequest.responseText.indexOf("error-page");
-
-            if (err > -1) {
-              status =
-                '<p class="ajax-error" >There was an error with your comment</p>';
-              console.log(XMLHttpRequest.responseText);
+            var errorMsg = "There was an error with your comment";
+            try {
+              var errorResponse = JSON.parse(XMLHttpRequest.responseText);
+              if (errorResponse && errorResponse.data && errorResponse.data.message) {
+                errorMsg = errorResponse.data.message;
+              }
+            } catch (e) {
+              // If not JSON, use default message
             }
 
+            var status = '<p class="ajax-error">' + errorMsg + '</p>';
             statusdiv.html(status);
           },
-          success: function (data, textStatus) {
+          success: function (response, textStatus) {
             posting = false;
 
-            var err = data.indexOf("error-page");
-
-            if (err > -1) {
-              status =
-                '<p class="ajax-error" >There was an error with your comment</p>';
+            // Handle JSON response from admin-ajax
+            if (response && response.success) {
+              var status = '<p class="ajax-success">Thanks for your comment. We appreciate your response.</p>';
+              statusdiv.html(status);
+              commentform.find("textarea[name=comment]").val("");
             } else {
-              status =
-                '<p class="ajax-success" >Thanks for your comment. We appreciate your response.</p>';
+              var errorMsg = (response && response.data && response.data.message) 
+                ? response.data.message 
+                : "There was an error with your comment";
+              var status = '<p class="ajax-error">' + errorMsg + '</p>';
+              statusdiv.html(status);
             }
-
-            statusdiv.html(status);
-
-            commentform.find("textarea[name=comment]").val("");
           },
         });
       }
@@ -511,27 +514,38 @@ $(document).ready(function () {
           type: "POST", // define the type of HTTP verb we want to use (POST for our form)
           url: $(this).attr("action"), // the url where we want to POST
           data: formData, // our data object
+          dataType: "json", // Expect JSON response from admin-ajax
           encode: true,
-          success: function (data) {
-            var hold = $("<div></div>");
-
-            hold.html(data);
-
-            var res = hold.find("p").html();
-
-            if (res.indexOf("ERROR") > 0) {
-              $("#comment-status").html(res);
-            } else {
+          success: function (response) {
+            // Handle JSON response from admin-ajax
+            if (response && response.success) {
+              // Comment submitted successfully
               location.reload();
+            } else {
+              // Error in response
+              var errorMsg = (response && response.data && response.data.message) 
+                ? response.data.message 
+                : "There was a problem with your comment, please try again.";
+              $("#comment-status").html('<p class="ajax-error">' + errorMsg + '</p>');
             }
           },
           error: function (xhr, ajaxOptions, thrownError) {
             console.log(xhr.status);
             console.log(thrownError);
+            console.log(xhr.responseText);
 
-            $("#comment-status").html(
-              "There was a problem with your comment, please try again."
-            );
+            // Try to parse JSON error response
+            var errorMsg = "There was a problem with your comment, please try again.";
+            try {
+              var errorResponse = JSON.parse(xhr.responseText);
+              if (errorResponse && errorResponse.data && errorResponse.data.message) {
+                errorMsg = errorResponse.data.message;
+              }
+            } catch (e) {
+              // If not JSON, use default message
+            }
+
+            $("#comment-status").html('<p class="ajax-error">' + errorMsg + '</p>');
           },
         });
       } else {
