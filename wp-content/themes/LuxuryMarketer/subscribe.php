@@ -4,44 +4,18 @@
  * Processes subscription form submissions and adds subscribers to Mailchimp via API
  */
 
-// Enable error reporting for debugging (but don't display if AJAX)
-error_reporting(E_ALL);
-$is_ajax_check = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || 
-                 (!empty($_POST['ajax']) && $_POST['ajax'] == '1');
-if (!$is_ajax_check) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-} else {
-    ini_set('display_errors', 0);
-    ini_set('display_startup_errors', 0);
-}
+// Start output buffering to catch any WordPress errors
+ob_start();
 
-// Load WordPress if not already loaded (must be first!)
-if (!defined('ABSPATH')) {
-    $wp_load_path = dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php';
-    if (file_exists($wp_load_path)) {
-        require_once($wp_load_path);
-    } else {
-        // If WordPress can't be loaded, send error response
-        if ($is_ajax_check) {
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode(array('success' => false, 'message' => 'System error: WordPress could not be loaded', 'errors' => array('config')));
-            exit;
-        } else {
-            die('Error: WordPress could not be loaded');
-        }
-    }
-}
-
-// Detect if this is an AJAX request
+// Detect if this is an AJAX request (check early, before any output)
 $is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || 
            (!empty($_POST['ajax']) && $_POST['ajax'] == '1');
 
-// Function to send JSON response
+// Function to send JSON response (define early)
 function send_json_response($success, $message, $errors = array(), $data = array()) {
     // Clear any previous output
-    if (ob_get_length()) {
-        ob_clean();
+    while (ob_get_level()) {
+        ob_end_clean();
     }
     header('Content-Type: application/json; charset=utf-8');
     $response = array(
@@ -54,6 +28,26 @@ function send_json_response($success, $message, $errors = array(), $data = array
     exit;
 }
 
+// Load WordPress if not already loaded
+if (!defined('ABSPATH')) {
+    $wp_load_path = dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php';
+    if (file_exists($wp_load_path)) {
+        // Clear any output so far
+        ob_clean();
+        // Load WordPress
+        require_once($wp_load_path);
+        
+        // Check if WordPress loaded successfully by checking for a core function
+        if (!defined('ABSPATH') || !function_exists('get_option')) {
+            // WordPress failed to load properly - send error
+            send_json_response(false, 'System error: Unable to initialize. Please try again later.', array('config'));
+        }
+    } else {
+        // WordPress file not found
+        send_json_response(false, 'System error: Configuration file not found.', array('config'));
+    }
+}
+
 // Include reCAPTCHA library for validation
 $recaptcha_options = function_exists('get_option') ? get_option('recaptcha_options', array()) : array();
 $recaptcha_secret = isset($recaptcha_options['secret']) ? $recaptcha_options['secret'] : '';
@@ -61,7 +55,7 @@ if (!empty($recaptcha_secret)) {
     // Path: from wp-content/themes/LuxuryMarketer to wp-content/plugins/wp-recaptcha
     $recaptcha_lib_path = dirname(dirname(dirname(__FILE__))) . '/plugins/wp-recaptcha/recaptchalib.php';
     if (file_exists($recaptcha_lib_path)) {
-        require_once($recaptcha_lib_path);
+        @require_once($recaptcha_lib_path);
     } else {
         error_log('reCAPTCHA library not found at: ' . $recaptcha_lib_path);
         // Try alternative path using WP_CONTENT_DIR if available
