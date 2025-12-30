@@ -305,25 +305,27 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							} else {
 								// Error - show error message
 								console.log('AJAX Success but response.success is false:', response);
+								console.log('Full response data:', JSON.stringify(response.data, null, 2));
 								var errorMessage = response && response.message ? response.message : 'There was an error submitting your subscription. Please try again.';
 								var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
 								errorHtml += '<strong>Error:</strong> ' + errorMessage;
 								
-								// Display debug log if available
+								// Always display debug log if available (expanded by default)
 								if (response && response.data && response.data.debug_log && response.data.debug_log.length > 0) {
-									errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#fff3cd; border:1px solid #ffc107; border-radius:4px; font-size:12px; font-family:monospace; max-height:300px; overflow-y:auto;">';
-									errorHtml += '<strong>Debug Log:</strong><br>';
+									errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#fff3cd; border:1px solid #ffc107; border-radius:4px; font-size:12px; font-family:monospace; max-height:400px; overflow-y:auto;">';
+									errorHtml += '<strong style="display:block; margin-bottom:10px;">Debug Log:</strong>';
 									response.data.debug_log.forEach(function(logEntry) {
-										errorHtml += '<div>' + logEntry.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+										errorHtml += '<div style="margin-bottom:5px; word-break:break-all;">' + String(logEntry).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
 									});
 									errorHtml += '</div>';
 								}
 								
-								// Display full response data for debugging
+								// Display full response data for debugging (expanded by default)
 								if (response && response.data) {
-									errorHtml += '<details style="margin-top:10px;"><summary style="cursor:pointer; color:#666; font-size:12px;">Show Debug Info</summary>';
-									errorHtml += '<pre style="margin-top:10px; padding:10px; background-color:#f5f5f5; border:1px solid #ddd; border-radius:4px; font-size:11px; max-height:400px; overflow-y:auto;">' + JSON.stringify(response.data, null, 2) + '</pre>';
-									errorHtml += '</details>';
+									errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#f5f5f5; border:1px solid #ddd; border-radius:4px;">';
+									errorHtml += '<strong style="display:block; margin-bottom:10px; color:#666; font-size:12px;">Full Debug Data:</strong>';
+									errorHtml += '<pre style="margin:0; padding:10px; background-color:#fff; border:1px solid #ccc; border-radius:4px; font-size:11px; max-height:500px; overflow-y:auto; white-space:pre-wrap; word-wrap:break-word;">' + JSON.stringify(response.data, null, 2) + '</pre>';
+									errorHtml += '</div>';
 								}
 								
 								errorHtml += '</div>';
