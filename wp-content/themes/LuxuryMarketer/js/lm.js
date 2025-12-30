@@ -644,7 +644,7 @@ $(document).ready(function () {
   });
 
   /*UTIL FUNCTIONS*/
-  /*
+  
   function toggleUtil(sel, caller) {
     if (!animating) {
       animating = true;
@@ -745,7 +745,6 @@ $(document).ready(function () {
       );
     }
   }
-  */
 
   /* VIDEOS */
   /*
