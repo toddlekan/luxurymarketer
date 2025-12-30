@@ -37,6 +37,8 @@ class ReCaptchaResponse
 {
     public $success;
     public $errorCodes;
+    public $rawResponse; // Store the raw API response for debugging
+    public $decodedResponse; // Store the decoded API response for debugging
 }
 
 class ReCaptcha
@@ -173,17 +175,30 @@ class ReCaptcha
             )
         );
         
-        // Log the raw response for debugging
+        // Store the raw response in the response object for debugging
+        $recaptchaResponse = new ReCaptchaResponse();
+        $recaptchaResponse->rawResponse = $getResponse;
+        
+        // Log the raw response for debugging (truncate if too long for error_log)
         if ($getResponse) {
-            error_log('reCAPTCHA API raw response: ' . $getResponse);
+            $log_response = strlen($getResponse) > 500 ? substr($getResponse, 0, 500) . '... (truncated)' : $getResponse;
+            error_log('reCAPTCHA API raw response: ' . $log_response);
         } else {
             error_log('reCAPTCHA API raw response: EMPTY or FALSE');
         }
         
         $answers = json_decode($getResponse, true);
+        $recaptchaResponse->decodedResponse = $answers;
         
-        // Log decoded response
-        error_log('reCAPTCHA API decoded response: ' . print_r($answers, true));
+        // Log decoded response (but not the full array in error_log to avoid truncation)
+        if ($answers) {
+            error_log('reCAPTCHA API decoded response - success: ' . (isset($answers['success']) ? ($answers['success'] ? 'true' : 'false') : 'not set'));
+            if (isset($answers['error-codes'])) {
+                error_log('reCAPTCHA API decoded response - error-codes: ' . implode(', ', $answers['error-codes']));
+            }
+        } else {
+            error_log('reCAPTCHA API decoded response: NULL or invalid JSON');
+        }
         
         // Check for JSON decode errors
         if (json_last_error() !== JSON_ERROR_NONE) {
@@ -198,8 +213,6 @@ class ReCaptcha
             }
         }
         
-        $recaptchaResponse = new ReCaptchaResponse();
-
         // Check if the API response indicates success (answers['success'] is a boolean from JSON)
         if (isset($answers['success']) && $answers['success'] === true) {
             $recaptchaResponse->success = true;
@@ -207,7 +220,7 @@ class ReCaptcha
         } else {
             $recaptchaResponse->success = false;
             $recaptchaResponse->errorCodes = isset($answers['error-codes']) ? $answers['error-codes'] : array();
-            error_log('reCAPTCHA verification: FAILED - ' . print_r($recaptchaResponse->errorCodes, true));
+            error_log('reCAPTCHA verification: FAILED - ' . implode(', ', $recaptchaResponse->errorCodes));
         }
 
         return $recaptchaResponse;

@@ -441,7 +441,17 @@ if (!empty($recaptcha_secret)) {
                 
                 subscribe_debug_log('reCAPTCHA validation - Response object: ' . print_r($recaptcha_response, true));
                 
-                // Also log the raw API response if available
+                // Log the raw API response if available
+                if (isset($recaptcha_response->rawResponse)) {
+                    subscribe_debug_log('reCAPTCHA validation - Raw API response: ' . $recaptcha_response->rawResponse);
+                }
+                
+                // Log the decoded API response if available
+                if (isset($recaptcha_response->decodedResponse)) {
+                    subscribe_debug_log('reCAPTCHA validation - Decoded API response: ' . json_encode($recaptcha_response->decodedResponse, JSON_PRETTY_PRINT));
+                }
+                
+                // Also log the error codes if available
                 if (isset($recaptcha_response->errorCodes) && is_array($recaptcha_response->errorCodes)) {
                     subscribe_debug_log('reCAPTCHA validation - Error codes: ' . implode(', ', $recaptcha_response->errorCodes));
                     
