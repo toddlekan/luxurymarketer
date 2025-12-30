@@ -4,11 +4,11 @@
  * Processes subscription form submissions and adds subscribers to Mailchimp via API
  */
 
-// Enable ALL error reporting and display
+// Enable ALL error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-ini_set('html_errors', 0); // Disable HTML formatting for cleaner output
+ini_set('html_errors', 0);
 
 // Start output buffering to catch any WordPress errors
 ob_start();
@@ -21,8 +21,8 @@ $is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HT
 function send_json_response($success, $message, $errors = array(), $data = array()) {
     // Get any errors/output from buffer
     $buffer_content = '';
-    if (ob_get_level() > 0) {
-        $buffer_content = ob_get_clean();
+    while (ob_get_level() > 0) {
+        $buffer_content .= ob_get_clean();
     }
     
     // Always include buffer content for debugging
@@ -43,8 +43,75 @@ function send_json_response($success, $message, $errors = array(), $data = array
         'errors' => $errors,
         'data' => $data
     );
-    echo json_encode($response);
+    echo json_encode($response, JSON_PRETTY_PRINT);
     exit;
+}
+
+// Custom error handler to catch fatal errors
+function subscribe_error_handler($errno, $errstr, $errfile, $errline) {
+    if (!(error_reporting() & $errno)) {
+        return false;
+    }
+    
+    $error_msg = "Error [$errno]: $errstr in $errfile on line $errline";
+    error_log($error_msg);
+    
+    // If this is a fatal error, send JSON response
+    if ($errno === E_ERROR || $errno === E_CORE_ERROR || $errno === E_COMPILE_ERROR || $errno === E_PARSE || $errno === E_USER_ERROR) {
+        send_json_response(false, 'PHP Fatal Error: ' . $errstr, array('fatal'), array(
+            'error_type' => $errno,
+            'error_file' => $errfile,
+            'error_line' => $errline,
+            'error_message' => $errstr
+        ));
+    }
+    
+    return false; // Let PHP's default error handler also run
+}
+
+// Set custom error handler
+set_error_handler('subscribe_error_handler');
+
+// Custom shutdown function to catch fatal errors
+function subscribe_shutdown_handler() {
+    $error = error_get_last();
+    if ($error !== NULL && in_array($error['type'], array(E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE))) {
+        // Clear any output
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+        
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(array(
+            'success' => false,
+            'message' => 'Fatal Error: ' . $error['message'],
+            'errors' => array('fatal'),
+            'data' => array(
+                'error_type' => $error['type'],
+                'error_file' => $error['file'],
+                'error_line' => $error['line'],
+                'error_message' => $error['message']
+            )
+        ), JSON_PRETTY_PRINT);
+        exit;
+    }
+}
+
+// Register shutdown function
+register_shutdown_function('subscribe_shutdown_handler');
+
+// Disable WordPress fatal error handler if possible (before loading)
+if (!defined('WP_SANDBOX_SCRAPING')) {
+    define('WP_SANDBOX_SCRAPING', false);
+}
+if (!defined('WP_DEBUG')) {
+    define('WP_DEBUG', true);
+}
+if (!defined('WP_DEBUG_DISPLAY')) {
+    define('WP_DEBUG_DISPLAY', true);
+}
+if (!defined('WP_DEBUG_LOG')) {
+    define('WP_DEBUG_LOG', true);
 }
 
 // Load WordPress if not already loaded
@@ -53,22 +120,31 @@ if (!defined('ABSPATH')) {
     if (file_exists($wp_load_path)) {
         // Clear any output so far
         ob_clean();
-        // Load WordPress with error display enabled
+        
+        // Capture any output during WordPress load
+        ob_start();
         try {
             require_once($wp_load_path);
         } catch (Exception $e) {
+            ob_end_clean();
             send_json_response(false, 'WordPress load error: ' . $e->getMessage(), array('config'), array('exception' => $e->getTraceAsString()));
         } catch (Error $e) {
+            ob_end_clean();
             send_json_response(false, 'WordPress fatal error: ' . $e->getMessage(), array('config'), array('file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()));
         }
         
+        // Get any output from WordPress loading
+        $wp_load_output = ob_get_clean();
+        
         // Check if WordPress loaded successfully by checking for a core function
         if (!defined('ABSPATH') || !function_exists('get_option')) {
-            // Get any error output
-            $error_output = ob_get_contents();
-            ob_clean();
             // WordPress failed to load properly - send error with details
-            send_json_response(false, 'System error: WordPress failed to load. ABSPATH: ' . (defined('ABSPATH') ? 'defined' : 'not defined') . ', get_option exists: ' . (function_exists('get_option') ? 'yes' : 'no'), array('config'), array('error_output' => $error_output));
+            send_json_response(false, 'System error: WordPress failed to load. ABSPATH: ' . (defined('ABSPATH') ? 'defined' : 'not defined') . ', get_option exists: ' . (function_exists('get_option') ? 'yes' : 'no'), array('config'), array('wp_load_output' => $wp_load_output));
+        }
+        
+        // If WordPress output something, log it
+        if (!empty($wp_load_output)) {
+            error_log('WordPress load output: ' . substr($wp_load_output, 0, 500));
         }
     } else {
         // WordPress file not found
