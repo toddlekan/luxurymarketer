@@ -137,8 +137,13 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 			});
 
 			$(document).on('click', '#submit_btn', function(e) {
-
-				e.preventDefault();
+				console.log('Submit button clicked');
+				
+				try {
+					e.preventDefault();
+				} catch (err) {
+					console.error('Error preventing default:', err);
+				}
 
 				var submit = true;
 
@@ -180,6 +185,7 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 				}
 
 				if (submit) {
+					console.log('Submit flag is true, proceeding with submission');
 
 					var bcode = $('#bcode').val();
 
@@ -218,10 +224,13 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 					}
 
 					// Disable submit button and show loading state
+					console.log('Disabling submit button and clearing messages');
 					submitButton.prop('disabled', true).val('Submitting...');
 					
 					// Remove any existing error/success messages
 					formContainer.find('.ajax-message').remove();
+					
+					console.log('About to call $.ajax()');
 					
 					// Get reCAPTCHA token using the API (most reliable method)
 					var recaptchaToken = '';
@@ -265,17 +274,25 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 					
 					console.log('Submitting form data to:', url);
 					console.log('Form data length:', formData.length);
+					console.log('Form data (first 500 chars):', formData.substring(0, 500));
 					
 					// Submit via AJAX
-					$.ajax({
+					console.log('Starting AJAX request...');
+					var ajaxStartTime = new Date().getTime();
+					
+					try {
+						$.ajax({
 						url: url,
 						type: 'POST',
 						data: formData,
 						dataType: 'json',
+						timeout: 30000, // 30 second timeout
 						beforeSend: function(xhr) {
+							console.log('AJAX beforeSend called');
 							xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 						},
 						success: function(response) {
+							console.log('AJAX success callback called after', (new Date().getTime() - ajaxStartTime) + 'ms');
 							console.log('AJAX Success Response:', response);
 							if (response && response.success) {
 								// Success - replace form with success message
@@ -321,10 +338,15 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							}
 						}
 						},
+						complete: function(xhr, status) {
+							console.log('AJAX complete callback called. Status:', status, 'after', (new Date().getTime() - ajaxStartTime) + 'ms');
+						},
 						error: function(xhr, status, error) {
-							console.log('AJAX Error:', status, error);
+							console.log('AJAX Error callback called. Status:', status, 'Error:', error);
+							console.log('XHR object:', xhr);
 							console.log('Response Text:', xhr.responseText);
 							console.log('Status Code:', xhr.status);
+							console.log('Ready State:', xhr.readyState);
 							
 							// Try to parse JSON error response
 							var errorMessage = 'There was an error submitting your subscription. Please try again.';
@@ -377,8 +399,18 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							}
 						}
 					});
+					} catch (ajaxError) {
+						console.error('Error calling $.ajax():', ajaxError);
+						var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
+						errorHtml += '<strong>Error:</strong> Failed to submit form: ' + ajaxError.message;
+						errorHtml += '<pre style="margin-top:10px; font-size:11px; overflow:auto;">' + ajaxError.stack + '</pre>';
+						errorHtml += '</div>';
+						formContainer.prepend(errorHtml);
+						submitButton.prop('disabled', false).val(originalButtonValue);
+					}
 
 				} else {
+					console.log('Submit flag is false, returning false');
 					return false;
 				}
 
