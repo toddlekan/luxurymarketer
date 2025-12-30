@@ -3,6 +3,11 @@
  Template Name: Mainchimp Free Subscription Page
  */
 
+// Load WordPress if not already loaded
+if (!defined('ABSPATH')) {
+    require_once(dirname(dirname(dirname(__FILE__))) . '/wp-load.php');
+}
+
 $url_root = ld16_cdn(get_template_directory_uri()); ?>
 
 
@@ -182,6 +187,20 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 						$('#bcode_other').val(bcode);
 					}
 
+					// Validate reCAPTCHA if it exists
+					var recaptchaResponse = form.find('[name="g-recaptcha-response"]').val();
+					if (recaptchaResponse === undefined || recaptchaResponse === '') {
+						// Check if reCAPTCHA widget exists on page
+						if ($('.g-recaptcha').length > 0) {
+							var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
+							errorHtml += '<strong>Error:</strong> Please complete the reCAPTCHA verification.';
+							errorHtml += '</div>';
+							formContainer.find('.ajax-message').remove();
+							formContainer.prepend(errorHtml);
+							return false;
+						}
+					}
+
 					// Disable submit button and show loading state
 					submitButton.prop('disabled', true).val('Submitting...');
 					
@@ -212,14 +231,19 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							} else {
 								// Error - show error message
 								var errorMessage = response && response.message ? response.message : 'There was an error submitting your subscription. Please try again.';
-								var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
-								errorHtml += '<strong>Error:</strong> ' + errorMessage;
-								errorHtml += '</div>';
-								formContainer.prepend(errorHtml);
-								
-								// Re-enable submit button
-								submitButton.prop('disabled', false).val(originalButtonValue);
+							var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
+							errorHtml += '<strong>Error:</strong> ' + errorMessage;
+							errorHtml += '</div>';
+							formContainer.prepend(errorHtml);
+							
+							// Re-enable submit button
+							submitButton.prop('disabled', false).val(originalButtonValue);
+							
+							// Reset reCAPTCHA if it exists
+							if (typeof grecaptcha !== 'undefined' && $('.g-recaptcha').length > 0) {
+								grecaptcha.reset();
 							}
+						}
 						},
 						error: function(xhr, status, error) {
 							console.log('AJAX Error:', status, error);
@@ -251,6 +275,11 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							
 							// Re-enable submit button
 							submitButton.prop('disabled', false).val(originalButtonValue);
+							
+							// Reset reCAPTCHA if it exists
+							if (typeof grecaptcha !== 'undefined' && $('.g-recaptcha').length > 0) {
+								grecaptcha.reset();
+							}
 						}
 					});
 
@@ -798,6 +827,20 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 
 							</div>
 							<div class="module_submit">
+								<?php 
+								// Display reCAPTCHA if configured
+								$recaptcha_options = get_option('recaptcha_options', array());
+								$recaptcha_site_key = isset($recaptcha_options['site_key']) ? $recaptcha_options['site_key'] : '';
+								$recaptcha_theme = isset($recaptcha_options['comments_theme']) ? $recaptcha_options['comments_theme'] : 'light';
+								$recaptcha_language = isset($recaptcha_options['recaptcha_language']) ? $recaptcha_options['recaptcha_language'] : 'en';
+								
+								if (!empty($recaptcha_site_key)) {
+									echo '<div style="margin: 15px 0;">';
+									echo '<div class="g-recaptcha" data-sitekey="' . esc_attr($recaptcha_site_key) . '" data-theme="' . esc_attr($recaptcha_theme) . '"></div>';
+									echo '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=' . esc_attr($recaptcha_language) . '"></script>';
+									echo '</div>';
+								}
+								?>
 								<input type="submit" name="submit_btn" value="Submit" id="submit_btn" />
 							</div>
 							<div id="module_submit_bottom" class="module-submit-bottom">
