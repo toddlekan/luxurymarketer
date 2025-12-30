@@ -443,20 +443,55 @@ $url_root = get_template_directory_uri();
     <div class="magnify-inner"></div>
   </a>
   <div class="navbar-collapse collapse" id="navbar-main">
-    <ul class="no-bullet mobile-menu" style="float: left;">
-      <li><a class="reverse grey" href="/">Home</a></li>
-      <li><a class="reverse grey" href="/about">About</a></li>
-      <li><a class="reverse grey" href="/about-membership">About Membership</a></li>
-      <li><a class="reverse grey" href="/category/networking-and-events">Networking & Events</a></li>
-      <li><a class="reverse grey" href="/category/research">Research</a></li>
-      <li><a class="reverse grey" href="/category/news">News</a></li>
-      <li><a class="reverse grey" href="/subscription-form">Free Newsletter</a></li>
-      <li><a class="reverse grey" href="/category/luxury-class">Luxury Class</a></li>
-      <li><a class="reverse grey" href="/partners">Partners</a></li>
-      <li><a class="reverse grey join" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">Subscribe</a></li>
-   
-   
-    </ul>
+
+  <li><a class="reverse" href="/">Home</a></li>
+                  
+                  <li class="reverse dropdown item">
+                    <a href="/category/research" class="dropdown-toggle grey" data-toggle="dropdown" role="button" 
+                      aria-expanded="false">
+                      Sectors <span class="caret"></span></a>
+                      <ul class="dropdown-menu sectors-dropdown">
+                        <li class="reverse"><a href="/category/research/fashion-and-leather-goods" class="grey">Fashion &amp; Leather Goods</a></li>
+                        <li class="reverse"><a href="/category/research/real-estate" class="grey">Real Estate &amp; Design</a></li>
+                        <li class="reverse"><a href="/category/research/retail" class="grey">Retail</a></li>
+                        <li class="reverse"><a href="/category/research/cars-jets-and-yachts/" class="grey">Cars, Jets &amp; Yachts</a></li>
+                        <li class="reverse"><a href="/category/research/marketing/" class="grey">Marketing</a></li>
+                        <li class="reverse"><a href="/category/research/art-and-auctions/" class="grey">Art</a></li>
+                        <li class="reverse"><a href="/category/research/travel-and-hospitality/" class="grey">Travel &amp; Hospitality</a></li>
+                        <li class="reverse"><a href="/category/research/watches-and-jewelry/" class="grey">Watches &amp; Jewelry</a></li>
+                        <li class="reverse"><a href="/category/research/perfumes-and-cosmetics/" class="grey">Beauty</a></li>
+                        <li class="reverse"><a href="/category/research/food-fine-dining-wines-and-spirits/" class="grey">Wines &amp; Spirits</a></li>
+                        <li class="reverse"><a href="/category/research" class="grey">Research</a></li>
+                        <li class="reverse"><a href="/category/news/columns" class="grey">Columns</a></li>
+                        <li class="reverse"><a href="/category/research/china" class="grey">China</a></li>
+                        <li class="reverse"><a href="/category/news/editorial-calendar" class="grey">Editorial Calendar</a></li>
+                        <li class="reverse"><a href="/category/news/editorials" class="grey">Editorials</a></li>
+                        <li class="reverse"><a href="/category/research/education" class="grey">Education</a></li>
+                        <li class="reverse"><a href="/category/research/entertainment" class="grey">Entertainment</a></li>
+                        <li class="reverse"><a href="/category/research/health-and-wellness/" class="grey">Health &amp; Wellness</a></li>
+                        <li class="reverse"><a href="/category/news/legal-and-regulation" class="grey">Legal &amp: Regulation</a></li>
+                        <li class="reverse"><a href="/category/research/media-and-publishing" class="grey">Media &amp; Publishing</a></li>
+                        <li class="reverse"><a href="/category/research/outlook" class="grey">Outlook</a></li>
+                        <li class="reverse"><a href="/category/research/philanthropy-foundations-and-nonprofits/" class="grey">Philanthropy</a></li>
+                        <li class="reverse"><a href="/category/networking-and-events/profiles" class="grey">Profiles</a></li>
+                        <li class="reverse"><a href="/category/research/sports" class="grey">Sports</a></li>
+                        <li class="reverse"><a href="/category/research/environment-and-sustainability" class="grey">Sustainability</a></li>
+                        <li class="reverse"><a href="/category/research/ai-and-automation" class="grey">Tech, AI &amp; Automation</a></li>
+                        <li class="reverse"><a href="/category/research/wealth-management/" class="grey">Wealth Management</a></li>
+                    </ul>
+
+                
+                  </li>
+                  <li class="reverse"><a href="/category/networking-and-events" class="grey">Events</a></li>
+                  <li class="reverse"><a href="/about-us" class="grey">About Us</a></li>
+                  <li class="reverse"><a href="/category/research/cars-jets-and-yachts/" class="grey">Contact Us</a></li>
+                  <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" class="grey">Master Class</a></li>
+                  
+                  <li class="reverse"><a href="/category/research/watches-and-jewelry/" class="grey">Subscribe</a></li>
+
+
+
+
   </div>
 
 
