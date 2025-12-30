@@ -18,16 +18,14 @@ Template Name: Newsletter Signup Template
 //ini_set('display_errors',1);
 
 
-if (array_key_exists('capture', $_POST)) {
-
-	//insert it into mysql
-	mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
-	mysql_select_db(DB_NAME);
-	$sql = "INSERT INTO subscribers set first_name = '" . $_POST['FIRST_NAME'] . "', last_name = '" . $_POST['LAST_NAME'] . "', email = '" . $_POST['EMAIL'] . "', title = '" . $_POST['TITLE'] . "', company = '" . $_POST['COMPANY'] . "', country = '" . $_POST['COUNTRY'] . "', industry = '" . $_POST['INDUSTRY'] . "', postal_code = '" . $_POST['ZIP'] . "'";
-	//print $sql;
-	mysql_query($sql);
-	exit;
-}
+// Old MySQL capture code removed - now using Mailchimp via subscribe.php
+// if (array_key_exists('capture', $_POST)) {
+// 	mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
+// 	mysql_select_db(DB_NAME);
+// 	$sql = "INSERT INTO subscribers set first_name = '" . $_POST['FIRST_NAME'] . "', last_name = '" . $_POST['LAST_NAME'] . "', email = '" . $_POST['EMAIL'] . "', title = '" . $_POST['TITLE'] . "', company = '" . $_POST['COMPANY'] . "', country = '" . $_POST['COUNTRY'] . "', industry = '" . $_POST['INDUSTRY'] . "', postal_code = '" . $_POST['ZIP'] . "'";
+// 	mysql_query($sql);
+// 	exit;
+// }
 
 ?>
 
@@ -57,120 +55,23 @@ if (array_key_exists('capture', $_POST)) {
 
 						<script language="javascript">
 							<!--
-							function validateForm() {
-								var submitForm = true;
-								var errors = "We need a little more information. Please enter:\n\n";
-								var notvalid = "=";
-								var ok1 = "yes";
-								var temp1;
-								for (var i = 0; i < document.form.comments.value.length; i++) {
-									temp1 = "" + document.form.comments.value.substring(i, i + 1);
-									if (notvalid.indexOf(temp1) == "0") {
-										errors += "Remove Invalid Characters from comments, \n";
-										submitForm = false;
+							// Sync email2 field with email field for email confirmation
+							document.addEventListener('DOMContentLoaded', function() {
+								var emailField = document.getElementById('email');
+								var email2Field = document.getElementById('email2');
+								
+								if (emailField && email2Field) {
+									// Sync on load
+									if (emailField.value) {
+										email2Field.value = emailField.value;
 									}
-
+									
+									// Sync on change
+									emailField.addEventListener('input', function() {
+										email2Field.value = emailField.value;
+									});
 								}
-
-								if (document.form.firstname.value == "") {
-									errors += " - Your name,\n";
-									submitForm = false;
-								}
-
-								if (document.form.address.value == " ") {
-									errors += " - Your address,\n";
-									submitForm = false;
-								}
-
-								if (document.form.url.value == "") {
-									errors += " - Your website,\n";
-									submitForm = false;
-								}
-
-								if (document.form.company.value == "") {
-									errors += " - Your compnay name,\n";
-									submitForm = false;
-								}
-
-								if (document.form.email.value != "") {
-
-									if ((document.form.email.value.indexOf("@") == -1) ||
-										(document.form.email.value.indexOf(".") == -1)) {
-
-										errors += " - Your valid email address needs a @ and .,\n";
-										submitForm = false;
-									}
-
-								} else
-
-								{
-
-									errors += " - Your email address is blank,\n";
-									submitForm = false;
-								}
-
-								if (!submitForm) {
-									errors += "\nand then re-submit the form.\n\nThanks!";
-									alert(errors);
-								}
-
-								return (submitForm);
-							}
-
-
-							function captureData(docForm) {
-
-								var strSubmit = '';
-								var formElem;
-								var strLastElemName = '';
-
-								for (i = 0; i < docForm.elements.length; i++) {
-									formElem = docForm.elements[i];
-									switch (formElem.type) {
-										// Text, select, hidden, password, textarea elements
-										case 'text':
-										case 'select-one':
-										case 'hidden':
-										case 'password':
-										case 'textarea':
-											strSubmit += formElem.name +
-												'=' + escape(formElem.value) + '&'
-											break;
-									}
-								}
-
-								strSubmit += 'capture=yes';
-
-								var xmlHttpReq = false;
-
-								// Mozilla/Safari
-								if (window.XMLHttpRequest) {
-									xmlHttpReq = new XMLHttpRequest();
-									xmlHttpReq.overrideMimeType('text/xml');
-								}
-								// IE
-								else if (window.ActiveXObject) {
-									xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
-								}
-
-								xmlHttpReq.open('POST', '/newsletter', true);
-								xmlHttpReq.setRequestHeader('Content-Type',
-									'application/x-www-form-urlencoded');
-								xmlHttpReq.onreadystatechange = function() {
-									if (xmlHttpReq.readyState == 4) {
-
-										if (xmlHttpReq.status == 200) {
-
-											//eval(strResultFunc + '(xmlHttpReq.responseText;);');
-											docForm.submit();
-
-										}
-									}
-								}
-
-								xmlHttpReq.send(strSubmit);
-							}
-							// 
+							});
 							-->
 						</script>
 
@@ -179,26 +80,36 @@ if (array_key_exists('capture', $_POST)) {
 						<h2 class="signup">Subscription details</h2>
 						<div id="newsletterlist">
 
-							<div style="color:red"><?= $_GET['status']; ?></div>
-							<form method="POST" action="/wp-content/themes/LD2016/subscribe.php" onsubmit="captureData(this); return false;">
+							<div style="color:red"><?= isset($_GET['status']) ? htmlspecialchars($_GET['status']) : ''; ?></div>
+							<?php 
+							// Get email from GET parameter and sanitize it
+							$prefill_email = isset($_GET['email']) ? sanitize_email($_GET['email']) : '';
+							$prefill_email = !empty($prefill_email) && is_email($prefill_email) ? $prefill_email : '';
+							?>
+							<form method="POST" action="<?php echo esc_url(get_template_directory_uri() . '/subscribe.php'); ?>" id="newsletter-form">
 
 
 								<table cellspacing=3>
 									<tr>
 										<td width=130> <label for="first_name">First name<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='FIRST_NAME' id='first_name' class='form_element' style='' value='' /></span> </td>
+										<td> <span class='input_left'><input type='textbox' name='FNAME' id='first_name' class='form_element' style='' value='<?php echo isset($_POST['FNAME']) ? htmlspecialchars(stripslashes($_POST['FNAME']), ENT_QUOTES) : ''; ?>' /></span> </td>
 									</tr>
 
 
 									<tr>
 										<td width=130> <label for="last_name">Last name<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='LAST_NAME' id='last_name' class='form_element' style='' value='' /></span> </td>
+										<td> <span class='input_left'><input type='textbox' name='LNAME' id='last_name' class='form_element' style='' value='<?php echo isset($_POST['LNAME']) ? htmlspecialchars(stripslashes($_POST['LNAME']), ENT_QUOTES) : ''; ?>' /></span> </td>
 									</tr>
 
 
 									<tr>
 										<td width=130> <label for="email">Email address<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='EMAIL' id='email' class='form_element' style='' value='<?= htmlspecialchars(stripslashes(strip_tags($_POST['email'])), ENT_QUOTES) ?>' /></span> </td>
+										<td> <span class='input_left'><input type='textbox' name='EMAIL' id='email' class='form_element' style='' value='<?php echo !empty($prefill_email) ? htmlspecialchars($prefill_email, ENT_QUOTES) : (isset($_POST['EMAIL']) ? htmlspecialchars(stripslashes($_POST['EMAIL']), ENT_QUOTES) : ''); ?>' /></span> </td>
+									</tr>
+									
+									<tr style="display:none;">
+										<td width=130> <label for="email2">Confirm Email<span class='requiredLabelRight'>*</span></label> </td>
+										<td> <span class='input_left'><input type='textbox' name='email2' id='email2' class='form_element' style='' value='<?php echo !empty($prefill_email) ? htmlspecialchars($prefill_email, ENT_QUOTES) : (isset($_POST['email2']) ? htmlspecialchars(stripslashes($_POST['email2']), ENT_QUOTES) : ''); ?>' /></span> </td>
 									</tr>
 
 
@@ -474,7 +385,7 @@ if (array_key_exists('capture', $_POST)) {
 
 									<tr>
 										<td width=130> <label for="job_industry_id">Industry<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class="input_left"><select name='INDUSTRY' class='form_element' id='job_industry_id'>
+										<td> <span class="input_left"><select name='CATEGORY' class='form_element' id='job_industry_id'>
 													<option value=''>Please select</option>
 													<option value='Ad networks'>Ad networks</option>
 													<option value='Advertising'>Advertising</option>
@@ -526,8 +437,18 @@ if (array_key_exists('capture', $_POST)) {
 
 
 									<tr>
+										<td width=130> <label for="city">City<span class='requiredLabelRight'>*</span></label> </td>
+										<td> <span class='input_left'><input type='textbox' name='CITY' id='city' class='form_element' style='' value='<?php echo isset($_POST['CITY']) ? htmlspecialchars(stripslashes($_POST['CITY']), ENT_QUOTES) : ''; ?>' /></span> </td>
+									</tr>
+									
+									<tr>
+										<td width=130> <label for="state">State<span class='requiredLabelRight'>*</span></label> </td>
+										<td> <span class='input_left'><input type='textbox' name='STATE' id='state' class='form_element' style='' value='<?php echo isset($_POST['STATE']) ? htmlspecialchars(stripslashes($_POST['STATE']), ENT_QUOTES) : ''; ?>' /></span> </td>
+									</tr>
+									
+									<tr>
 										<td width=130> <label for="postal_code">ZIP/post code<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='ZIP' id='postal_code' class='form_element' style='' value='' /></span> </td>
+										<td> <span class='input_left'><input type='textbox' name='ZIPCODE' id='postal_code' class='form_element' style='' value='<?php echo isset($_POST['ZIPCODE']) ? htmlspecialchars(stripslashes($_POST['ZIPCODE']), ENT_QUOTES) : ''; ?>' /></span> </td>
 
 									</tr>
 
