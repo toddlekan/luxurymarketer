@@ -670,6 +670,10 @@ h3,
   padding-right: 0px;
 }
 
+.navbar-collapse.in {
+  overflow-y: visible;
+}
+
 .navbar.search {
   margin-bottom: 10px;
 }

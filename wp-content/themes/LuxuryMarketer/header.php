@@ -443,7 +443,7 @@ $url_root = get_template_directory_uri();
     <div class="magnify-inner"></div>
   </a>
   <div class="navbar-collapse collapse" id="navbar-main">
-
+  <ul>
   <li><a class="reverse" href="/">Home</a></li>
                   
                   <li class="reverse dropdown item">
@@ -490,7 +490,7 @@ $url_root = get_template_directory_uri();
                   <li class="reverse"><a href="/category/research/watches-and-jewelry/" class="grey">Subscribe</a></li>
 
 
-
+                  </ul>
 
   </div>
 
