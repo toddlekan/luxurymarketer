@@ -3008,7 +3008,7 @@ ul.no-bullet {
   color: #1169aa;
 }
 
-.home #mobile-sub-menu a {
+.home #mobile-sub-menu a, .home #mobile-sub-menu span {
   color: #777777;
 }
 
