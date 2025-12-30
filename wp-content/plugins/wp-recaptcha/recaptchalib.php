@@ -126,7 +126,8 @@ class ReCaptcha
         $answers = json_decode($getResponse, true);
         $recaptchaResponse = new ReCaptchaResponse();
 
-        if (isset($answers['success']) && trim($answers['success']) == true) {
+        // Check if the API response indicates success (answers['success'] is a boolean from JSON)
+        if (isset($answers['success']) && $answers['success'] === true) {
             $recaptchaResponse->success = true;
         } else {
             $recaptchaResponse->success = false;
