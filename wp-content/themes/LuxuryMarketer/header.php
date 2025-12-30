@@ -497,7 +497,7 @@ $url_root = get_template_directory_uri();
 
   <div id="mobile-sub-menu">
 
-    <div class="date">
+    <div class="label subscribe">
       <script>
           var options = {
             year: 'numeric',
