@@ -1753,7 +1753,7 @@ a.reverse.grey {
 }
 
 .main .newsbox {
-  top: -6px;
+  top: 0;
   position: relative;
 }
 
