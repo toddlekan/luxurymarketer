@@ -152,6 +152,15 @@ class ReCaptcha
             return $recaptchaResponse;
         }
 
+        // Log what we're sending
+        error_log('reCAPTCHA verifyResponse called with:');
+        error_log('  - Secret key length: ' . strlen($this->_secret));
+        error_log('  - Secret key (first 10 chars): ' . substr($this->_secret, 0, 10));
+        error_log('  - Remote IP: ' . $remoteIp);
+        error_log('  - Response token length: ' . strlen($response));
+        error_log('  - Response token (first 50 chars): ' . substr($response, 0, 50));
+        error_log('  - Response token (last 50 chars): ' . substr($response, -50));
+        
         $getResponse = $this->_submitHttpGet(
             self::$_siteVerifyUrl,
             array (

@@ -172,6 +172,11 @@ if (!defined('ABSPATH')) {
 // Include reCAPTCHA library for validation
 $recaptcha_options = function_exists('get_option') ? get_option('recaptcha_options', array()) : array();
 $recaptcha_secret = isset($recaptcha_options['secret']) ? $recaptcha_options['secret'] : '';
+$recaptcha_site_key = isset($recaptcha_options['site_key']) ? $recaptcha_options['site_key'] : '';
+
+// Log reCAPTCHA configuration for debugging
+subscribe_debug_log('reCAPTCHA configuration - Site key: ' . (!empty($recaptcha_site_key) ? $recaptcha_site_key : 'NOT SET'));
+subscribe_debug_log('reCAPTCHA configuration - Secret key: ' . (!empty($recaptcha_secret) ? substr($recaptcha_secret, 0, 10) . '...' . substr($recaptcha_secret, -4) : 'NOT SET'));
 if (!empty($recaptcha_secret)) {
     // Path: from wp-content/themes/LuxuryMarketer to wp-content/plugins/wp-recaptcha
     $recaptcha_lib_path = dirname(dirname(dirname(__FILE__))) . '/plugins/wp-recaptcha/recaptchalib.php';
