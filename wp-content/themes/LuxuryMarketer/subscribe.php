@@ -384,10 +384,17 @@ if (!empty($recaptcha_secret)) {
                 $remote_ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
                 subscribe_debug_log('reCAPTCHA validation - Calling verifyResponse with IP: ' . $remote_ip);
                 subscribe_debug_log('reCAPTCHA validation - Token (first 50 chars): ' . substr($recaptcha_token, 0, 50));
+                subscribe_debug_log('reCAPTCHA validation - Current domain: ' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'NOT SET'));
+                subscribe_debug_log('reCAPTCHA validation - Request URI: ' . (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'NOT SET'));
                 
                 $recaptcha_response = $recaptcha->verifyResponse($remote_ip, $recaptcha_token);
                 
                 subscribe_debug_log('reCAPTCHA validation - Response object: ' . print_r($recaptcha_response, true));
+                
+                // Also log the raw API response if available
+                if (isset($recaptcha_response->errorCodes) && is_array($recaptcha_response->errorCodes)) {
+                    subscribe_debug_log('reCAPTCHA validation - Error codes: ' . implode(', ', $recaptcha_response->errorCodes));
+                }
                 
                 if (!$recaptcha_response) {
                     subscribe_debug_log('reCAPTCHA validation failed: Response object is null');

@@ -155,11 +155,11 @@ class ReCaptcha
         // Log what we're sending
         error_log('reCAPTCHA verifyResponse called with:');
         error_log('  - Secret key length: ' . strlen($this->_secret));
-        error_log('  - Secret key (first 10 chars): ' . substr($this->_secret, 0, 10));
-        error_log('  - Remote IP: ' . $remoteIp);
+        error_log('  - Secret key (first 10 chars): ' . (is_string($this->_secret) && strlen($this->_secret) >= 10 ? substr($this->_secret, 0, 10) : 'N/A'));
+        error_log('  - Remote IP: ' . ($remoteIp ? $remoteIp : 'NOT SET'));
         error_log('  - Response token length: ' . strlen($response));
-        error_log('  - Response token (first 50 chars): ' . substr($response, 0, 50));
-        error_log('  - Response token (last 50 chars): ' . substr($response, -50));
+        error_log('  - Response token (first 50 chars): ' . (is_string($response) && strlen($response) >= 50 ? substr($response, 0, 50) : 'N/A'));
+        error_log('  - Response token (last 50 chars): ' . (is_string($response) && strlen($response) >= 50 ? substr($response, -50) : 'N/A'));
         
         $getResponse = $this->_submitHttpGet(
             self::$_siteVerifyUrl,
@@ -172,7 +172,11 @@ class ReCaptcha
         );
         
         // Log the raw response for debugging
-        error_log('reCAPTCHA API raw response: ' . $getResponse);
+        if ($getResponse) {
+            error_log('reCAPTCHA API raw response: ' . $getResponse);
+        } else {
+            error_log('reCAPTCHA API raw response: EMPTY or FALSE');
+        }
         
         $answers = json_decode($getResponse, true);
         
@@ -182,6 +186,14 @@ class ReCaptcha
         // Check for JSON decode errors
         if (json_last_error() !== JSON_ERROR_NONE) {
             error_log('reCAPTCHA JSON decode error: ' . json_last_error_msg());
+        }
+        
+        // Log specific error details if available
+        if (isset($answers['error-codes']) && is_array($answers['error-codes'])) {
+            error_log('reCAPTCHA API error codes: ' . implode(', ', $answers['error-codes']));
+            foreach ($answers['error-codes'] as $error_code) {
+                error_log('  - Error code: ' . $error_code);
+            }
         }
         
         $recaptchaResponse = new ReCaptchaResponse();
