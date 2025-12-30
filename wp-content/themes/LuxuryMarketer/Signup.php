@@ -320,6 +320,18 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 									errorHtml += '</div>';
 								}
 								
+								// Display error log file entries if available
+								if (response && response.data && response.data.error_log_file && response.data.error_log_file.length > 0) {
+									errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#ffe0e0; border:1px solid #ff9999; border-radius:4px;">';
+									errorHtml += '<strong style="display:block; margin-bottom:10px; color:#666; font-size:12px;">Server Error Log (reCAPTCHA entries):</strong>';
+									errorHtml += '<pre style="margin:0; padding:10px; background-color:#fff; border:1px solid #ccc; border-radius:4px; font-size:11px; max-height:300px; overflow-y:auto; white-space:pre-wrap; word-wrap:break-word; font-family:monospace;">';
+									response.data.error_log_file.forEach(function(logEntry) {
+										errorHtml += logEntry.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n';
+									});
+									errorHtml += '</pre>';
+									errorHtml += '</div>';
+								}
+								
 								// Display full response data for debugging (expanded by default)
 								if (response && response.data) {
 									errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#f5f5f5; border:1px solid #ddd; border-radius:4px;">';
@@ -379,6 +391,18 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 								errorResponse.data.debug_log.forEach(function(logEntry) {
 									errorHtml += '<div>' + logEntry.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
 								});
+								errorHtml += '</div>';
+							}
+							
+							// Display error log file entries if available
+							if (errorResponse && errorResponse.data && errorResponse.data.error_log_file && errorResponse.data.error_log_file.length > 0) {
+								errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#ffe0e0; border:1px solid #ff9999; border-radius:4px;">';
+								errorHtml += '<strong style="display:block; margin-bottom:10px; color:#666; font-size:12px;">Server Error Log (reCAPTCHA entries):</strong>';
+								errorHtml += '<pre style="margin:0; padding:10px; background-color:#fff; border:1px solid #ccc; border-radius:4px; font-size:11px; max-height:300px; overflow-y:auto; white-space:pre-wrap; word-wrap:break-word; font-family:monospace;">';
+								errorResponse.data.error_log_file.forEach(function(logEntry) {
+									errorHtml += logEntry.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n';
+								});
+								errorHtml += '</pre>';
 								errorHtml += '</div>';
 							}
 							

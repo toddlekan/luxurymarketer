@@ -29,6 +29,45 @@ function subscribe_debug_log($message) {
     $GLOBALS['subscribe_debug_log'][] = $message;
 }
 
+// Function to read error log file
+function read_error_log_file() {
+    $log_entries = array();
+    
+    // Try common error log locations
+    $log_paths = array(
+        ini_get('error_log'),
+        WP_CONTENT_DIR . '/debug.log',
+        ABSPATH . 'wp-content/debug.log',
+        dirname(ABSPATH) . '/error_log',
+        '/var/log/apache2/error.log',
+        '/var/log/nginx/error.log',
+    );
+    
+    foreach ($log_paths as $log_path) {
+        if (empty($log_path)) continue;
+        
+        if (file_exists($log_path) && is_readable($log_path)) {
+            // Read last 100 lines of the error log
+            $lines = file($log_path);
+            if ($lines) {
+                $recent_lines = array_slice($lines, -100);
+                // Filter for reCAPTCHA-related entries
+                foreach ($recent_lines as $line) {
+                    if (stripos($line, 'recaptcha') !== false || stripos($line, 'reCAPTCHA') !== false) {
+                        $log_entries[] = trim($line);
+                    }
+                }
+                // If we found entries, break
+                if (!empty($log_entries)) {
+                    break;
+                }
+            }
+        }
+    }
+    
+    return $log_entries;
+}
+
 // Function to send JSON response (define early)
 function send_json_response($success, $message, $errors = array(), $data = array()) {
     // Get any errors/output from buffer
@@ -45,6 +84,14 @@ function send_json_response($success, $message, $errors = array(), $data = array
     // Include debug log messages
     if (isset($GLOBALS['subscribe_debug_log']) && !empty($GLOBALS['subscribe_debug_log'])) {
         $data['debug_log'] = $GLOBALS['subscribe_debug_log'];
+    }
+    
+    // Try to read error log file for reCAPTCHA entries
+    if (defined('WP_CONTENT_DIR') || defined('ABSPATH')) {
+        $error_log_entries = read_error_log_file();
+        if (!empty($error_log_entries)) {
+            $data['error_log_file'] = $error_log_entries;
+        }
     }
     
     // Get last PHP error if any
@@ -387,6 +434,9 @@ if (!empty($recaptcha_secret)) {
                 subscribe_debug_log('reCAPTCHA validation - Current domain: ' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'NOT SET'));
                 subscribe_debug_log('reCAPTCHA validation - Request URI: ' . (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'NOT SET'));
                 
+                // Create a wrapper to capture the API response
+                $recaptcha_api_response_capture = array();
+                
                 $recaptcha_response = $recaptcha->verifyResponse($remote_ip, $recaptcha_token);
                 
                 subscribe_debug_log('reCAPTCHA validation - Response object: ' . print_r($recaptcha_response, true));
@@ -394,6 +444,16 @@ if (!empty($recaptcha_secret)) {
                 // Also log the raw API response if available
                 if (isset($recaptcha_response->errorCodes) && is_array($recaptcha_response->errorCodes)) {
                     subscribe_debug_log('reCAPTCHA validation - Error codes: ' . implode(', ', $recaptcha_response->errorCodes));
+                    
+                    // Check server error log for the actual API response (it's logged there)
+                    // For now, log what we know
+                    subscribe_debug_log('reCAPTCHA validation - Note: Check server error logs for detailed API response from Google');
+                    subscribe_debug_log('reCAPTCHA validation - Common causes of invalid-input-response:');
+                    subscribe_debug_log('  1. Token expired (tokens expire after ~2 minutes)');
+                    subscribe_debug_log('  2. Token already used (tokens are single-use)');
+                    subscribe_debug_log('  3. Token format corrupted during transmission');
+                    subscribe_debug_log('  4. Domain mismatch (even if domain looks correct)');
+                    subscribe_debug_log('  5. Secret key mismatch (even if keys look correct)');
                 }
                 
                 if (!$recaptcha_response) {

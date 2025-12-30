@@ -154,12 +154,14 @@ class ReCaptcha
 
         // Log what we're sending
         error_log('reCAPTCHA verifyResponse called with:');
-        error_log('  - Secret key length: ' . strlen($this->_secret));
-        error_log('  - Secret key (first 10 chars): ' . (is_string($this->_secret) && strlen($this->_secret) >= 10 ? substr($this->_secret, 0, 10) : 'N/A'));
+        $secret_len = ($this->_secret && is_string($this->_secret)) ? strlen($this->_secret) : 0;
+        error_log('  - Secret key length: ' . $secret_len);
+        error_log('  - Secret key (first 10 chars): ' . ($secret_len >= 10 ? substr($this->_secret, 0, 10) : 'N/A'));
         error_log('  - Remote IP: ' . ($remoteIp ? $remoteIp : 'NOT SET'));
-        error_log('  - Response token length: ' . strlen($response));
-        error_log('  - Response token (first 50 chars): ' . (is_string($response) && strlen($response) >= 50 ? substr($response, 0, 50) : 'N/A'));
-        error_log('  - Response token (last 50 chars): ' . (is_string($response) && strlen($response) >= 50 ? substr($response, -50) : 'N/A'));
+        $response_len = ($response && is_string($response)) ? strlen($response) : 0;
+        error_log('  - Response token length: ' . $response_len);
+        error_log('  - Response token (first 50 chars): ' . ($response_len >= 50 ? substr($response, 0, 50) : 'N/A'));
+        error_log('  - Response token (last 50 chars): ' . ($response_len >= 50 ? substr($response, -50) : 'N/A'));
         
         $getResponse = $this->_submitHttpGet(
             self::$_siteVerifyUrl,
