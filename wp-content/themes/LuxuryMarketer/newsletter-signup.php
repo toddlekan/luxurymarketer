@@ -107,10 +107,8 @@ Template Name: Newsletter Signup Template
 										<td> <span class='input_left'><input type='textbox' name='EMAIL' id='email' class='form_element' style='' value='<?php echo !empty($prefill_email) ? htmlspecialchars($prefill_email, ENT_QUOTES) : (isset($_POST['EMAIL']) ? htmlspecialchars(stripslashes($_POST['EMAIL']), ENT_QUOTES) : ''); ?>' /></span> </td>
 									</tr>
 									
-									<tr style="display:none;">
-										<td width=130> <label for="email2">Confirm Email<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='email2' id='email2' class='form_element' style='' value='<?php echo !empty($prefill_email) ? htmlspecialchars($prefill_email, ENT_QUOTES) : (isset($_POST['email2']) ? htmlspecialchars(stripslashes($_POST['email2']), ENT_QUOTES) : ''); ?>' /></span> </td>
-									</tr>
+									<!-- Hidden email2 field for email confirmation - synced with email field via JavaScript -->
+									<input type='hidden' name='email2' id='email2' value='<?php echo !empty($prefill_email) ? htmlspecialchars($prefill_email, ENT_QUOTES) : (isset($_POST['email2']) ? htmlspecialchars(stripslashes($_POST['email2']), ENT_QUOTES) : ''); ?>' />
 
 
 									<tr>
@@ -470,6 +468,22 @@ Template Name: Newsletter Signup Template
 								</table>
 
 								<hr><br />
+								
+								<?php 
+								// Display reCAPTCHA if configured
+								$recaptcha_options = get_option('recaptcha_options', array());
+								$recaptcha_site_key = isset($recaptcha_options['site_key']) ? $recaptcha_options['site_key'] : '';
+								$recaptcha_theme = isset($recaptcha_options['comments_theme']) ? $recaptcha_options['comments_theme'] : 'light';
+								$recaptcha_language = isset($recaptcha_options['recaptcha_language']) ? $recaptcha_options['recaptcha_language'] : 'en';
+								
+								if (!empty($recaptcha_site_key)) {
+									echo '<div style="margin: 15px 0;">';
+									echo '<div class="g-recaptcha" data-sitekey="' . esc_attr($recaptcha_site_key) . '" data-theme="' . esc_attr($recaptcha_theme) . '"></div>';
+									echo '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=' . esc_attr($recaptcha_language) . '"></script>';
+									echo '</div>';
+								}
+								?>
+								
 								<span class='input_button'><input name="Submit" value="Subscribe" border="0" name="imageField" width="78" height="29" type="submit"></span>
 							</form>
 						</div>
