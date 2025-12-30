@@ -497,17 +497,25 @@ $url_root = get_template_directory_uri();
 
   <div id="mobile-sub-menu">
 
-    <div class="label subscribe">
-      <script>
-          var options = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          };
-          var today = new Date();
+    <div class="date">
+      <span class="label subscribe">
 
-          document.write(today.toLocaleDateString("en-US", options)); // September 17, 2016
-        </script>
+
+      <span class="sign-in-subscribe pop-subscribe loggedout" 
+      style="display: none;" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" 
+        id="subscribe-mobile">
+          <script>
+              var options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              };
+              var today = new Date();
+
+              document.write(today.toLocaleDateString("en-US", options)); // September 17, 2016
+          </script>
+        </span>
+      </span>
     </div>
 
     <span class="label subscribe">
