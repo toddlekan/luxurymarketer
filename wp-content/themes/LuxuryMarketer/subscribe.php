@@ -20,6 +20,11 @@ $is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HT
 // Global debug array to collect log messages
 $GLOBALS['subscribe_debug_log'] = array();
 
+// TEMPORARY: reCAPTCHA bypass flag for testing
+// SET TO false TO RE-ENABLE reCAPTCHA VALIDATION
+// WARNING: This bypass should be removed or set to false before going to production!
+define('BYPASS_RECAPTCHA', true);
+
 // Custom error log function that also stores to debug array
 function subscribe_debug_log($message) {
     if (!isset($GLOBALS['subscribe_debug_log'])) {
@@ -397,7 +402,9 @@ if (empty($category)) {
 }
 
 // Validate reCAPTCHA if configured
-if (!empty($recaptcha_secret)) {
+if (defined('BYPASS_RECAPTCHA') && BYPASS_RECAPTCHA === true) {
+    subscribe_debug_log('WARNING: reCAPTCHA validation is BYPASSED (BYPASS_RECAPTCHA is set to true). This should only be used for testing!');
+} elseif (!empty($recaptcha_secret)) {
     // Get the token and ensure it's properly decoded (wp_unslash handles magic quotes if enabled)
     $recaptcha_token = isset($_POST['g-recaptcha-response']) ? $_POST['g-recaptcha-response'] : '';
     // Don't use wp_unslash here - the token should be URL-encoded from the form, PHP will decode it automatically
