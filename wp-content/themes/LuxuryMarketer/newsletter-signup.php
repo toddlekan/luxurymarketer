@@ -64,15 +64,41 @@ Template Name: Newsletter Signup Template
 							$error_message = '';
 							$success_message = '';
 							
+							// Debug: Show all GET parameters for troubleshooting
+							if (isset($_GET['debug'])) {
+								echo '<div style="background:#fff3cd; padding:10px; margin-bottom:15px; border:1px solid #ffc107;">';
+								echo '<strong>Debug Info:</strong><br>';
+								echo 'GET params: ' . print_r($_GET, true);
+								echo '</div>';
+							}
+							
 							if (isset($_GET['error'])) {
 								$error_type = $_GET['error'];
 								if ($error_type === 'validation' && isset($_GET['fields'])) {
 									$error_fields = explode(',', $_GET['fields']);
-									$error_message = 'Please check the following fields: ' . htmlspecialchars(implode(', ', $error_fields));
+									$field_labels = array(
+										'email' => 'Email Address',
+										'email_mismatch' => 'Email addresses do not match',
+										'first_name' => 'First Name',
+										'last_name' => 'Last Name',
+										'title' => 'Title',
+										'company' => 'Company',
+										'city' => 'City',
+										'state' => 'State',
+										'zipcode' => 'ZIP/Post Code',
+										'country' => 'Country',
+										'category' => 'Industry',
+										'captcha' => 'reCAPTCHA verification'
+									);
+									$error_field_labels = array();
+									foreach ($error_fields as $field) {
+										$error_field_labels[] = isset($field_labels[$field]) ? $field_labels[$field] : $field;
+									}
+									$error_message = 'Please check the following fields: ' . htmlspecialchars(implode(', ', $error_field_labels));
 								} elseif ($error_type === 'api') {
 									$error_message = 'There was an error submitting your subscription. Please try again.';
 									if (isset($_GET['msg'])) {
-										$error_message .= ' (' . htmlspecialchars(urldecode($_GET['msg'])) . ')';
+										$error_message .= '<br><small>' . htmlspecialchars(urldecode($_GET['msg'])) . '</small>';
 									}
 								} elseif ($error_type === 'config') {
 									$error_message = 'Subscription service is temporarily unavailable. Please try again later.';
@@ -90,10 +116,14 @@ Template Name: Newsletter Signup Template
 							}
 							
 							if (!empty($error_message)) {
-								echo '<div style="color:red; background-color:#ffebee; margin-bottom:15px; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold;">' . $error_message . '</div>';
+								echo '<div style="color:#d32f2f; background-color:#ffebee; margin-bottom:15px; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px;">';
+								echo '<strong>Error:</strong> ' . $error_message;
+								echo '</div>';
 							}
 							if (!empty($success_message)) {
-								echo '<div style="color:green; background-color:#e8f5e9; margin-bottom:15px; padding:15px; border:2px solid #4caf50; border-radius:4px; font-weight:bold;">' . $success_message . '</div>';
+								echo '<div style="color:#2e7d32; background-color:#e8f5e9; margin-bottom:15px; padding:15px; border:2px solid #4caf50; border-radius:4px; font-weight:bold; font-size:14px;">';
+								echo $success_message;
+								echo '</div>';
 							}
 							?>
 							<?php 
@@ -113,7 +143,7 @@ Template Name: Newsletter Signup Template
 								$prefill_email = is_email($raw_email) ? sanitize_email($raw_email) : '';
 							}
 							?>
-							<form method="POST" action="<?php echo esc_url(get_template_directory_uri() . '/subscribe.php'); ?>" id="newsletter-form">
+							<form method="POST" action="<?php echo esc_url(home_url('/wp-content/themes/LuxuryMarketer/subscribe.php')); ?>" id="newsletter-form">
 
 
 								<table cellspacing=3>
