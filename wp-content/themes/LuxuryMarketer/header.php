@@ -493,13 +493,12 @@ $url_root = get_template_directory_uri();
 
 
 
-  <div id="mobile-sub-menu">
-    <span class="label subscribe">
+ 
 
-      <span class="sign-in-subscribe pop-subscribe loggedout" 
-      style="display: none;" 
-        id="subscribe-mobile">
-        <script>
+  <div id="mobile-sub-menu">
+
+    <div class="date">
+      <script>
           var options = {
             year: 'numeric',
             month: 'long',
@@ -509,12 +508,8 @@ $url_root = get_template_directory_uri();
 
           document.write(today.toLocaleDateString("en-US", options)); // September 17, 2016
         </script>
-      </span>
+    </div>
 
-    </span>
-  </div>
-
-  <div id="mobile-sub-menu">
     <span class="label subscribe">
       <a href="#" id="popular-mobile" target="popular">Most Read</a>
       <span style="color: #ccc;"> &nbsp; &nbsp; </span>
