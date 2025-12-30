@@ -410,7 +410,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".navbar-toggle", function (e) {
     e.preventDefault();
-    $("#popular-mobile, #date-mobile").toggle();
+    $("#popular-mobile, #date-mobile, .pop-subscribe").toggle();
   });
 
   /*COMMENTS*/

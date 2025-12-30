@@ -45,6 +45,6 @@
 <script src="<?= ld16_cdn($url_root) ?>/js/custom.js"></script>
 <script src="<?= ld16_cdn($url_root) ?>/js/aes.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.js"></script>
-<script src="<?= ld16_cdn($url_root) ?>/js/lrt.js?<?= time() ?>"></script>
+<script src="<?= ld16_cdn($url_root) ?>/js/lm.js?<?= time() ?>"></script>
 <script src="<?= ld16_cdn($url_root) ?>/js/slider.js?<?= time() ?>"></script>
 
