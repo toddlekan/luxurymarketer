@@ -3031,6 +3031,11 @@ ul.no-bullet {
 
   h1{text-align: center;}
 
+  .section.divider {
+    margin-left: -14px;
+    width: 106%;
+  }
+
   #logo-mobile, #mobile-sub-menu {
     margin-top: 10px;
   }
