@@ -142,8 +142,11 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 
 				$('.reqmsg').hide();
 
-				var form = $('form');
+				var form = $('#mc-embedded-subscribe-form');
 				var url = form.attr('action');
+				var formContainer = $('#thePanel');
+				var submitButton = $('#submit_btn');
+				var originalButtonValue = submitButton.val();
 
 				var email = $('#email');
 				var email2 = $('#email2');
@@ -152,12 +155,9 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 
 					var reqmsg = $(this).closest('td').find('.reqmsg');
 
-
 					if (!$(this).val()) {
-
 						reqmsg.show();
 						submit = false;
-
 					}
 
 				});
@@ -166,23 +166,82 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 
 				if (email.val() && !re.test(email.val())) {
 					$('#email_regex').show();
-					var submit = false;
+					submit = false;
 				}
 
 				if (email2.val() && email2.val() !== email.val()) {
 					$('#email2_compare').show();
-					var submit = false;
+					submit = false;
 				}
 
 				if (submit) {
 
-					var bcode = $('#bcode').val()
+					var bcode = $('#bcode').val();
 
 					if (bcode !== 'Other') {
 						$('#bcode_other').val(bcode);
 					}
 
-					form.submit();
+					// Disable submit button and show loading state
+					submitButton.prop('disabled', true).val('Submitting...');
+					
+					// Remove any existing error/success messages
+					formContainer.find('.ajax-message').remove();
+					
+					// Serialize form data and add AJAX flag
+					var formData = form.serialize() + '&ajax=1';
+					
+					// Submit via AJAX
+					$.ajax({
+						url: url,
+						type: 'POST',
+						data: formData,
+						dataType: 'json',
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+						},
+						success: function(response) {
+							if (response && response.success) {
+								// Success - replace form with success message
+								var successHtml = '<div class="ajax-message" style="color:#2e7d32; background-color:#e8f5e9; padding:30px; border:2px solid #4caf50; border-radius:4px; text-align:center; margin:20px 0;">';
+								successHtml += '<h2 style="color:#2e7d32; margin-top:0;">Success!</h2>';
+								successHtml += '<p style="font-size:16px; margin-bottom:0;">' + (response.message || 'Thank you! Your subscription has been confirmed.') + '</p>';
+								successHtml += '<p style="margin-top:20px;"><a href="https://www.luxurymarketer.com">Return to the Luxury Marketer homepage</a></p>';
+								successHtml += '</div>';
+								formContainer.html(successHtml);
+							} else {
+								// Error - show error message
+								var errorMessage = response && response.message ? response.message : 'There was an error submitting your subscription. Please try again.';
+								var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
+								errorHtml += '<strong>Error:</strong> ' + errorMessage;
+								errorHtml += '</div>';
+								formContainer.prepend(errorHtml);
+								
+								// Re-enable submit button
+								submitButton.prop('disabled', false).val(originalButtonValue);
+							}
+						},
+						error: function(xhr, status, error) {
+							// Try to parse JSON error response
+							var errorMessage = 'There was an error submitting your subscription. Please try again.';
+							try {
+								var errorResponse = JSON.parse(xhr.responseText);
+								if (errorResponse && errorResponse.message) {
+									errorMessage = errorResponse.message;
+								}
+							} catch (e) {
+								// Not JSON, use default message
+							}
+							
+							var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
+							errorHtml += '<strong>Error:</strong> ' + errorMessage;
+							errorHtml += '</div>';
+							formContainer.prepend(errorHtml);
+							
+							// Re-enable submit button
+							submitButton.prop('disabled', false).val(originalButtonValue);
+						}
+					});
 
 				} else {
 					return false;
