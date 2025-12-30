@@ -4,6 +4,12 @@
  * Processes subscription form submissions and adds subscribers to Mailchimp via API
  */
 
+// Enable ALL error reporting and display
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+ini_set('html_errors', 0); // Disable HTML formatting for cleaner output
+
 // Start output buffering to catch any WordPress errors
 ob_start();
 
@@ -13,10 +19,23 @@ $is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HT
 
 // Function to send JSON response (define early)
 function send_json_response($success, $message, $errors = array(), $data = array()) {
-    // Clear any previous output
-    while (ob_get_level()) {
-        ob_end_clean();
+    // Get any errors/output from buffer
+    $buffer_content = '';
+    if (ob_get_level() > 0) {
+        $buffer_content = ob_get_clean();
     }
+    
+    // Always include buffer content for debugging
+    if (!empty($buffer_content)) {
+        $data['debug_output'] = $buffer_content;
+    }
+    
+    // Get last PHP error if any
+    $last_error = error_get_last();
+    if ($last_error) {
+        $data['php_error'] = $last_error;
+    }
+    
     header('Content-Type: application/json; charset=utf-8');
     $response = array(
         'success' => $success,
@@ -34,17 +53,26 @@ if (!defined('ABSPATH')) {
     if (file_exists($wp_load_path)) {
         // Clear any output so far
         ob_clean();
-        // Load WordPress
-        require_once($wp_load_path);
+        // Load WordPress with error display enabled
+        try {
+            require_once($wp_load_path);
+        } catch (Exception $e) {
+            send_json_response(false, 'WordPress load error: ' . $e->getMessage(), array('config'), array('exception' => $e->getTraceAsString()));
+        } catch (Error $e) {
+            send_json_response(false, 'WordPress fatal error: ' . $e->getMessage(), array('config'), array('file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()));
+        }
         
         // Check if WordPress loaded successfully by checking for a core function
         if (!defined('ABSPATH') || !function_exists('get_option')) {
-            // WordPress failed to load properly - send error
-            send_json_response(false, 'System error: Unable to initialize. Please try again later.', array('config'));
+            // Get any error output
+            $error_output = ob_get_contents();
+            ob_clean();
+            // WordPress failed to load properly - send error with details
+            send_json_response(false, 'System error: WordPress failed to load. ABSPATH: ' . (defined('ABSPATH') ? 'defined' : 'not defined') . ', get_option exists: ' . (function_exists('get_option') ? 'yes' : 'no'), array('config'), array('error_output' => $error_output));
         }
     } else {
         // WordPress file not found
-        send_json_response(false, 'System error: Configuration file not found.', array('config'));
+        send_json_response(false, 'System error: WordPress file not found at: ' . $wp_load_path, array('config'));
     }
 }
 
