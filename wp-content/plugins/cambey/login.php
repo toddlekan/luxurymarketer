@@ -8,14 +8,14 @@ $url = 'https://www.cambeywest.com/api/service.asmx/GetSubscriberData';
 $fields = array(
     'subscriber_email' => urlencode($_POST['subscriber_email']),
     'subscriber_pass' => urlencode($_POST['subscriber_pass']),
-    'pub_acronym' => urlencode('LXR'),
+    'pub_acronym' => urlencode('LXM'),
     'auth_user' => urlencode('API231018'),
     'auth_pass' => urlencode('5358Q3R2XQ'),
 );
 
 if ($fields['subscriber_email'] == '' || $fields['subscriber_pass'] == '') {
     $msg = "Either email or password is blank.";
-    $url = "https:\/\/join.luxuryroundtable.com\/LXR\/?f=paid";
+    $url = "https:\/\/luxurymarketer.subsmediahub.com\/LXM\/?f=paid";
     $url_label = "Subscribe";
     $arr = array(
         'msg' => (string)$msg,
@@ -191,7 +191,7 @@ if (!trim($data->friendcorrectiveaction)) {
         $url_label = "";
     } else {
         $msg = "Your account information was not found. Please try again or click the link below to start a subscription.";
-        $url = "https://join.luxuryroundtable.com/LXR/?f=paid";
+        $url = "https://join.luxurymarketer.com/LXR/?f=paid";
         $url_label = "Subscribe";
         trash_cookies();
     }

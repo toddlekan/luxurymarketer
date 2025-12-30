@@ -38,7 +38,7 @@ $filename = "$cache_path/$post_id.pdf";
 
 if(!file_exists($filename) || array_key_exists('nocache', $_GET)){
 
-  $cmd = "/usr/local/bin/wkhtmltopdf \"https://www.luxuryroundtable.com/?p=$post_id&format=pdf\" $filename";
+  $cmd = "/usr/local/bin/wkhtmltopdf \"https://www.luxurymarketer.com/?p=$post_id&format=pdf\" $filename";
   //$cmd = "/usr/local/bin/wkhtmltopdf https://beta.luxuryroundtable.com/?p=204922&format=pdf /tmp/test.pdf";
 
   $result = shell_exec($cmd);

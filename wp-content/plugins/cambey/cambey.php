@@ -21,7 +21,7 @@ function cambey_login() {
 	$fields = array(
 		'subscriber_email' => urlencode($_POST['subscriber_email']),
 		'subscriber_pass' => urlencode($_POST['subscriber_pass']),
-		'pub_acronym' => urlencode('LXR'),
+		'pub_acronym' => urlencode('LXM'),
 		'auth_user' => urlencode('API231018'),
 		'auth_pass' => urlencode('5358Q3R2XQ'),
 
@@ -165,7 +165,7 @@ function cambey_login() {
 
 		$value = base64_encode($data->email);
 
-		setcookie("luxuryroundtable_login", $value, time()+60*60*24*7, "/", ".luxuryroundtable.com", 0, false);
+		setcookie("luxurymarketer_login", $value, time()+60*60*24*7, "/", ".luxurymarketer.com", 0, false);
 
 		print "COOKIE SET $value";
 	} else {

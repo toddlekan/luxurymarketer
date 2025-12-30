@@ -18,7 +18,7 @@ function bake_cred($cwrec_id, $acctno)
 
   $expires = time() + 60 * 60 * 24 * 14;
 
-  setcookie("luxuryroundtable_acctno", $acctno, $expires, "/", ".luxuryroundtable.com", 0, false);
+  setcookie("luxurymarketer_acctno", $acctno, $expires, "/", ".luxurymarketer.com", 0, false);
 
   bake_cookie($cwrec_id, $acctno, $cred_salt, $cred_name, $expires);
 }
@@ -50,7 +50,7 @@ function bake_cookie($cwrec_id, $acctno, $salt, $name, $expires)
 
   $cookie = base64_encode($cookie);
 
-  setcookie($name, $cookie, $expires, "/", ".luxuryroundtable.com", 0, false);
+  setcookie($name, $cookie, $expires, "/", ".luxurymarketer.com", 0, false);
 }
 
 function read_cookie($name)
@@ -70,10 +70,10 @@ function trash_cookies()
 
   global $cred_name, $day_pass_name;
 
-  setcookie($cred_name, '', time() - 3600, "/", ".luxuryroundtable.com", 0, false);
-  setcookie($day_pass_name, '', time() - 3600, "/", ".luxuryroundtable.com", 0, false);
-  setcookie('luxuryroundtable_login', '',  time() - 3600, "/", ".luxuryroundtable.com", 0, false);
-  setcookie('luxuryroundtable_acctno', '',  time() - 3600, "/", ".luxuryroundtable.com", 0, false);
+  setcookie($cred_name, '', time() - 3600, "/", ".luxurymarketer.com", 0, false);
+  setcookie($day_pass_name, '', time() - 3600, "/", ".luxurymarketer.com", 0, false);
+  setcookie('luxurymarketer_login', '',  time() - 3600, "/", ".luxurymarketercom", 0, false);
+  setcookie('luxurymarketer_acctno', '',  time() - 3600, "/", ".luxurymarketer.com", 0, false);
 }
 
 function get_token($id, $yesterday = false)

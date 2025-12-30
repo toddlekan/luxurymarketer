@@ -148,8 +148,6 @@ $url_root = get_template_directory_uri();
 
 
 <div id="lr-header" class="navbar navbar-default navbar-fixed-top">
-g
-
 
 
 
@@ -186,7 +184,7 @@ g
 
                     <ul class="dropdown-menu">
                       <li><a class="reverse" href="/">Home</a></li>
-                      <li class="reverse"><a href="/category/research" class="grey">Sectors</a>
+                  
                       <li class="reverse dropdown item">
                         <a href="/category/research" class="dropdown-toggle grey" data-toggle="dropdown" role="button" 
                           aria-expanded="false">
@@ -271,7 +269,7 @@ g
                 
                 <li class="label subscribe">
 
-                  <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="" style="color: #000;">
+                  <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="/log-in" style="color: #000;">
                     Log In &nbsp;</a>
                 </li>
                 <li class="label subscribe">
