@@ -1049,6 +1049,7 @@ a.desktop .bar {
 }
 
 @media (max-width: 768px) {
+
   button.navbar-toggle.desktop {
     display: none;
   }
@@ -3024,11 +3025,14 @@ ul.no-bullet {
 
 .logo-side{display: none;}
 .mobile-only{display: none;}
+.desktop-only{display: initial;}
+
 @media (max-width:501px) {
   #logo-mobile, #mobile-sub-menu {
     margin-top: 10px;
   }
   .mobile-only{display: block;}
+  .desktop-only{display: none;}
 }
 
 @media (max-width:768px) {

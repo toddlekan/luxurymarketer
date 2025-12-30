@@ -52,6 +52,19 @@ if (have_posts()) {
 				<div class="col-lg-12">
 					<div class="newswell-divider section divider"></div>
 					<div class="newswell">
+
+						<div class="mobile-only">
+						
+							<?php
+								for ($i = 0; $i < 1; $i++) {
+									if (isset($post_arr_2[$i])) {
+										$post = get_post($post_arr_2[$i]);
+										setup_postdata($post);
+										get_template_part('template-parts/content', 'above-fold-rail');
+									}
+								};
+							?>
+						</div>
 				
 						<div class="col-lg-3 above-fold-left-top-col">
 			
@@ -70,7 +83,7 @@ if (have_posts()) {
 							?>
 
 						</div>
-						<div class="col-lg-6 above-fold-center-top-col">
+						<div class="col-lg-6 above-fold-center-top-col desktop-only">
 					
 							<?php
 
@@ -108,6 +121,17 @@ if (have_posts()) {
 
 							?>
 
+						</div>
+
+						<div class="mobile-only">
+							<?php
+								for ($i = 5; $i < 6; $i++) {
+									if (isset($post_arr_2[$i])) {
+										$post = get_post($post_arr_2[$i]);
+										setup_postdata($post);
+										get_template_part('template-parts/content', 'above-fold-rail');
+									}
+							?>
 						</div>
 
 				   </div>
