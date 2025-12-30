@@ -331,22 +331,45 @@ if (empty($category)) {
 if (!empty($recaptcha_secret)) {
     $recaptcha_token = isset($_POST['g-recaptcha-response']) ? $_POST['g-recaptcha-response'] : '';
     
+    error_log('reCAPTCHA validation - Token received: ' . (!empty($recaptcha_token) ? 'Yes (length: ' . strlen($recaptcha_token) . ')' : 'No'));
+    error_log('reCAPTCHA validation - Secret key: ' . (!empty($recaptcha_secret) ? 'Yes (length: ' . strlen($recaptcha_secret) . ')' : 'No'));
+    
     if (empty($recaptcha_token)) {
         error_log('reCAPTCHA validation failed: Token is empty');
+        if ($is_ajax) {
+            send_json_response(false, 'reCAPTCHA token is missing. Please complete the reCAPTCHA verification.', array('captcha'), array('debug' => 'Token empty', 'post_keys' => array_keys($_POST)));
+        }
         $errors[] = 'captcha';
     } else {
         try {
             if (!class_exists('ReCaptcha')) {
                 error_log('reCAPTCHA validation failed: ReCaptcha class not found');
+                if ($is_ajax) {
+                    send_json_response(false, 'reCAPTCHA class not found', array('captcha'), array('debug' => 'ReCaptcha class missing'));
+                }
                 $errors[] = 'captcha';
             } else {
                 $recaptcha = new ReCaptcha($recaptcha_secret);
                 $remote_ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+                error_log('reCAPTCHA validation - Calling verifyResponse with IP: ' . $remote_ip);
+                error_log('reCAPTCHA validation - Token (first 50 chars): ' . substr($recaptcha_token, 0, 50));
+                
                 $recaptcha_response = $recaptcha->verifyResponse($remote_ip, $recaptcha_token);
                 
-                if (!$recaptcha_response || !$recaptcha_response->success) {
+                error_log('reCAPTCHA validation - Response object: ' . print_r($recaptcha_response, true));
+                
+                if (!$recaptcha_response) {
+                    error_log('reCAPTCHA validation failed: Response object is null');
+                    if ($is_ajax) {
+                        send_json_response(false, 'reCAPTCHA verification failed: No response from server', array('captcha'), array('debug' => 'Response null'));
+                    }
+                    $errors[] = 'captcha';
+                } elseif (!isset($recaptcha_response->success) || !$recaptcha_response->success) {
                     $error_codes = isset($recaptcha_response->errorCodes) ? $recaptcha_response->errorCodes : 'unknown';
                     error_log('reCAPTCHA validation failed: ' . print_r($error_codes, true));
+                    if ($is_ajax) {
+                        send_json_response(false, 'reCAPTCHA verification failed: ' . (is_array($error_codes) ? implode(', ', $error_codes) : $error_codes), array('captcha'), array('debug' => 'Validation failed', 'error_codes' => $error_codes));
+                    }
                     $errors[] = 'captcha';
                 } else {
                     error_log('reCAPTCHA validation successful');
@@ -354,9 +377,17 @@ if (!empty($recaptcha_secret)) {
             }
         } catch (Exception $e) {
             error_log('reCAPTCHA validation exception: ' . $e->getMessage());
+            error_log('reCAPTCHA validation exception trace: ' . $e->getTraceAsString());
+            if ($is_ajax) {
+                send_json_response(false, 'reCAPTCHA verification error: ' . $e->getMessage(), array('captcha'), array('debug' => 'Exception', 'message' => $e->getMessage()));
+            }
             $errors[] = 'captcha';
         } catch (Error $e) {
             error_log('reCAPTCHA validation error: ' . $e->getMessage());
+            error_log('reCAPTCHA validation error trace: ' . $e->getTraceAsString());
+            if ($is_ajax) {
+                send_json_response(false, 'reCAPTCHA verification error: ' . $e->getMessage(), array('captcha'), array('debug' => 'Error', 'message' => $e->getMessage()));
+            }
             $errors[] = 'captcha';
         }
     }

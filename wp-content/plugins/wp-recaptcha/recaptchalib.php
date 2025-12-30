@@ -91,7 +91,38 @@ class ReCaptcha
     private function _submitHTTPGet($path, $data)
     {
         $req = $this->_encodeQS($data);
-        $response = file_get_contents($path . $req);
+        $url = $path . $req;
+        
+        // Log the URL being called (without secret key for security)
+        $log_url = preg_replace('/secret=[^&]*/', 'secret=***', $url);
+        error_log('reCAPTCHA API URL: ' . $log_url);
+        
+        // Try file_get_contents first
+        $response = @file_get_contents($url);
+        
+        // If file_get_contents fails, try cURL as fallback
+        if ($response === false) {
+            error_log('reCAPTCHA file_get_contents failed, trying cURL');
+            if (function_exists('curl_init')) {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+                $response = curl_exec($ch);
+                $curl_error = curl_error($ch);
+                curl_close($ch);
+                
+                if ($response === false) {
+                    error_log('reCAPTCHA cURL error: ' . $curl_error);
+                    return '{"success":false,"error-codes":["network-error"]}';
+                }
+            } else {
+                error_log('reCAPTCHA: file_get_contents failed and cURL not available');
+                return '{"success":false,"error-codes":["network-error"]}';
+            }
+        }
+        
         return $response;
     }
 
@@ -123,15 +154,30 @@ class ReCaptcha
                 'response' => $response
             )
         );
+        
+        // Log the raw response for debugging
+        error_log('reCAPTCHA API raw response: ' . $getResponse);
+        
         $answers = json_decode($getResponse, true);
+        
+        // Log decoded response
+        error_log('reCAPTCHA API decoded response: ' . print_r($answers, true));
+        
+        // Check for JSON decode errors
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log('reCAPTCHA JSON decode error: ' . json_last_error_msg());
+        }
+        
         $recaptchaResponse = new ReCaptchaResponse();
 
         // Check if the API response indicates success (answers['success'] is a boolean from JSON)
         if (isset($answers['success']) && $answers['success'] === true) {
             $recaptchaResponse->success = true;
+            error_log('reCAPTCHA verification: SUCCESS');
         } else {
             $recaptchaResponse->success = false;
             $recaptchaResponse->errorCodes = isset($answers['error-codes']) ? $answers['error-codes'] : array();
+            error_log('reCAPTCHA verification: FAILED - ' . print_r($recaptchaResponse->errorCodes, true));
         }
 
         return $recaptchaResponse;
