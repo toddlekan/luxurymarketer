@@ -249,6 +249,9 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 					
 					formData += '&ajax=1';
 					
+					console.log('Submitting form data to:', url);
+					console.log('Form data length:', formData.length);
+					
 					// Submit via AJAX
 					$.ajax({
 						url: url,
@@ -259,6 +262,7 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 							xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 						},
 						success: function(response) {
+							console.log('AJAX Success Response:', response);
 							if (response && response.success) {
 								// Success - replace form with success message
 								var successHtml = '<div class="ajax-message" style="color:#2e7d32; background-color:#e8f5e9; padding:30px; border:2px solid #4caf50; border-radius:4px; text-align:center; margin:20px 0;">';
@@ -269,11 +273,12 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 								formContainer.html(successHtml);
 							} else {
 								// Error - show error message
+								console.log('AJAX Success but response.success is false:', response);
 								var errorMessage = response && response.message ? response.message : 'There was an error submitting your subscription. Please try again.';
-							var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
-							errorHtml += '<strong>Error:</strong> ' + errorMessage;
-							errorHtml += '</div>';
-							formContainer.prepend(errorHtml);
+								var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
+								errorHtml += '<strong>Error:</strong> ' + errorMessage;
+								errorHtml += '</div>';
+								formContainer.prepend(errorHtml);
 							
 							// Re-enable submit button
 							submitButton.prop('disabled', false).val(originalButtonValue);
