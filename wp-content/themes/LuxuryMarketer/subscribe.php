@@ -4,6 +4,11 @@
  * Processes subscription form submissions and adds subscribers to Mailchimp via API
  */
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 // Load WordPress if not already loaded
 if (!defined('ABSPATH')) {
     require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php');
@@ -20,11 +25,15 @@ if (!empty($recaptcha_secret)) {
 $mailchimp_api_key = defined('MAILCHIMP_API_KEY') ? MAILCHIMP_API_KEY : (getenv('MAILCHIMP_API_KEY') ?: '');
 
 // Log API key status for debugging (first 10 chars only for security)
-error_log('Mailchimp API Key Check: ' . (empty($mailchimp_api_key) ? 'NOT SET' : substr($mailchimp_api_key, 0, 10) . '...'));
+$api_key_status = empty($mailchimp_api_key) ? 'NOT SET' : substr($mailchimp_api_key, 0, 10) . '...';
+error_log('Mailchimp API Key Check: ' . $api_key_status);
+echo "<!-- Mailchimp API Key Check: " . htmlspecialchars($api_key_status) . " -->\n";
 
 if (empty($mailchimp_api_key) || $mailchimp_api_key === 'YOUR_MAILCHIMP_API_KEY_HERE') {
     // Redirect with error if API key is not configured
-    error_log('Mailchimp API Key not configured properly');
+    $error_msg = 'Mailchimp API Key not configured properly';
+    error_log($error_msg);
+    echo "<!-- ERROR: " . htmlspecialchars($error_msg) . " -->\n";
     header("Location: " . home_url('/subscription-form/') . "?error=config");
     exit;
 }
@@ -164,6 +173,9 @@ if (!empty($recaptcha_secret)) {
 // If there are validation errors, redirect back to form
 if (!empty($errors)) {
     $error_params = implode(',', $errors);
+    $validation_error = 'Validation errors: ' . $error_params;
+    error_log($validation_error);
+    echo "<!-- VALIDATION ERROR: " . htmlspecialchars($validation_error) . " -->\n";
     header("Location: " . home_url('/subscription-form/') . "?error=validation&fields=" . urlencode($error_params));
     exit;
 }
@@ -262,20 +274,31 @@ try {
             } else {
                 // Log error and redirect
                 $update_error_response = json_decode($update_response['body'], true);
-                error_log('Mailchimp Update Error: ' . print_r($update_error_response, true));
-                error_log('HTTP Code: ' . $update_response['http_code']);
+                $update_error_msg = 'Mailchimp Update Error: ' . print_r($update_error_response, true);
+                $update_http_code = 'HTTP Code: ' . $update_response['http_code'];
+                error_log($update_error_msg);
+                error_log($update_http_code);
+                echo "<!-- UPDATE ERROR: " . htmlspecialchars($update_error_msg) . " -->\n";
+                echo "<!-- " . htmlspecialchars($update_http_code) . " -->\n";
                 header("Location: " . home_url('/subscription-form/') . "?error=update");
                 exit;
             }
         } else {
             // Other error occurred - log detailed error information
+            $api_error_details = array(
+                'HTTP Code' => $http_code,
+                'Formatted Response' => $formatted_response,
+                'cURL Error' => $curl_error,
+                'API Key (first 10 chars)' => substr($mailchimp_api_key, 0, 10) . '...',
+                'List ID' => $list_id,
+                'Subscriber Data' => $subscriber_data
+            );
+            
             error_log('Mailchimp API Error Details:');
-            error_log('HTTP Code: ' . $http_code);
-            error_log('Formatted Response: ' . print_r($formatted_response, true));
-            error_log('cURL Error: ' . $curl_error);
-            error_log('API Key (first 10 chars): ' . substr($mailchimp_api_key, 0, 10) . '...');
-            error_log('List ID: ' . $list_id);
-            error_log('Subscriber Data: ' . print_r($subscriber_data, true));
+            foreach ($api_error_details as $key => $value) {
+                error_log($key . ': ' . print_r($value, true));
+                echo "<!-- API ERROR - " . htmlspecialchars($key) . ": " . htmlspecialchars(print_r($value, true)) . " -->\n";
+            }
             
             // Extract error message from formatted response
             $error_message = 'api_error';
@@ -296,7 +319,12 @@ try {
     }
 } catch (Exception $e) {
     // Log exception and redirect
-    error_log('Mailchimp Exception: ' . $e->getMessage());
+    $exception_msg = 'Mailchimp Exception: ' . $e->getMessage();
+    $exception_trace = $e->getTraceAsString();
+    error_log($exception_msg);
+    error_log('Exception Trace: ' . $exception_trace);
+    echo "<!-- EXCEPTION: " . htmlspecialchars($exception_msg) . " -->\n";
+    echo "<!-- EXCEPTION TRACE: " . htmlspecialchars($exception_trace) . " -->\n";
     header("Location: " . home_url('/subscription-form/') . "?error=exception");
     exit;
 }
