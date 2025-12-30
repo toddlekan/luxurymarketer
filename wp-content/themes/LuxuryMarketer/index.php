@@ -131,6 +131,7 @@ if (have_posts()) {
 										setup_postdata($post);
 										get_template_part('template-parts/content', 'above-fold-rail');
 									}
+								}
 							?>
 						</div>
 
