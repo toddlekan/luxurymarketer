@@ -518,8 +518,8 @@ ul.nav li.dropdown:hover>ul.dropdown-menu {
   display: block;
 }
 
-.sectors-dropdown:hover>.dropdown-menu {
-  margin-left: 200px;
+.sectors-dropdown {
+  margin-left: 100px;
 
 }
 
