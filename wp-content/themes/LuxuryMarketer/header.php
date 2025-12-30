@@ -223,10 +223,10 @@ $url_root = get_template_directory_uri();
                       </li>
                       <li class="reverse"><a href="/category/networking-and-events" class="grey">Events</a></li>
                       <li class="reverse"><a href="/about-us" class="grey">About Us</a></li>
-                      <li class="reverse"><a href="/category/research/cars-jets-and-yachts/" class="grey">Contact Us</a></li>
-                      <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" class="grey">Master Class</a></li>
+                      <li class="reverse"><a href="/contact-us" class="grey">Contact Us</a></li>
+                      <li class="reverse"><a href="/category/networking-and-events/master-class" class="grey">Master Class</a></li>
                       
-                      <li class="reverse"><a href="/category/research/watches-and-jewelry/" class="grey">Subscribe</a></li>
+                      <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" class="grey">Subscribe</a></li>
 
               
                     </ul>
@@ -426,10 +426,7 @@ $url_root = get_template_directory_uri();
           <li class="reverse"><a href="/category/research">Research</a></li>
           <li class="reverse"><a href="/category/news/columns">Columns</a></li>
           <li><a href="/category/networking-and-events">Events</a></li>
-          <li><a class="reverse join" href="<?php
-                                          echo ($isMobileApp ? 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
-' : 'https://www.cambeywest.com/subscribe2/?p=LXM&f=paid
-'); ?>">Subscribe</a></li>
+          <li><a class="reverse join" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">Subscribe</a></li>
         </ul>
       </li>
     </li>
@@ -484,10 +481,10 @@ $url_root = get_template_directory_uri();
                   </li>
                   <li class="reverse"><a href="/category/networking-and-events" class="grey">Events</a></li>
                   <li class="reverse"><a href="/about-us" class="grey">About Us</a></li>
-                  <li class="reverse"><a href="/category/research/cars-jets-and-yachts/" class="grey">Contact Us</a></li>
-                  <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" class="grey">Master Class</a></li>
+                  <li class="reverse"><a href="/contact-us" class="grey">Contact Us</a></li>
+                  <li class="reverse"><a href="/category/networking-and-events/master-class" class="grey">Master Class</a></li>
                   
-                  <li class="reverse"><a href="/category/research/watches-and-jewelry/" class="grey">Subscribe</a></li>
+                  <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" class="grey">Subscribe</a></li>
 
 
                   </ul>
@@ -496,7 +493,27 @@ $url_root = get_template_directory_uri();
 
 
 
-  
+  <div id="mobile-sub-menu">
+    <span class="label subscribe">
+
+      <span class="sign-in-subscribe pop-subscribe loggedout" 
+      style="display: none;" 
+        id="subscribe-mobile">
+        <script>
+          var options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          };
+          var today = new Date();
+
+          document.write(today.toLocaleDateString("en-US", options)); // September 17, 2016
+        </script>
+      </span>
+
+    </span>
+  </div>
+
   <div id="mobile-sub-menu">
     <span class="label subscribe">
       <a href="#" id="popular-mobile" target="popular">Most Read</a>
@@ -510,6 +527,8 @@ $url_root = get_template_directory_uri();
 
     </span>
   </div>
+
+
 </div>
 
 </div>
