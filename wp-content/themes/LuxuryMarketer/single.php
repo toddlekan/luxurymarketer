@@ -17,13 +17,11 @@ if (have_posts()) :
 
 ?>
 
+	<div class="section divider"></div>
+
 	<div class="section clearfix main article">
 
 		<div class="row text">
-
-		<div class="col-lg-12">
-				<div class="section divider"></div>
-			</div>
 
 			<div class="col-lg-1">
 
