@@ -3078,6 +3078,15 @@ ul.no-bullet {
     padding: 10px 9px;
   }
 
+  #mobile-sub-menu .date{
+    margin-top: -20px;
+    margin-bottom: 17px;
+  }
+
+  #homePage{
+    margin-top: 58px;
+  }
+
   #logo-mobile, #mobile-sub-menu {
     display: block;
   }
