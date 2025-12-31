@@ -145,8 +145,8 @@ if (have_posts()) :
 									<div class="col-lg-12">
 
 										<center>
-											This content is accessible only to members of Luxury Marketer. We would love for you to become a member and enjoy the many benefits soon after. <a href="https://www.cambeywest.com/subscribe2/?p=LXM&f=paid" target="_blank">Please click here to enroll as a member of Luxury Marketer.</a> Already a member?
-											<a href="/log-in?redirect=<?= get_the_permalink() ?>" class="pop-login">Please log in.</a><!--https://subscribe.luxurydaily.com/LUX/?f=12for12&s=IARTICLE-->
+											This content is accessible only to subscribers of Luxury Marketer. We would love for you to become a subscriber and enjoy the many benefits soon after. <a href="https://www.cambeywest.com/subscribe2/?p=LXM&f=paid" target="_blank">Please click here to enroll as a subscriber of Luxury Marketer.</a> Already a subscriber? 
+											<a href="/log-in?redirect=<?= get_the_permalink() ?>" class="pop-login">Please log in.</a>
 
 										</center>
 

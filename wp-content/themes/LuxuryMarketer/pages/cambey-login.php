@@ -61,10 +61,10 @@ get_header();
                                 
 
                                 <div class="col-lg-10 forgot unlocked">
-                                    <a href="https://https://www.cambeywest.com/subscribe2/LXM/?f=pa">Forgot password?</a>
+                                    <a href="https://www.cambeywest.com/subscribe2/LXM/?f=pa">Forgot password?</a>
                                 </div>
 
-                                <div class="col-lg-10 msg" style="display:none;">
+                                <div class="col-lg-10 msg" style="display:none; color: red!important; font-weight: bold!important">
 
                                 </div>
 
