@@ -17,8 +17,6 @@ if (have_posts()) :
 
 ?>
 
-	<div class="section divider"></div>
-
 	<div class="section clearfix main article">
 
 		<div class="row text">
