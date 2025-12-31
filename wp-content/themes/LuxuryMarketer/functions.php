@@ -765,7 +765,8 @@ function ld16_showkey($id = 0, $newsletter = false)
 
 function ld16_is_locked($id = 0)
 {
-
+	return false;
+	
 	if (!$id) {
 		$id = get_the_ID();
 	}
