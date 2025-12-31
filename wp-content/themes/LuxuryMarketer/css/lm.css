@@ -703,7 +703,7 @@ h3,
 .navbar.popular .popular-inner,
 .navbar.subscribe .subscribe-inner {
 
-  margin: 20px auto;
+  margin: 100px auto 20px auto;
 }
 
 .navbar.popular .popular-inner {
