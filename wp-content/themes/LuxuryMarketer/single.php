@@ -21,6 +21,10 @@ if (have_posts()) :
 
 		<div class="row text">
 
+		<div class="col-lg-12">
+				<div class="section divider"></div>
+			</div>
+
 			<div class="col-lg-1">
 
 				<a class="comment-button" href="#"><img style="width: 36px; margin: 0 27px;" src="<?= $url_root ?>/img/comment-75-light.png" /></a>
