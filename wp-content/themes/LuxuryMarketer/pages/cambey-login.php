@@ -68,7 +68,7 @@ get_header();
 
                                 </div>
 
-                                <div class="col-lg-10 action">
+                                <div class="col-lg-10 action" style="color: red!important; font-weight: bold!important; text-transform: uppercase!important">
 
                                     <a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">
                                         Click here to enroll</a>
