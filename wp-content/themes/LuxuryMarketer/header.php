@@ -538,6 +538,26 @@ $url_root = get_template_directory_uri();
 
 
 
+<div class="navbar fold search">
+
+  <div class="search-inner">
+
+    <form class="navbar-form navbar-left search" role="search">
+      <div class="form-group">
+        <ul class="clr">
+          <li>
+            <input type="text" class="form-control" placeholder="Search">
+          </li>
+          <li>
+            <a href="#" class="popup-magnify"><img src="<?= $url_root ?>/img/magnify-new.png"></a>
+
+          </li>
+        </ul>
+      </div>
+    </form>
+
+  </div>
+</div>
 
 <div class="navbar fold popular">
   <div class="popular-inner">
