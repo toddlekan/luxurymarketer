@@ -696,7 +696,12 @@ $(document).ready(function () {
                 }
               );
             }
+            
+            fold.css('display','none');
+
           }
+
+
         );
 
         //item is not showing
@@ -720,6 +725,7 @@ $(document).ready(function () {
             if (!fadeAnimation) {
               animating = false;
             }
+            fold.css('display','block');
           }
         );
       }

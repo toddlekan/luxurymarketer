@@ -686,6 +686,8 @@ h3,
 .navbar.subscribe {
   height: 0;
   overflow: hidden;
+  margin-top: 83px;
+  display: none;
 }
 
 .navbar.popular {
