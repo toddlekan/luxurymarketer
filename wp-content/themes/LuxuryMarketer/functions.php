@@ -4,38 +4,6 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
-// Override any coming soon redirects - prevents cached redirects in browsers
-add_action('template_redirect', 'prevent_coming_soon_redirect', 1);
-function prevent_coming_soon_redirect() {
-	// Check if we're being redirected to a coming soon page
-	$request_uri = $_SERVER['REQUEST_URI'] ?? '';
-	$query_string = $_SERVER['QUERY_STRING'] ?? '';
-	
-	// If someone tries to access coming soon page, redirect them away
-	if (strpos($request_uri, 'coming-soon') !== false || strpos($query_string, 'coming-soon') !== false) {
-		wp_redirect(home_url('/'), 301);
-		exit;
-	}
-	
-	// Prevent any redirects to coming soon pages
-	if (!headers_sent()) {
-		// Add cache-busting headers to help clear browser cache
-		header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0');
-		header('Pragma: no-cache');
-		header('Expires: 0');
-	}
-}
-
-// Also hook into wp_redirect to prevent redirects to coming soon
-add_filter('wp_redirect', 'prevent_coming_soon_redirect_url', 10, 2);
-function prevent_coming_soon_redirect_url($location, $status) {
-	if (strpos($location, 'coming-soon') !== false) {
-		// Redirect to home instead
-		return home_url('/');
-	}
-	return $location;
-}
-
 add_filter('acf/settings/remove_wp_meta_box', '__return_false');
 add_filter('wp_get_attachment_url', 'am19_url_change');
 update_option('image_default_size', 'full' );
@@ -765,8 +733,7 @@ function ld16_showkey($id = 0, $newsletter = false)
 
 function ld16_is_locked($id = 0)
 {
-	return false;
-	
+
 	if (!$id) {
 		$id = get_the_ID();
 	}
@@ -1792,56 +1759,3 @@ function filter_rest_allow_anonymous_comments()
 	return true;
 }
 add_filter('rest_allow_anonymous_comments', 'filter_rest_allow_anonymous_comments');
-
-// Handle comment submissions via admin-ajax to bypass Cloudflare challenges
-add_action('wp_ajax_submit_comment', 'lm_handle_comment_submission');
-add_action('wp_ajax_nopriv_submit_comment', 'lm_handle_comment_submission');
-
-function lm_handle_comment_submission() {
-	// Verify request method
-	if ('POST' !== $_SERVER['REQUEST_METHOD']) {
-		wp_send_json_error(array('message' => 'Invalid request method'), 405);
-		return;
-	}
-
-	// Handle comment submission using WordPress's built-in function
-	$comment = wp_handle_comment_submission(wp_unslash($_POST));
-	
-	if (is_wp_error($comment)) {
-		$data = $comment->get_error_data();
-		$status = !empty($data) ? (int) $data : 400;
-		wp_send_json_error(array(
-			'message' => $comment->get_error_message(),
-			'data' => $data
-		), $status);
-		return;
-	}
-
-	// Set comment cookies
-	$user = wp_get_current_user();
-	$cookies_consent = (isset($_POST['wp-comment-cookies-consent']));
-	do_action('set_comment_cookies', $comment, $user, $cookies_consent);
-
-	// Determine redirect location
-	$location = empty($_POST['redirect_to']) ? get_comment_link($comment) : $_POST['redirect_to'] . '#comment-' . $comment->comment_ID;
-	
-	// If user didn't consent to cookies, add specific query arguments
-	if (!$cookies_consent && 'unapproved' === wp_get_comment_status($comment) && !empty($comment->comment_author_email)) {
-		$location = add_query_arg(
-			array(
-				'unapproved' => $comment->comment_ID,
-				'moderation-hash' => wp_hash($comment->comment_date_gmt),
-			),
-			$location
-		);
-	}
-
-	$location = apply_filters('comment_post_redirect', $location, $comment);
-
-	// Return success response
-	wp_send_json_success(array(
-		'location' => $location,
-		'comment_id' => $comment->comment_ID
-	));
-}
-

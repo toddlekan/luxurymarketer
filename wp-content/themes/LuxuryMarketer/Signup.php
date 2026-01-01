@@ -3,11 +3,6 @@
  Template Name: Mainchimp Free Subscription Page
  */
 
-// Load WordPress if not already loaded
-if (!defined('ABSPATH')) {
-    require_once(dirname(dirname(dirname(__FILE__))) . '/wp-load.php');
-}
-
 $url_root = ld16_cdn(get_template_directory_uri()); ?>
 
 
@@ -137,13 +132,8 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 			});
 
 			$(document).on('click', '#submit_btn', function(e) {
-				console.log('Submit button clicked');
-				
-				try {
-					e.preventDefault();
-				} catch (err) {
-					console.error('Error preventing default:', err);
-				}
+
+				e.preventDefault();
 
 				var submit = true;
 
@@ -152,11 +142,8 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 
 				$('.reqmsg').hide();
 
-				var form = $('#mc-embedded-subscribe-form');
+				var form = $('form');
 				var url = form.attr('action');
-				var formContainer = $('#thePanel');
-				var submitButton = $('#submit_btn');
-				var originalButtonValue = submitButton.val();
 
 				var email = $('#email');
 				var email2 = $('#email2');
@@ -165,9 +152,12 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 
 					var reqmsg = $(this).closest('td').find('.reqmsg');
 
+
 					if (!$(this).val()) {
+
 						reqmsg.show();
 						submit = false;
+
 					}
 
 				});
@@ -176,191 +166,25 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 
 				if (email.val() && !re.test(email.val())) {
 					$('#email_regex').show();
-					submit = false;
+					var submit = false;
 				}
 
 				if (email2.val() && email2.val() !== email.val()) {
 					$('#email2_compare').show();
-					submit = false;
+					var submit = false;
 				}
 
 				if (submit) {
-					console.log('Submit flag is true, proceeding with submission');
 
-					var bcode = $('#bcode').val();
+					var bcode = $('#bcode').val()
 
 					if (bcode !== 'Other') {
 						$('#bcode_other').val(bcode);
 					}
 
-					// Disable submit button and show loading state
-					console.log('Disabling submit button and clearing messages');
-					submitButton.prop('disabled', true).val('Submitting...');
-					
-					// Remove any existing error/success messages
-					formContainer.find('.ajax-message').remove();
-					
-					console.log('About to call $.ajax()');
-					
-					// Serialize form data
-					var formData = form.serialize();
-					formData += '&ajax=1';
-					
-					console.log('Submitting form data to:', url);
-					console.log('Form data length:', formData.length);
-					console.log('Form data (first 500 chars):', formData.substring(0, 500));
-					
-					// Submit via AJAX
-					console.log('Starting AJAX request...');
-					var ajaxStartTime = new Date().getTime();
-					
-					try {
-						$.ajax({
-						url: url,
-						type: 'POST',
-						data: formData,
-						dataType: 'json',
-						timeout: 30000, // 30 second timeout
-						beforeSend: function(xhr) {
-							console.log('AJAX beforeSend called');
-							xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-						},
-						success: function(response) {
-							console.log('AJAX success callback called after', (new Date().getTime() - ajaxStartTime) + 'ms');
-							console.log('AJAX Success Response:', response);
-							if (response && response.success) {
-								// Success - replace form with success message
-								var successHtml = '<div class="ajax-message" style="color:#2e7d32; background-color:#e8f5e9; padding:30px; border:2px solid #4caf50; border-radius:4px; text-align:center; margin:20px 0;">';
-								successHtml += '<h2 style="color:#2e7d32; margin-top:0;">Success!</h2>';
-								successHtml += '<p style="font-size:16px; margin-bottom:0;">' + (response.message || 'Thank you! Your subscription has been confirmed.') + '</p>';
-								successHtml += '<p style="margin-top:20px;"><a href="https://www.luxurymarketer.com">Return to the Luxury Marketer homepage</a></p>';
-								successHtml += '</div>';
-								formContainer.html(successHtml);
-							} else {
-								// Error - show error message
-								console.log('AJAX Success but response.success is false:', response);
-								console.log('Full response data:', JSON.stringify(response.data, null, 2));
-								var errorMessage = response && response.message ? response.message : 'There was an error submitting your subscription. Please try again.';
-								var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
-								errorHtml += '<strong>Error:</strong> ' + errorMessage;
-								
-								// Always display debug log if available (expanded by default)
-								if (response && response.data && response.data.debug_log && response.data.debug_log.length > 0) {
-									errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#fff3cd; border:1px solid #ffc107; border-radius:4px; font-size:12px; font-family:monospace; max-height:400px; overflow-y:auto;">';
-									errorHtml += '<strong style="display:block; margin-bottom:10px;">Debug Log:</strong>';
-									response.data.debug_log.forEach(function(logEntry) {
-										errorHtml += '<div style="margin-bottom:5px; word-break:break-all;">' + String(logEntry).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
-									});
-									errorHtml += '</div>';
-								}
-								
-								// Display error log file entries if available
-								if (response && response.data && response.data.error_log_file && response.data.error_log_file.length > 0) {
-									errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#ffe0e0; border:1px solid #ff9999; border-radius:4px;">';
-									errorHtml += '<strong style="display:block; margin-bottom:10px; color:#666; font-size:12px;">Server Error Log:</strong>';
-									errorHtml += '<pre style="margin:0; padding:10px; background-color:#fff; border:1px solid #ccc; border-radius:4px; font-size:11px; max-height:300px; overflow-y:auto; white-space:pre-wrap; word-wrap:break-word; font-family:monospace;">';
-									response.data.error_log_file.forEach(function(logEntry) {
-										errorHtml += logEntry.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n';
-									});
-									errorHtml += '</pre>';
-									errorHtml += '</div>';
-								}
-								
-								// Display full response data for debugging (expanded by default)
-								if (response && response.data) {
-									errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#f5f5f5; border:1px solid #ddd; border-radius:4px;">';
-									errorHtml += '<strong style="display:block; margin-bottom:10px; color:#666; font-size:12px;">Full Debug Data:</strong>';
-									errorHtml += '<pre style="margin:0; padding:10px; background-color:#fff; border:1px solid #ccc; border-radius:4px; font-size:11px; max-height:500px; overflow-y:auto; white-space:pre-wrap; word-wrap:break-word;">' + JSON.stringify(response.data, null, 2) + '</pre>';
-									errorHtml += '</div>';
-								}
-								
-								errorHtml += '</div>';
-								formContainer.prepend(errorHtml);
-							
-							// Re-enable submit button
-							submitButton.prop('disabled', false).val(originalButtonValue);
-						}
-					},
-						complete: function(xhr, status) {
-							console.log('AJAX complete callback called. Status:', status, 'after', (new Date().getTime() - ajaxStartTime) + 'ms');
-						},
-						error: function(xhr, status, error) {
-							console.log('AJAX Error callback called. Status:', status, 'Error:', error);
-							console.log('XHR object:', xhr);
-							console.log('Response Text:', xhr.responseText);
-							console.log('Status Code:', xhr.status);
-							console.log('Ready State:', xhr.readyState);
-							
-							// Try to parse JSON error response
-							var errorMessage = 'There was an error submitting your subscription. Please try again.';
-							var errorResponse = null;
-							try {
-								errorResponse = JSON.parse(xhr.responseText);
-								if (errorResponse && errorResponse.message) {
-									errorMessage = errorResponse.message;
-								}
-							} catch (e) {
-								// Not JSON, check if it's HTML with error info
-								if (xhr.responseText && xhr.responseText.indexOf('<!--') !== -1) {
-									// Try to extract error from HTML comments
-									var match = xhr.responseText.match(/<!--\s*(?:ERROR|EXCEPTION|VALIDATION ERROR):\s*([^>]+)\s*-->/);
-									if (match && match[1]) {
-										errorMessage = 'Server error: ' + match[1].substring(0, 100);
-									}
-								}
-							}
-							
-							var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
-							errorHtml += '<strong>Error:</strong> ' + errorMessage;
-							
-							// Display debug log if available
-							if (errorResponse && errorResponse.data && errorResponse.data.debug_log && errorResponse.data.debug_log.length > 0) {
-								errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#fff3cd; border:1px solid #ffc107; border-radius:4px; font-size:12px; font-family:monospace; max-height:300px; overflow-y:auto;">';
-								errorHtml += '<strong>Debug Log:</strong><br>';
-								errorResponse.data.debug_log.forEach(function(logEntry) {
-									errorHtml += '<div>' + logEntry.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
-								});
-								errorHtml += '</div>';
-							}
-							
-							// Display error log file entries if available
-							if (errorResponse && errorResponse.data && errorResponse.data.error_log_file && errorResponse.data.error_log_file.length > 0) {
-								errorHtml += '<div style="margin-top:15px; padding:10px; background-color:#ffe0e0; border:1px solid #ff9999; border-radius:4px;">';
-								errorHtml += '<strong style="display:block; margin-bottom:10px; color:#666; font-size:12px;">Server Error Log:</strong>';
-								errorHtml += '<pre style="margin:0; padding:10px; background-color:#fff; border:1px solid #ccc; border-radius:4px; font-size:11px; max-height:300px; overflow-y:auto; white-space:pre-wrap; word-wrap:break-word; font-family:monospace;">';
-								errorResponse.data.error_log_file.forEach(function(logEntry) {
-									errorHtml += logEntry.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n';
-								});
-								errorHtml += '</pre>';
-								errorHtml += '</div>';
-							}
-							
-							// Display full response data for debugging
-							if (errorResponse && errorResponse.data) {
-								errorHtml += '<details style="margin-top:10px;"><summary style="cursor:pointer; color:#666; font-size:12px;">Show Debug Info</summary>';
-								errorHtml += '<pre style="margin-top:10px; padding:10px; background-color:#f5f5f5; border:1px solid #ddd; border-radius:4px; font-size:11px; max-height:400px; overflow-y:auto;">' + JSON.stringify(errorResponse.data, null, 2) + '</pre>';
-								errorHtml += '</details>';
-							}
-							
-							errorHtml += '</div>';
-							formContainer.prepend(errorHtml);
-							
-							// Re-enable submit button
-							submitButton.prop('disabled', false).val(originalButtonValue);
-						}
-					});
-					} catch (ajaxError) {
-						console.error('Error calling $.ajax():', ajaxError);
-						var errorHtml = '<div class="ajax-message" style="color:#d32f2f; background-color:#ffebee; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px; margin-bottom:20px;">';
-						errorHtml += '<strong>Error:</strong> Failed to submit form: ' + ajaxError.message;
-						errorHtml += '<pre style="margin-top:10px; font-size:11px; overflow:auto;">' + ajaxError.stack + '</pre>';
-						errorHtml += '</div>';
-						formContainer.prepend(errorHtml);
-						submitButton.prop('disabled', false).val(originalButtonValue);
-					}
+					form.submit();
 
 				} else {
-					console.log('Submit flag is false, returning false');
 					return false;
 				}
 

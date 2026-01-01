@@ -37,8 +37,6 @@ class ReCaptchaResponse
 {
     public $success;
     public $errorCodes;
-    public $rawResponse; // Store the raw API response for debugging
-    public $decodedResponse; // Store the decoded API response for debugging
 }
 
 class ReCaptcha
@@ -74,14 +72,7 @@ class ReCaptcha
     {
         $req = "";
         foreach ($data as $key => $value) {
-            // Only stripslashes if value is not null and is a string
-            if ($value !== null && is_string($value)) {
-                $req .= $key . '=' . urlencode(stripslashes($value)) . '&';
-            } elseif ($value !== null) {
-                // For non-string, non-null values, just urlencode
-                $req .= $key . '=' . urlencode($value) . '&';
-            }
-            // Skip null values
+            $req .= $key . '=' . urlencode(stripslashes($value)) . '&';
         }
 
         // Cut the last '&'
@@ -100,38 +91,7 @@ class ReCaptcha
     private function _submitHTTPGet($path, $data)
     {
         $req = $this->_encodeQS($data);
-        $url = $path . $req;
-        
-        // Log the URL being called (without secret key for security)
-        $log_url = preg_replace('/secret=[^&]*/', 'secret=***', $url);
-        error_log('reCAPTCHA API URL: ' . $log_url);
-        
-        // Try file_get_contents first
-        $response = @file_get_contents($url);
-        
-        // If file_get_contents fails, try cURL as fallback
-        if ($response === false) {
-            error_log('reCAPTCHA file_get_contents failed, trying cURL');
-            if (function_exists('curl_init')) {
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-                $response = curl_exec($ch);
-                $curl_error = curl_error($ch);
-                curl_close($ch);
-                
-                if ($response === false) {
-                    error_log('reCAPTCHA cURL error: ' . $curl_error);
-                    return '{"success":false,"error-codes":["network-error"]}';
-                }
-            } else {
-                error_log('reCAPTCHA: file_get_contents failed and cURL not available');
-                return '{"success":false,"error-codes":["network-error"]}';
-            }
-        }
-        
+        $response = file_get_contents($path . $req);
         return $response;
     }
 
@@ -154,17 +114,6 @@ class ReCaptcha
             return $recaptchaResponse;
         }
 
-        // Log what we're sending
-        error_log('reCAPTCHA verifyResponse called with:');
-        $secret_len = ($this->_secret && is_string($this->_secret)) ? strlen($this->_secret) : 0;
-        error_log('  - Secret key length: ' . $secret_len);
-        error_log('  - Secret key (first 10 chars): ' . ($secret_len >= 10 ? substr($this->_secret, 0, 10) : 'N/A'));
-        error_log('  - Remote IP: ' . ($remoteIp ? $remoteIp : 'NOT SET'));
-        $response_len = ($response && is_string($response)) ? strlen($response) : 0;
-        error_log('  - Response token length: ' . $response_len);
-        error_log('  - Response token (first 50 chars): ' . ($response_len >= 50 ? substr($response, 0, 50) : 'N/A'));
-        error_log('  - Response token (last 50 chars): ' . ($response_len >= 50 ? substr($response, -50) : 'N/A'));
-        
         $getResponse = $this->_submitHttpGet(
             self::$_siteVerifyUrl,
             array (
@@ -174,53 +123,14 @@ class ReCaptcha
                 'response' => $response
             )
         );
-        
-        // Store the raw response in the response object for debugging
-        $recaptchaResponse = new ReCaptchaResponse();
-        $recaptchaResponse->rawResponse = $getResponse;
-        
-        // Log the raw response for debugging (truncate if too long for error_log)
-        if ($getResponse) {
-            $log_response = strlen($getResponse) > 500 ? substr($getResponse, 0, 500) . '... (truncated)' : $getResponse;
-            error_log('reCAPTCHA API raw response: ' . $log_response);
-        } else {
-            error_log('reCAPTCHA API raw response: EMPTY or FALSE');
-        }
-        
         $answers = json_decode($getResponse, true);
-        $recaptchaResponse->decodedResponse = $answers;
-        
-        // Log decoded response (but not the full array in error_log to avoid truncation)
-        if ($answers) {
-            error_log('reCAPTCHA API decoded response - success: ' . (isset($answers['success']) ? ($answers['success'] ? 'true' : 'false') : 'not set'));
-            if (isset($answers['error-codes'])) {
-                error_log('reCAPTCHA API decoded response - error-codes: ' . implode(', ', $answers['error-codes']));
-            }
-        } else {
-            error_log('reCAPTCHA API decoded response: NULL or invalid JSON');
-        }
-        
-        // Check for JSON decode errors
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            error_log('reCAPTCHA JSON decode error: ' . json_last_error_msg());
-        }
-        
-        // Log specific error details if available
-        if (isset($answers['error-codes']) && is_array($answers['error-codes'])) {
-            error_log('reCAPTCHA API error codes: ' . implode(', ', $answers['error-codes']));
-            foreach ($answers['error-codes'] as $error_code) {
-                error_log('  - Error code: ' . $error_code);
-            }
-        }
-        
-        // Check if the API response indicates success (answers['success'] is a boolean from JSON)
-        if (isset($answers['success']) && $answers['success'] === true) {
+        $recaptchaResponse = new ReCaptchaResponse();
+
+        if (trim($answers [success]) == true) {
             $recaptchaResponse->success = true;
-            error_log('reCAPTCHA verification: SUCCESS');
         } else {
             $recaptchaResponse->success = false;
-            $recaptchaResponse->errorCodes = isset($answers['error-codes']) ? $answers['error-codes'] : array();
-            error_log('reCAPTCHA verification: FAILED - ' . implode(', ', $recaptchaResponse->errorCodes));
+            $recaptchaResponse->errorCodes = $answers [error-codes];
         }
 
         return $recaptchaResponse;

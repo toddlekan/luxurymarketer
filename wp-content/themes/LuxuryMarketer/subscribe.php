@@ -4,216 +4,21 @@
  * Processes subscription form submissions and adds subscribers to Mailchimp via API
  */
 
-// Enable ALL error reporting
+// Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-ini_set('html_errors', 0);
-
-// Start output buffering to catch any WordPress errors
-ob_start();
-
-// Detect if this is an AJAX request (check early, before any output)
-$is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || 
-           (!empty($_POST['ajax']) && $_POST['ajax'] == '1');
-
-// Global debug array to collect log messages
-$GLOBALS['subscribe_debug_log'] = array();
-
-// Custom error log function that also stores to debug array
-function subscribe_debug_log($message) {
-    if (!isset($GLOBALS['subscribe_debug_log'])) {
-        $GLOBALS['subscribe_debug_log'] = array();
-    }
-    error_log($message);
-    $GLOBALS['subscribe_debug_log'][] = $message;
-}
-
-// Function to read error log file
-function read_error_log_file() {
-    $log_entries = array();
-    
-    // Try common error log locations
-    $log_paths = array(
-        ini_get('error_log'),
-        WP_CONTENT_DIR . '/debug.log',
-        ABSPATH . 'wp-content/debug.log',
-        dirname(ABSPATH) . '/error_log',
-        '/var/log/apache2/error.log',
-        '/var/log/nginx/error.log',
-    );
-    
-    foreach ($log_paths as $log_path) {
-        if (empty($log_path)) continue;
-        
-        if (file_exists($log_path) && is_readable($log_path)) {
-            // Read last 100 lines of the error log
-            $lines = file($log_path);
-            if ($lines) {
-                $recent_lines = array_slice($lines, -100);
-                // Filter for reCAPTCHA-related entries
-                foreach ($recent_lines as $line) {
-                    if (stripos($line, 'recaptcha') !== false || stripos($line, 'reCAPTCHA') !== false) {
-                        $log_entries[] = trim($line);
-                    }
-                }
-                // If we found entries, break
-                if (!empty($log_entries)) {
-                    break;
-                }
-            }
-        }
-    }
-    
-    return $log_entries;
-}
-
-// Function to send JSON response (define early)
-function send_json_response($success, $message, $errors = array(), $data = array()) {
-    // Get any errors/output from buffer
-    $buffer_content = '';
-    while (ob_get_level() > 0) {
-        $buffer_content .= ob_get_clean();
-    }
-    
-    // Always include buffer content for debugging
-    if (!empty($buffer_content)) {
-        $data['debug_output'] = $buffer_content;
-    }
-    
-    // Include debug log messages
-    if (isset($GLOBALS['subscribe_debug_log']) && !empty($GLOBALS['subscribe_debug_log'])) {
-        $data['debug_log'] = $GLOBALS['subscribe_debug_log'];
-    }
-    
-    // Try to read error log file for reCAPTCHA entries
-    if (defined('WP_CONTENT_DIR') || defined('ABSPATH')) {
-        $error_log_entries = read_error_log_file();
-        if (!empty($error_log_entries)) {
-            $data['error_log_file'] = $error_log_entries;
-        }
-    }
-    
-    // Get last PHP error if any
-    $last_error = error_get_last();
-    if ($last_error) {
-        $data['php_error'] = $last_error;
-    }
-    
-    header('Content-Type: application/json; charset=utf-8');
-    $response = array(
-        'success' => $success,
-        'message' => $message,
-        'errors' => $errors,
-        'data' => $data
-    );
-    echo json_encode($response, JSON_PRETTY_PRINT);
-    exit;
-}
-
-// Custom error handler to catch fatal errors
-function subscribe_error_handler($errno, $errstr, $errfile, $errline) {
-    if (!(error_reporting() & $errno)) {
-        return false;
-    }
-    
-    $error_msg = "Error [$errno]: $errstr in $errfile on line $errline";
-    error_log($error_msg);
-    
-    // If this is a fatal error, send JSON response
-    if ($errno === E_ERROR || $errno === E_CORE_ERROR || $errno === E_COMPILE_ERROR || $errno === E_PARSE || $errno === E_USER_ERROR) {
-        send_json_response(false, 'PHP Fatal Error: ' . $errstr, array('fatal'), array(
-            'error_type' => $errno,
-            'error_file' => $errfile,
-            'error_line' => $errline,
-            'error_message' => $errstr
-        ));
-    }
-    
-    return false; // Let PHP's default error handler also run
-}
-
-// Set custom error handler
-set_error_handler('subscribe_error_handler');
-
-// Custom shutdown function to catch fatal errors
-function subscribe_shutdown_handler() {
-    $error = error_get_last();
-    if ($error !== NULL && in_array($error['type'], array(E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE))) {
-        // Clear any output
-        while (ob_get_level() > 0) {
-            ob_end_clean();
-        }
-        
-        header('Content-Type: application/json; charset=utf-8');
-        echo json_encode(array(
-            'success' => false,
-            'message' => 'Fatal Error: ' . $error['message'],
-            'errors' => array('fatal'),
-            'data' => array(
-                'error_type' => $error['type'],
-                'error_file' => $error['file'],
-                'error_line' => $error['line'],
-                'error_message' => $error['message']
-            )
-        ), JSON_PRETTY_PRINT);
-        exit;
-    }
-}
-
-// Register shutdown function
-register_shutdown_function('subscribe_shutdown_handler');
-
-// Disable WordPress fatal error handler if possible (before loading)
-if (!defined('WP_SANDBOX_SCRAPING')) {
-    define('WP_SANDBOX_SCRAPING', false);
-}
-if (!defined('WP_DEBUG')) {
-    define('WP_DEBUG', true);
-}
-if (!defined('WP_DEBUG_DISPLAY')) {
-    define('WP_DEBUG_DISPLAY', true);
-}
-if (!defined('WP_DEBUG_LOG')) {
-    define('WP_DEBUG_LOG', true);
-}
 
 // Load WordPress if not already loaded
 if (!defined('ABSPATH')) {
-    $wp_load_path = dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php';
-    if (file_exists($wp_load_path)) {
-        // Clear any output so far
-        ob_clean();
-        
-        // Capture any output during WordPress load
-        ob_start();
-        try {
-            require_once($wp_load_path);
-        } catch (Exception $e) {
-            ob_end_clean();
-            send_json_response(false, 'WordPress load error: ' . $e->getMessage(), array('config'), array('exception' => $e->getTraceAsString()));
-        } catch (Error $e) {
-            ob_end_clean();
-            send_json_response(false, 'WordPress fatal error: ' . $e->getMessage(), array('config'), array('file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()));
-        }
-        
-        // Get any output from WordPress loading
-        $wp_load_output = ob_get_clean();
-        
-        // Check if WordPress loaded successfully by checking for a core function
-        if (!defined('ABSPATH') || !function_exists('get_option')) {
-            // WordPress failed to load properly - send error with details
-            send_json_response(false, 'System error: WordPress failed to load. ABSPATH: ' . (defined('ABSPATH') ? 'defined' : 'not defined') . ', get_option exists: ' . (function_exists('get_option') ? 'yes' : 'no'), array('config'), array('wp_load_output' => $wp_load_output));
-        }
-        
-        // If WordPress output something, log it
-        if (!empty($wp_load_output)) {
-            error_log('WordPress load output: ' . substr($wp_load_output, 0, 500));
-        }
-    } else {
-        // WordPress file not found
-        send_json_response(false, 'System error: WordPress file not found at: ' . $wp_load_path, array('config'));
-    }
+    require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php');
+}
+
+// Include reCAPTCHA library for validation
+$recaptcha_options = get_option('recaptcha_options', array());
+$recaptcha_secret = isset($recaptcha_options['secret']) ? $recaptcha_options['secret'] : '';
+if (!empty($recaptcha_secret)) {
+    require_once(dirname(dirname(__FILE__)) . '/plugins/wp-recaptcha/recaptchalib.php');
 }
 
 // Get Mailchimp API key from wp-config or environment variable
@@ -222,23 +27,15 @@ $mailchimp_api_key = defined('MAILCHIMP_API_KEY') ? MAILCHIMP_API_KEY : (getenv(
 // Log API key status for debugging (first 10 chars only for security)
 $api_key_status = empty($mailchimp_api_key) ? 'NOT SET' : substr($mailchimp_api_key, 0, 10) . '...';
 error_log('Mailchimp API Key Check: ' . $api_key_status);
-if (!$is_ajax) {
-    echo "<!-- Mailchimp API Key Check: " . htmlspecialchars($api_key_status) . " -->\n";
-}
+echo "<!-- Mailchimp API Key Check: " . htmlspecialchars($api_key_status) . " -->\n";
 
 if (empty($mailchimp_api_key) || $mailchimp_api_key === 'YOUR_MAILCHIMP_API_KEY_HERE') {
+    // Redirect with error if API key is not configured
     $error_msg = 'Mailchimp API Key not configured properly';
     error_log($error_msg);
-    if ($is_ajax) {
-        send_json_response(false, 'Subscription service is temporarily unavailable. Please try again later.', array('config'));
-    } else {
-        if (!$is_ajax) {
-            echo "<!-- ERROR: " . htmlspecialchars($error_msg) . " -->\n";
-        }
-        $redirect_url = function_exists('home_url') ? home_url('/subscription-form/') : '/subscription-form/';
-        header("Location: " . $redirect_url . "?error=config");
-        exit;
-    }
+    echo "<!-- ERROR: " . htmlspecialchars($error_msg) . " -->\n";
+    header("Location: " . home_url('/subscription-form/') . "?error=config");
+    exit;
 }
 
 // Extract data center from API key (format: xxxxxxxx-us12)
@@ -295,37 +92,24 @@ function mailchimp_subscriber_hash($email) {
 }
 
 // Sanitize and validate form data
-// Preserve plus signs by getting raw POST data first, then sanitizing
-$email_raw = isset($_POST['EMAIL']) ? wp_unslash($_POST['EMAIL']) : '';
-$email2_raw = isset($_POST['email2']) ? wp_unslash($_POST['email2']) : '';
-// Sanitize email addresses (sanitize_email preserves plus signs in valid emails)
-$email = sanitize_email($email_raw);
-$email2 = sanitize_email($email2_raw);
-// Helper function to sanitize text fields
-function subscribe_sanitize_text_field($value) {
-    if (function_exists('sanitize_text_field')) {
-        return sanitize_text_field($value);
-    } else {
-        return htmlspecialchars(strip_tags(stripslashes($value)), ENT_QUOTES, 'UTF-8');
-    }
-}
-
-$first_name = isset($_POST['FNAME']) ? subscribe_sanitize_text_field($_POST['FNAME']) : '';
-$last_name = isset($_POST['LNAME']) ? subscribe_sanitize_text_field($_POST['LNAME']) : '';
-$title = isset($_POST['TITLE']) ? subscribe_sanitize_text_field($_POST['TITLE']) : '';
-$company = isset($_POST['COMPANY']) ? subscribe_sanitize_text_field($_POST['COMPANY']) : '';
-$city = isset($_POST['CITY']) ? subscribe_sanitize_text_field($_POST['CITY']) : '';
-$state = isset($_POST['STATE']) ? subscribe_sanitize_text_field($_POST['STATE']) : '';
-$zipcode = isset($_POST['ZIPCODE']) ? subscribe_sanitize_text_field($_POST['ZIPCODE']) : '';
-$country = isset($_POST['COUNTRY']) ? subscribe_sanitize_text_field($_POST['COUNTRY']) : '';
-$phone = isset($_POST['PHONE']) ? subscribe_sanitize_text_field($_POST['PHONE']) : '';
-$category = isset($_POST['CATEGORY']) ? subscribe_sanitize_text_field($_POST['CATEGORY']) : '';
-$category_other = isset($_POST['MMERGE7']) ? subscribe_sanitize_text_field($_POST['MMERGE7']) : '';
+$email = isset($_POST['EMAIL']) ? sanitize_email($_POST['EMAIL']) : '';
+$email2 = isset($_POST['email2']) ? sanitize_email($_POST['email2']) : '';
+$first_name = isset($_POST['FNAME']) ? sanitize_text_field($_POST['FNAME']) : '';
+$last_name = isset($_POST['LNAME']) ? sanitize_text_field($_POST['LNAME']) : '';
+$title = isset($_POST['TITLE']) ? sanitize_text_field($_POST['TITLE']) : '';
+$company = isset($_POST['COMPANY']) ? sanitize_text_field($_POST['COMPANY']) : '';
+$city = isset($_POST['CITY']) ? sanitize_text_field($_POST['CITY']) : '';
+$state = isset($_POST['STATE']) ? sanitize_text_field($_POST['STATE']) : '';
+$zipcode = isset($_POST['ZIPCODE']) ? sanitize_text_field($_POST['ZIPCODE']) : '';
+$country = isset($_POST['COUNTRY']) ? sanitize_text_field($_POST['COUNTRY']) : '';
+$phone = isset($_POST['PHONE']) ? sanitize_text_field($_POST['PHONE']) : '';
+$category = isset($_POST['CATEGORY']) ? sanitize_text_field($_POST['CATEGORY']) : '';
+$category_other = isset($_POST['MMERGE7']) ? sanitize_text_field($_POST['MMERGE7']) : '';
 
 // Basic validation
 $errors = array();
 
-if (empty($email) || !(function_exists('is_email') ? is_email($email) : filter_var($email, FILTER_VALIDATE_EMAIL))) {
+if (empty($email) || !is_email($email)) {
     $errors[] = 'email';
 }
 
@@ -369,39 +153,31 @@ if (empty($category)) {
     $errors[] = 'category';
 }
 
-// If there are validation errors, return error response
+// Validate reCAPTCHA if configured
+if (!empty($recaptcha_secret)) {
+    if (empty($_POST['g-recaptcha-response'])) {
+        $errors[] = 'captcha';
+    } else {
+        $recaptcha = new ReCaptcha($recaptcha_secret);
+        $recaptcha_response = $recaptcha->verifyResponse(
+            $_SERVER['REMOTE_ADDR'],
+            $_POST['g-recaptcha-response']
+        );
+        
+        if (!$recaptcha_response->success) {
+            $errors[] = 'captcha';
+        }
+    }
+}
+
+// If there are validation errors, redirect back to form
 if (!empty($errors)) {
     $error_params = implode(',', $errors);
     $validation_error = 'Validation errors: ' . $error_params;
     error_log($validation_error);
-    
-    $field_labels = array(
-        'email' => 'Email Address',
-        'email_mismatch' => 'Email addresses do not match',
-        'first_name' => 'First Name',
-        'last_name' => 'Last Name',
-        'title' => 'Title',
-        'company' => 'Company',
-        'city' => 'City',
-        'state' => 'State',
-        'zipcode' => 'ZIP/Post Code',
-        'country' => 'Country',
-        'category' => 'Industry'
-    );
-    $error_messages = array();
-    foreach ($errors as $error) {
-        $error_messages[] = isset($field_labels[$error]) ? $field_labels[$error] : ucfirst(str_replace('_', ' ', $error));
-    }
-    
-    if ($is_ajax) {
-        send_json_response(false, 'Please check the following fields: ' . implode(', ', $error_messages), $errors);
-    } else {
-        if (!$is_ajax) {
-            echo "<!-- VALIDATION ERROR: " . htmlspecialchars($validation_error) . " -->\n";
-        }
-        header("Location: " . home_url('/subscription-form/') . "?error=validation&fields=" . urlencode($error_params));
-        exit;
-    }
+    echo "<!-- VALIDATION ERROR: " . htmlspecialchars($validation_error) . " -->\n";
+    header("Location: " . home_url('/subscription-form/') . "?error=validation&fields=" . urlencode($error_params));
+    exit;
 }
 
 // Use "Other" category value if category is "Other"
@@ -458,13 +234,9 @@ try {
     
     // Check if the request was successful
     if ($response['success']) {
-        // Success
-        if ($is_ajax) {
-            send_json_response(true, 'Thank you! Your subscription has been confirmed.');
-        } else {
-            header("Location: " . home_url('/subscription-form/') . "?step=thankyou");
-            exit;
-        }
+        // Success - redirect to confirmation page
+        header("Location: " . home_url('/subscription-form/') . "?step=thankyou");
+        exit;
     } else {
         // Get error details
         $formatted_response = json_decode($response['body'], true);
@@ -496,30 +268,20 @@ try {
             $update_response = mailchimp_api_request($update_url, 'PATCH', $mailchimp_api_key, $subscriber_data);
             
             if ($update_response['success']) {
-                // Success
-                if ($is_ajax) {
-                    send_json_response(true, 'Thank you! Your subscription has been confirmed.');
-                } else {
-                    header("Location: " . home_url('/subscription-form/') . "?step=thankyou");
-                    exit;
-                }
+                // Success - redirect to confirmation page
+                header("Location: " . home_url('/subscription-form/') . "?step=thankyou");
+                exit;
             } else {
-                // Log error
+                // Log error and redirect
                 $update_error_response = json_decode($update_response['body'], true);
                 $update_error_msg = 'Mailchimp Update Error: ' . print_r($update_error_response, true);
                 $update_http_code = 'HTTP Code: ' . $update_response['http_code'];
                 error_log($update_error_msg);
                 error_log($update_http_code);
-                if ($is_ajax) {
-                    send_json_response(false, 'There was an error updating your subscription. Please try again.', array('update'));
-                } else {
-                    if (!$is_ajax) {
-                        echo "<!-- UPDATE ERROR: " . htmlspecialchars($update_error_msg) . " -->\n";
-                        echo "<!-- " . htmlspecialchars($update_http_code) . " -->\n";
-                    }
-                    header("Location: " . home_url('/subscription-form/') . "?error=update");
-                    exit;
-                }
+                echo "<!-- UPDATE ERROR: " . htmlspecialchars($update_error_msg) . " -->\n";
+                echo "<!-- " . htmlspecialchars($update_http_code) . " -->\n";
+                header("Location: " . home_url('/subscription-form/') . "?error=update");
+                exit;
             }
         } else {
             // Other error occurred - log detailed error information
@@ -535,9 +297,7 @@ try {
             error_log('Mailchimp API Error Details:');
             foreach ($api_error_details as $key => $value) {
                 error_log($key . ': ' . print_r($value, true));
-                if (!$is_ajax) {
-                    echo "<!-- API ERROR - " . htmlspecialchars($key) . ": " . htmlspecialchars(print_r($value, true)) . " -->\n";
-                }
+                echo "<!-- API ERROR - " . htmlspecialchars($key) . ": " . htmlspecialchars(print_r($value, true)) . " -->\n";
             }
             
             // Extract error message from formatted response
@@ -553,29 +313,19 @@ try {
                 $error_message = urlencode($curl_error);
             }
             
-            if ($is_ajax) {
-                send_json_response(false, 'There was an error submitting your subscription. Please try again.', array('api'));
-            } else {
-                header("Location: " . home_url('/subscription-form/') . "?error=api&msg=" . $error_message);
-                exit;
-            }
+            header("Location: " . home_url('/subscription-form/') . "?error=api&msg=" . $error_message);
+            exit;
         }
     }
 } catch (Exception $e) {
-    // Log exception
+    // Log exception and redirect
     $exception_msg = 'Mailchimp Exception: ' . $e->getMessage();
     $exception_trace = $e->getTraceAsString();
     error_log($exception_msg);
     error_log('Exception Trace: ' . $exception_trace);
-    if ($is_ajax) {
-        send_json_response(false, 'An unexpected error occurred. Please try again.', array('exception'));
-    } else {
-        if (!$is_ajax) {
-            echo "<!-- EXCEPTION: " . htmlspecialchars($exception_msg) . " -->\n";
-            echo "<!-- EXCEPTION TRACE: " . htmlspecialchars($exception_trace) . " -->\n";
-        }
-        header("Location: " . home_url('/subscription-form/') . "?error=exception");
-        exit;
-    }
+    echo "<!-- EXCEPTION: " . htmlspecialchars($exception_msg) . " -->\n";
+    echo "<!-- EXCEPTION TRACE: " . htmlspecialchars($exception_trace) . " -->\n";
+    header("Location: " . home_url('/subscription-form/') . "?error=exception");
+    exit;
 }
 ?>

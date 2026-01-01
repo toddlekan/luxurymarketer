@@ -3,7 +3,7 @@
 		<a class="img-container main" href="<?php the_permalink() ?>"><img src="<?= ld16_get_image() ?>"></a>
 
 		<span class="desktop newsbox">
-			<a class="category thicken grey uppercase"
+			<a class="category grey uppercase"
 				href="<?=ld16_cat_id($post->ID)?>">
 				<?=ld16_cat_name($post->ID)?>
 			</a>
