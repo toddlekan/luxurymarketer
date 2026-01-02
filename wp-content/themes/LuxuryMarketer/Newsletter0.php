@@ -573,7 +573,7 @@ if(array_key_exists('date', $_GET)){
 
 	<a  style="text-decoration:none;" target="_blank" href="https://twitter.com/share?url=http%3A%2F%2Fwww.luxurydaily.com&amp;via=LuxuryDaily"><img src="<?=$url_root?>/img/sharing/twitter.png" width="24" height="24"/></a>  &nbsp;
 
-	<a  style="text-decoration:none;" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Fwww.luxurydaily.com"><img src="<?=$url_root?>/img/sharing/linkedin.png" width="24" height="24" /></a>  &nbsp;
+	<a  style="text-decoration:none;" target="_blank" href="https://www.linkedin.com/in/mickey-alam-khan/"><img src="<?=$url_root?>/img/sharing/linkedin.png" width="24" height="24" /></a>  &nbsp;
 
 	<a  style="text-decoration:none;" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.luxurydaily.com"><img src="<?=$url_root?>/img/sharing/facebook.png" width="24" height="24" /></a>  &nbsp;
 

@@ -768,11 +768,8 @@ $url_root = ld16_cdn(get_template_directory_uri()); ?>
 			<tr>
 				<td>
 					<span class="heading">FOLLOW US: </span>
-					<span class="mr_social_sharing"> <a href="https://www.instagram.com/luxurymarketer/" class="mr_social_sharing_popup_link" rel="nofollow"> <img src="<?= $url_root ?>/img/sharing/instagram.jpg" class="nopin" alt="Share on Instagram" title="Share on Instagram"> </a> </span>
-
-					&nbsp;
 					<span class="mr_social_sharing">
-						<a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Fwww.luxurymarketer.com" class="mr_social_sharing_popup_link" rel="nofollow">
+						<a target="_blank" href="https://www.linkedin.com/in/mickey-alam-khan/" class="mr_social_sharing_popup_link" rel="nofollow">
 							<img src="/wp-content/themes/LuxuryMarketer/img/sharing/linkedin.png" class="nopin" alt="Share on LinkedIn" title="Share on LinkedIn"> </a>
 					</span>
 

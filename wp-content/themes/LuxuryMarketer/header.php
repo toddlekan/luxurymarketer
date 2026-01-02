@@ -211,6 +211,7 @@ $url_root = get_template_directory_uri();
                             <li class="reverse"><a href="/category/news/legal-and-regulation" class="grey">Legal &amp: Regulation</a></li>
                             <li class="reverse"><a href="/category/research/media-and-publishing" class="grey">Media &amp; Publishing</a></li>
                             <li class="reverse"><a href="/category/research/outlook" class="grey">Outlook</a></li>
+                            <li class="reverse"><a href="/category/news" class="grey">News</a></li>
                             <li class="reverse"><a href="/category/research/philanthropy-foundations-and-nonprofits/" class="grey">Philanthropy</a></li>
                             <li class="reverse"><a href="/category/networking-and-events/profiles" class="grey">Profiles</a></li>
                             <li class="reverse"><a href="/category/research/sports" class="grey">Sports</a></li>
@@ -358,6 +359,7 @@ $url_root = get_template_directory_uri();
               <li><a href="/category/news/legal-and-regulation">Legal &amp: Regulation</a></li>
               
               <li><a href="/category/research/media-and-publishing">Media &amp; Publishing</a></li>
+              <li><a href="/category/news">News</a></li>
               <li><a href="/category/research/outlook">Outlook</a></li>
               <li><a href="/category/research/philanthropy-foundations-and-nonprofits/" title="View all posts filed under Philanthropy, foundations and nonprofits">Philanthropy</a></li>
               
@@ -468,6 +470,7 @@ $url_root = get_template_directory_uri();
                         <li class="reverse"><a href="/category/research/health-and-wellness/" class="grey">Health &amp; Wellness</a></li>
                         <li class="reverse"><a href="/category/news/legal-and-regulation" class="grey">Legal &amp: Regulation</a></li>
                         <li class="reverse"><a href="/category/research/media-and-publishing" class="grey">Media &amp; Publishing</a></li>
+                        <li class="reverse"><a href="/category/news" class="grey">News</a></li>
                         <li class="reverse"><a href="/category/research/outlook" class="grey">Outlook</a></li>
                         <li class="reverse"><a href="/category/research/philanthropy-foundations-and-nonprofits/" class="grey">Philanthropy</a></li>
                         <li class="reverse"><a href="/category/networking-and-events/profiles" class="grey">Profiles</a></li>

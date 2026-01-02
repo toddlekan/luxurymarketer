@@ -54,7 +54,7 @@
 	                        <span class="mr_social_sharing"> <a href="https://twitter.com/share?url=http%3A%2F%2Fwww.luxurydaily.com%2Fguccis-new-motifs-retold-to-show-modernity%2F&amp;text=Gucci%E2%80%99s+new+motifs+retold+to+show+modernity&amp;via=LuxuryDaily"
 	                            class="mr_social_sharing_popup_link" rel="nofollow"> <img src="./img/sharing/twitter.png" class="nopin" alt="Share on Twitter" title="Share on Twitter"> </a> </span>
 
-							<span class="mr_social_sharing"> <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Fwww.luxurydaily.com%2Fguccis-new-motifs-retold-to-show-modernity%2F&amp;title=Gucci%E2%80%99s+new+motifs+retold+to+show+modernity"
+							<span class="mr_social_sharing"> <a href="https://www.linkedin.com/in/mickey-alam-khan/"
 	                            class="mr_social_sharing_popup_link" rel="nofollow"> <img src="./img/sharing/linkedin-sm.png" class="nopin" alt="Share on LinkedIn"
 	                            title="Share on LinkedIn"> </a> </span>
 

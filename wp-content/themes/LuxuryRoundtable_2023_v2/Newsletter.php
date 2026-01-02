@@ -682,10 +682,7 @@ if (array_key_exists('date', $_GET)) {
 
                         <p style="font-family: 'Neue-Frutiger-W04-Light', arial, serif; font-size:13px">
 
-                          <a style="text-decoration:none;" target="_blank" href="https://www.instagram.com/luxuryroundtable/">
-                            <img src="<?= $url_root ?>/img/sharing/instagram.jpg" width="24" height="24" /></a> &nbsp;
-
-                          <a style="text-decoration:none;" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fwww.luxuryroundtable.com">
+                          <a style="text-decoration:none;" target="_blank" href="https://www.linkedin.com/in/mickey-alam-khan/">
                             <img src="<?= $url_root ?>/img/sharing/linkedin.png" width="24" height="24" /></a> &nbsp;
 
                         </p>

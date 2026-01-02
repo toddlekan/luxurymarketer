@@ -208,9 +208,6 @@ if (have_posts()) :
 							<a href="mailto:reprints@napean.com">Reprints</a>
 						</li>
 
-						<li class="social inTool">
-							<span class="mr_social_sharing"> <a alt="Tweet" href="https://www.instagram.com/luxurymarketer" class="mr_social_sharing_popup_link" rel="nofollow"></a> </span>
-						</li>
 						<li class="social liTool">
 							<span class="mr_social_sharing"> <a alt="Link" href="http://www.linkedin.com/shareArticle?mini=true&url=<?= urlencode(get_permalink()); ?>&title=<?= urlencode(get_the_title()); ?>" class="mr_social_sharing_popup_link" rel="nofollow"></a></span>
 						</li>
