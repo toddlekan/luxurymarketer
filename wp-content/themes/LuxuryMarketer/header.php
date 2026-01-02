@@ -208,7 +208,7 @@ $url_root = get_template_directory_uri();
                             <li class="reverse"><a href="/category/research/education" class="grey">Education</a></li>
                             <li class="reverse"><a href="/category/research/entertainment" class="grey">Entertainment</a></li>
                             <li class="reverse"><a href="/category/research/health-and-wellness/" class="grey">Health &amp; Wellness</a></li>
-                            <li class="reverse"><a href="/category/news/legal-and-regulation" class="grey">Legal &amp: Regulation</a></li>
+                            <li class="reverse"><a href="/category/news/legal-and-regulation" class="grey">Legal &amp; Regulation</a></li>
                             <li class="reverse"><a href="/category/research/media-and-publishing" class="grey">Media &amp; Publishing</a></li>
                             <li class="reverse"><a href="/category/research/outlook" class="grey">Outlook</a></li>
                             <li class="reverse"><a href="/category/news" class="grey">News</a></li>
@@ -356,7 +356,7 @@ $url_root = get_template_directory_uri();
               <li><a href="/category/research/education">Education</a></li>
               <li><a href="/category/research/entertainment">Entertainment</a></li>
               <li><a href="/category/research/health-and-wellness/" title="View all posts filed under Health and wellness">Health &amp; Wellness</a></li>
-              <li><a href="/category/news/legal-and-regulation">Legal &amp: Regulation</a></li>
+              <li><a href="/category/news/legal-and-regulation">Legal &amp; Regulation</a></li>
               
               <li><a href="/category/research/media-and-publishing">Media &amp; Publishing</a></li>
               <li><a href="/category/news">News</a></li>
@@ -468,7 +468,7 @@ $url_root = get_template_directory_uri();
                         <li class="reverse"><a href="/category/research/education" class="grey">Education</a></li>
                         <li class="reverse"><a href="/category/research/entertainment" class="grey">Entertainment</a></li>
                         <li class="reverse"><a href="/category/research/health-and-wellness/" class="grey">Health &amp; Wellness</a></li>
-                        <li class="reverse"><a href="/category/news/legal-and-regulation" class="grey">Legal &amp: Regulation</a></li>
+                        <li class="reverse"><a href="/category/news/legal-and-regulation" class="grey">Legal &amp; Regulation</a></li>
                         <li class="reverse"><a href="/category/research/media-and-publishing" class="grey">Media &amp; Publishing</a></li>
                         <li class="reverse"><a href="/category/news" class="grey">News</a></li>
                         <li class="reverse"><a href="/category/research/outlook" class="grey">Outlook</a></li>

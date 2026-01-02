@@ -179,7 +179,8 @@ get_header();
 				$column = 1;
 				while (have_posts()) : the_post();
 
-					if ($cat_name == 'Columns') {
+					// Only use column template for top-level "Columns" category, not subcategories
+					if ($cat_name == 'Columns' && $category->parent == 0) {
 						get_template_part('template-parts/content', 'column-item');
 					} else {
 						get_template_part('template-parts/content', 'category-item', ['column' => $column]);
@@ -202,7 +203,7 @@ get_header();
 			</div>
 			<div class="col-lg-12 navigation">
 
-				<?php if ($cat_name == 'Columns') {
+				<?php if ($cat_name == 'Columns' && $category->parent == 0) {
 
 					$label = 'columns';
 				} else {
