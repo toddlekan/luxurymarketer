@@ -1214,12 +1214,15 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	}
 	email_removefilters();
 	// Filter functions must return a value, not echo
-	// When used as a filter, WordPress only passes the content (1 arg), so func_num_args() == 1
-	// When called directly, multiple args are passed, so func_num_args() > 1
-	// Always return when used as filter (1 arg), respect $echo when called directly (>1 args)
-	if(func_num_args() <= 1) {
+	// When used as a filter, WordPress only passes the content (1 arg)
+	// When called directly with email_form('', false, ...), multiple args are passed
+	// The key is: if only 1 arg was passed, we're being used as a filter
+	$num_args = func_num_args();
+	if($num_args == 1) {
+		// Used as filter - must return
 		return $output;
 	}
+	// Called directly - respect $echo parameter
 	if($echo) {
 		echo $output;
 		return;
