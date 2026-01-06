@@ -689,7 +689,7 @@ h3,
   overflow: hidden;
 }
 
-.navbar.popular {
+.navbar.popular, .navbar.latest {
   width: 100% !important;
   margin-top: 32px;
 }
@@ -702,7 +702,8 @@ h3,
 
 .navbar.search .search-inner,
 .navbar.popular .popular-inner,
-.navbar.subscribe .subscribe-inner {
+.navbar.subscribe .subscribe-inner,
+.navbar.latest .latest-inner {
 
   margin: 100px auto 20px auto;
 }
