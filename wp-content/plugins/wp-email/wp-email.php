@@ -1238,6 +1238,16 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	// The key is: if only 1 arg was passed, we're being used as a filter
 	$num_args = func_num_args();
 	// DEBUG: Log when function is called as filter
+	print 'EMAIL_FORM: Output: ' . $output . '<br>';
+	print 'EMAIL_FORM: Output length: ' . strlen($output) . '<br>';
+	print 'EMAIL_FORM: Email options: ' . print_r($email_options, true) . '<br>';
+	print 'EMAIL_FORM: Email fields: ' . print_r($email_fields, true) . '<br>';
+	print 'EMAIL_FORM: Email type: ' . $email_type . '<br>';
+	print 'EMAIL_FORM: Error field: ' . $error_field . '<br>';
+	print 'EMAIL_FORM: Num args: ' . $num_args . '<br>';
+	print 'EMAIL_FORM: Echo: ' . $echo . '<br>';
+	print 'EMAIL_FORM: Div: ' . $div . '<br>';
+
 	if($num_args == 1) {
 		// Used as filter - must return (don't echo)
 		// Always return the output, never echo when used as filter
