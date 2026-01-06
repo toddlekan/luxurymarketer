@@ -1120,45 +1120,30 @@ function process_email_form() {
 function email_form($content, $echo = true, $subtitle = true, $div = true, $error_field = '') {
   global $wpdb, $multipage;
 
-	print 'EMAIL_FORM: Function called<br>';
+
   // Variables
 	$multipage = false;
-	print 'EMAIL_FORM: After multipage = false<br>';
 	$post_title = email_get_title();
-	print 'EMAIL_FORM: After email_get_title<br>';
 	$post_author = the_author('', false);
-	print 'EMAIL_FORM: After the_author<br>';
 	$post_date = get_the_time(get_option('date_format').' ('.get_option('time_format').')', '', '', false);
-	print 'EMAIL_FORM: After get_the_time<br>';
 	$post_category = email_category(__(',', 'wp-email').' ');
-	print 'EMAIL_FORM: After email_category<br>';
 	$post_category_alt = strip_tags($post_category);
 	$email_fields = get_option('email_fields');
-	print 'EMAIL_FORM: After get_option email_fields<br>';
 	$email_image_verify = intval(get_option('email_imageverify'));
-	print 'EMAIL_FORM: After get_option email_imageverify<br>';
 	$email_options = get_option('email_options');
-	print 'EMAIL_FORM: After get_option email_options: ' . (is_array($email_options) ? 'is_array' : 'NOT_ARRAY') . '<br>';
 	if (!is_array($email_options)) {
-		print 'EMAIL_FORM: ERROR - email_options is not an array!<br>';
 		return '';
 	}
 	$email_type = intval($email_options['email_type']);
-	print 'EMAIL_FORM: After email_type<br>';
 	// Ensure $error_field is an array before applying filters
 	if (!is_array($error_field)) {
 		$error_field = array();
 	}
-	print 'EMAIL_FORM: error_field before filter: ' . print_r($error_field, true) . '<br>';
 	$error_field = apply_filters('email_form-fieldvalues', $error_field);
-	print 'EMAIL_FORM: After apply_filters - error_field: ' . print_r($error_field, true) . '<br>';
 	if (!is_array($error_field)) {
-		print 'EMAIL_FORM: ERROR - error_field is not an array after filter!<br>';
 		$error_field = array();
 	}
-	print 'EMAIL_FORM: After apply_filters check<br>';
 	$output = '';
-	print 'EMAIL_FORM: Output initialized<br>';
 	// Template - Subtitle
 	if($subtitle) {
 		$template_subtitle = stripslashes(get_option('email_template_subtitle'));
@@ -1175,12 +1160,8 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	if($div) {
 		$output .= '<div id="wp-email-content" class="wp-email">'."\n";
 	}
-	print 'EMAIL_FORM: Checking not_spamming<br>';
 	if (not_spamming()) {
-		print 'EMAIL_FORM: not_spamming returned true<br>';
-		print 'EMAIL_FORM: Checking post_password_required<br>';
 		if(!post_password_required()) {
-			print 'EMAIL_FORM: post_password_required returned false<br>';
 			if($email_type == 2){
 				$output .= email_popup_form_header(false, (!empty($error_field['id']) ? $error_field['id'] : 0));
 			} else {
@@ -1233,7 +1214,6 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 			$output .= '</form>'."\n";
 		} else {
 			$output .= get_the_password_form();
-			print $output;
 		} // End if(!post_password_required())
 	} else {
 		$output .= '<p>'.sprintf(_n('Please wait for <strong>%s Minute</strong> before sending the next article.', 'Please wait for <strong>%s Minutes</strong> before sending the next article.', email_flood_interval(false), 'wp-email'), email_flood_interval(false)).'</p>'."\n";
@@ -1242,33 +1222,15 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	if($div) {
 		$output .= '</div>'."\n";
 	}
-	print $output;
 	email_removefilters();
 	// Filter functions must return a value, not echo
 	// When used as a filter, WordPress only passes the content (1 arg)
 	// When called directly with email_form('', false, ...), multiple args are passed
 	// The key is: if only 1 arg was passed, we're being used as a filter
 	$num_args = func_num_args();
-	// DEBUG: Log when function is called as filter
-	print 'EMAIL_FORM: Output: ' . $output . '<br>';
-	print 'EMAIL_FORM: Output length: ' . strlen($output) . '<br>';
-	print 'EMAIL_FORM: Email options: ' . print_r($email_options, true) . '<br>';
-	print 'EMAIL_FORM: Email fields: ' . print_r($email_fields, true) . '<br>';
-	print 'EMAIL_FORM: Email type: ' . $email_type . '<br>';
-	print 'EMAIL_FORM: Error field: ' . $error_field . '<br>';
-	print 'EMAIL_FORM: Num args: ' . $num_args . '<br>';
-	print 'EMAIL_FORM: Echo: ' . $echo . '<br>';
-	print 'EMAIL_FORM: Div: ' . $div . '<br>';
-
 	if($num_args == 1) {
 		// Used as filter - must return (don't echo)
 		// Always return the output, never echo when used as filter
-		print 'EMAIL_FORM FILTER CALLED - output length: ' . strlen($output) . '<br>';
-		if(empty($output)) {
-			print 'EMAIL_FORM FILTER - OUTPUT IS EMPTY!<br>';
-			print 'EMAIL_FORM FILTER - email_options: ' . print_r($email_options, true) . '<br>';
-			print 'EMAIL_FORM FILTER - email_fields: ' . print_r($email_fields, true) . '<br>';
-		}
 		return $output;
 	}
 	// Called directly - respect $echo parameter
