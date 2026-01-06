@@ -12,8 +12,6 @@ $url_root = ld16_cdn(get_template_directory_uri());
 
 get_header();
 
-print "IN EMAIL.PHP";
-exit;
 if (have_posts()) :
 
 ?>
@@ -77,9 +75,12 @@ if (have_posts()) :
 
 						<div class="entry-content">
 							<?php 
-							// Use the_content() which should have the email_form filter applied
-							// The filter is added on loop_start by email-standalone.php
-							the_content();
+							// Call email_form directly since the filter isn't working
+							if (function_exists('email_form')) {
+								echo email_form('', false, true, true, '');
+							} else {
+								the_content();
+							}
 							?>
 						</div>
 
