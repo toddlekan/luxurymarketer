@@ -90,7 +90,9 @@ if (have_posts()) :
 								if (empty($form_output)) {
 									echo 'DEBUG: email_form returned empty';
 								} else {
+									echo "DEBUG: email_form returned not empty";
 									echo $form_output;
+									echo "DEBUG: email_form output end";
 								}
 							} else {
 								the_content();
