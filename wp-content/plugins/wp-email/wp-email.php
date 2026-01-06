@@ -1134,6 +1134,8 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	$email_type = intval($email_options['email_type']);
 	$error_field = apply_filters('email_form-fieldvalues', $error_field);
 	$output = '';
+	// DEBUG: Function is being called
+	// $output .= '<!-- email_form called -->';
 	// Template - Subtitle
 	if($subtitle) {
 		$template_subtitle = stripslashes(get_option('email_template_subtitle'));

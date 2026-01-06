@@ -76,12 +76,18 @@ if (have_posts()) :
 						<div class="entry-content">
 							<?php 
 							// Call email_form directly since the filter isn't working
-							print "IN EMAIL.PHP";
 							if (function_exists('email_form')) {
-								print "EMAIL FORM EXISTS";
-								echo email_form('', false, true, true, '');
+								$form_output = email_form('', false, true, true, '');
+								if (empty($form_output)) {
+									echo '<!-- DEBUG: email_form returned empty string -->';
+									// Try to see what's wrong - check if options exist
+									$email_options = get_option('email_options');
+									$email_fields = get_option('email_fields');
+									echo '<!-- email_options: ' . print_r($email_options, true) . ' -->';
+									echo '<!-- email_fields: ' . print_r($email_fields, true) . ' -->';
+								}
+								echo $form_output;
 							} else {
-								print "EMAIL FORM DOES NOT EXIST";
 								the_content();
 							}
 							?>
