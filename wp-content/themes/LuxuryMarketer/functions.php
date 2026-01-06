@@ -1284,6 +1284,7 @@ function send_email($data)
 				if (!class_exists("phpmailer")) {
 					require_once(ABSPATH . WPINC . '/class-phpmailer.php');
 				}
+				$email_smtp = get_option('email_smtp');
 				$mail = new PHPMailer();
 				$mail->From     = "editor@luxurymarketer.com";
 				$mail->FromName = $yourname;
