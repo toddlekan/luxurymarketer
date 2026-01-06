@@ -1070,9 +1070,10 @@ a.desktop .bar {
   border: 0px;
 }
 
-.inner #lr-header{
-  position: relative;
+#lr-header{
+  position: fixed;
 }
+
 
 .navbar-default .navbar-toggle .icon-bar {
   padding: 1px 0 0px 0;
