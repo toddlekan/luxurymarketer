@@ -249,12 +249,12 @@ try {
             $error_title = isset($formatted_response['title']) ? $formatted_response['title'] : '';
             $error_detail = isset($formatted_response['detail']) ? $formatted_response['detail'] : '';
             $is_duplicate = (
-                strpos($error_title, 'already a list member') !== false ||
-                strpos($error_title, 'Member Exists') !== false ||
-                strpos($error_detail, 'already a list member') !== false ||
-                strpos($error_detail, 'Member Exists') !== false ||
+                strpos($error_title, 'already a list subscriber') !== false ||
+                strpos($error_title, 'Subscriber Exists') !== false ||
+                strpos($error_detail, 'already a list subscriber') !== false ||
+                strpos($error_detail, 'Subscriber Exists') !== false ||
                 ($http_code === 400 && isset($formatted_response['title']) && 
-                 (strpos($formatted_response['title'], 'Member Exists') !== false))
+                 (strpos($formatted_response['title'], 'Subscriber Exists') !== false))
             );
         }
         

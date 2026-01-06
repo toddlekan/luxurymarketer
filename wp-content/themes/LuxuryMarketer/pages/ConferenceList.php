@@ -89,7 +89,7 @@ get_header();
             t.name like 'Luxury FirstLook%' OR
             t.name like 'Mobile Insights Summit%' OR
             t.name like 'Luxury Retail Summit%' OR
-            t.name like 'luxury roundtable%' OR
+            t.name like 'luxury marketer%' OR
 						t.name like 'conference%'
           )
           AND p.post_type LIKE 'post'

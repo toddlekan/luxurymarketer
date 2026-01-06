@@ -747,7 +747,6 @@ function ld16_is_locked($id = 0)
 		$lock = false;
 	} else {		
 		$logged_in = $_COOKIE['_QAS3247adjl'] ?? null;
-		// $logged_acctno = $_COOKIE['luxuryroundtable_acctno'];
 
 		if ($logged_in) {
 			$lock = false;

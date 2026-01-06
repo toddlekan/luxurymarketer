@@ -98,7 +98,7 @@ $(document).ready(function () {
 
     $(".band").hide();
 
-    setCookie("luxuryroundtable_promo", 1);
+    setCookie("luxurymarketer_promo", 1);
   });
 
   function afterDecrypt(body, html) {
@@ -204,7 +204,7 @@ $(document).ready(function () {
       $(".free").removeClass("free");
 
       //handle my account links
-      var acctno = getCookie("luxuryroundtable_acctno");
+      var acctno = getCookie("luxurymarketer_acctno");
       var acctno_href =
         "https://www.cambeywest.com/LXM/?f=custcare&a=" + acctno;
 
@@ -336,7 +336,7 @@ $(document).ready(function () {
 
     $(".promo").show();
     $(".acc-divider").hide();
-    if (getCookie("luxuryroundtable_promo")) {
+    if (getCookie("luxurymarketer_promo")) {
     } else {
       $(".band-container").show();
     }
@@ -609,7 +609,6 @@ $(document).ready(function () {
     function (e) {
       e.preventDefault();
 
-      //http://stage.luxuryroundtable.com/?s=sadf
       var val = $(this).closest(".clr").find(".form-control").val();
 
       location.href = "/?s=" + encodeURI(val);

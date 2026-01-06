@@ -620,7 +620,7 @@ if (array_key_exists('date', $_GET)) {
 
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/cookie-policy">Cookie Policy</a> |
 
-                          <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/terms">Member Agreement and Terms of Use</a> |
+                          <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/terms">Subscriber Agreement and Terms of Use</a> |
 
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/contact-us">Contact Us</a> |
 

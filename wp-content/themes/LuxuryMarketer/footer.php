@@ -120,7 +120,7 @@ $url_root = ld16_cdn(get_template_directory_uri());
 					<a href="/cookie-policy">Cookie Policy</a>
 				</li>
 				<li>
-					<a href="/terms">Member Agreement and Terms of Use</a>
+					<a href="/terms">Subscriber Agreement and Terms of Use</a>
 				</li>
 				<li>
 					<a href="/about-us">About Us</a>

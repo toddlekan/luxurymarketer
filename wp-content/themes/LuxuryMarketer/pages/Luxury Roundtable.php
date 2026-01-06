@@ -84,7 +84,7 @@ get_header();
 					JOIN wp_term_relationships AS tr ON p.id = tr.object_id
 					JOIN wp_term_taxonomy AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
 					JOIN wp_terms AS t ON tt.term_id = t.term_id
-					WHERE t.name like 'luxury roundtable%' AND p.post_type LIKE 'post'
+					WHERE t.name like 'luxury marketer%' AND p.post_type LIKE 'post'
 					GROUP BY p.id
 					ORDER BY p.post_date DESC
 					LIMIT $offset, $number
@@ -115,13 +115,13 @@ get_header();
 					<div class="navigation clearfix">
 
 						<div class="previousnav">
-							<a href="/luxury-roundtable/<?=$prev?>" rel="prev">« Previous archives</a>
+							<a href="/luxury-marketer/<?=$prev?>" rel="prev">« Previous archives</a>
 
 						</div>
 						<div class="nextnav">
 
 							<?php if($next){?>
-								<a href="/luxury-roundtable/<?=$next?>" rel="next">Next archives »</a>
+								<a href="/luxury-marketer/<?=$next?>" rel="next">Next archives »</a>
 							<?php } ?>
 
 						</div>

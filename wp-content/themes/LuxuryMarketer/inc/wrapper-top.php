@@ -99,7 +99,7 @@
             <div class="page-header logo">
                 <div class="row">
                     <div class="col-lg-8">
-                        <a href="." id="logo"><img src="./img/LuxuryRoundtable.png" style="width: 630px;"/></a>
+                        <a href="." id="logo"><img src="./img/LuxuryMarketer.png" style="width: 630px;"/></a>
 
                         <div class="navbar collapse navbar-collapse">
                             <ul class="nav navbar-nav">
