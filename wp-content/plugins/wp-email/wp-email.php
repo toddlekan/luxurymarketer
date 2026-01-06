@@ -1218,9 +1218,16 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	// When called directly with email_form('', false, ...), multiple args are passed
 	// The key is: if only 1 arg was passed, we're being used as a filter
 	$num_args = func_num_args();
+	// DEBUG: Log when function is called as filter
 	if($num_args == 1) {
 		// Used as filter - must return (don't echo)
 		// Always return the output, never echo when used as filter
+		error_log('EMAIL_FORM FILTER CALLED - output length: ' . strlen($output));
+		if(empty($output)) {
+			error_log('EMAIL_FORM FILTER - OUTPUT IS EMPTY!');
+			error_log('EMAIL_FORM FILTER - email_options: ' . print_r($email_options, true));
+			error_log('EMAIL_FORM FILTER - email_fields: ' . print_r($email_fields, true));
+		}
 		return $output;
 	}
 	// Called directly - respect $echo parameter
