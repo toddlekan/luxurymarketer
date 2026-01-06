@@ -83,9 +83,11 @@ if (have_posts()) :
 						<div class="entry-content">
 							<?php 
 							// Call email_form directly to display the form
+							print "DEBUG: checking if email_form exists";
 							if (function_exists('email_form')) {
 								// Call with: content='', echo=false (so it returns), subtitle=true, div=true, error_field=''
 								// Then echo the returned value
+								print "DEBUG: email_form exists";
 								$form_output = email_form('', false, true, true, '');
 								if (empty($form_output)) {
 									echo 'DEBUG: email_form returned empty';
@@ -95,7 +97,10 @@ if (have_posts()) :
 									echo "DEBUG: email_form output end";
 								}
 							} else {
+								print "DEBUG: email_form does not exist";
+								print "DEBUG: calling the_content";
 								the_content();
+								print "DEBUG: the_content end";
 							}
 							?>
 						</div>
