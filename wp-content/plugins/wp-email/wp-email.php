@@ -1219,7 +1219,8 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	// The key is: if only 1 arg was passed, we're being used as a filter
 	$num_args = func_num_args();
 	if($num_args == 1) {
-		// Used as filter - must return
+		// Used as filter - must return (don't echo)
+		// Always return the output, never echo when used as filter
 		return $output;
 	}
 	// Called directly - respect $echo parameter

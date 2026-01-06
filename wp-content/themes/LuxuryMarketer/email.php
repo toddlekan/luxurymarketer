@@ -12,6 +12,8 @@ $url_root = ld16_cdn(get_template_directory_uri());
 
 get_header();
 
+print "IN EMAIL.PHP";
+exit;
 if (have_posts()) :
 
 ?>
