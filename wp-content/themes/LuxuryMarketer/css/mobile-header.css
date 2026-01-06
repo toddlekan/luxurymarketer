@@ -51,9 +51,10 @@ body{padding-top:0px;}
 
 /* #mobile-sub-menu{display: block; border-top: 1px solid #f3f3f3;} */
 
-#popular-mobile{color: #1169aa; font-family: Verdana,Geneva,Tahoma,sans-serif; font-size: 12px;}
+#popular-mobile, #latest-mobile{color: #1169aa; font-family: Verdana,Geneva,Tahoma,sans-serif; font-size: 12px;}
 
 .popular-inner ul{list-style-type: none; margin-left: -13px;}
+.latest-inner ul{list-style-type: none; margin-left: -13px;}
 
 #date-mobile{display: block; width: 120px; margin: 3px auto 15px auto; color: #444444; font-family: Verdana,Geneva,Tahoma,sans-serif; font-size: 12px; font-weight: normal;}
 
