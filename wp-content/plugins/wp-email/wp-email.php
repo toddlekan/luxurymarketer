@@ -1144,7 +1144,8 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	if (!is_array($error_field)) {
 		$error_field = array();
 	}
-	print "&nbsp;
+	print "&nbsp";
+	
 	$output = '';
 	// Template - Subtitle
 	if($subtitle) {
