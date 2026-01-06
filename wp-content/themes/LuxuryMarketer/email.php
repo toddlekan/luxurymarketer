@@ -28,6 +28,9 @@ if (have_posts()) :
 
 
 			<?php
+			// Ensure loop_start fires so email_addfilters() is called
+			do_action('loop_start');
+			
 			while (have_posts()) : the_post();
 
 			?>
@@ -74,7 +77,15 @@ if (have_posts()) :
 					<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 						<div class="entry-content">
-							<?php the_content(); ?>
+							<?php 
+							// Call email_form directly to display the form
+							if (function_exists('email_form')) {
+								echo email_form('', false, true, true, '');
+							} else {
+								// Fallback: use the_content which should have the filter applied
+								the_content();
+							}
+							?>
 						</div>
 
 					</article>
