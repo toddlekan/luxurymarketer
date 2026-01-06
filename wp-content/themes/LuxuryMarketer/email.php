@@ -88,7 +88,7 @@ if (have_posts()) :
 								// Call with: content='', echo=false (so it returns), subtitle=true, div=true, error_field=''
 								// Then echo the returned value
 								print "DEBUG: email_form exists";
-								$form_output = email_form('', false, true, true, '');
+								$form_output = email_form('', true, true, true, '');
 								if (empty($form_output)) {
 									echo 'DEBUG: email_form returned empty';
 								} else {
