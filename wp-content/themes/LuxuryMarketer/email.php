@@ -84,13 +84,14 @@ if (have_posts()) :
 							<?php 
 							// Call email_form directly to display the form
 							if (function_exists('email_form')) {
-								// Call with: content='', echo=true, subtitle=true, div=true, error_field=''
-								print "EMAIL FORM EXISTS";
-								print email_form('', true, true, true, '');
-								
-								print "EMAIL FORM OUTPUT";
-								email_form('', true, true, true, '');
-								print "EMAIL FORM END";
+								// Call with: content='', echo=false (so it returns), subtitle=true, div=true, error_field=''
+								// Then echo the returned value
+								$form_output = email_form('', false, true, true, '');
+								if (empty($form_output)) {
+									echo 'DEBUG: email_form returned empty';
+								} else {
+									echo $form_output;
+								}
 							} else {
 								the_content();
 							}
