@@ -85,7 +85,12 @@ if (have_posts()) :
 							// Call email_form directly to display the form
 							if (function_exists('email_form')) {
 								// Call with: content='', echo=true, subtitle=true, div=true, error_field=''
+								print "EMAIL FORM EXISTS";
+								print email_form('', true, true, true, '');
+								
+								print "EMAIL FORM OUTPUT";
 								email_form('', true, true, true, '');
+								print "EMAIL FORM END";
 							} else {
 								the_content();
 							}
