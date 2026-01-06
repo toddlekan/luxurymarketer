@@ -280,9 +280,7 @@ if (have_posts()) {
 		<section id=<?= "hero-section-" . $post_id ?> class="section clearfix categories ">
 
 			<div class="row">
-				<div class="col-lg-12">
-					<div class="newswell-divider section divider"></div>
-				</div>
+
 				<div class="col-lg-12">
 
 					<div class="newswell">

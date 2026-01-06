@@ -978,8 +978,7 @@ function process_email_form() {
 			}
 		}
 		// If There Is No Error, We Process The E-Mail
-		// Override spam check - always allow sending
-		if(empty($error) && true) { // Changed from not_spamming() to always true
+		if(empty($error) && not_spamming()) {
 			// If Remarks Is Empty, Assign N/A
 			if(empty($yourremarks)) { $yourremarks = __('N/A', 'wp-email'); }
 			// Template For E-Mail Subject
@@ -1163,8 +1162,7 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	if($div) {
 		$output .= '<div id="wp-email-content" class="wp-email">'."\n";
 	}
-	// Override spam check - always show form
-	if (true) { // Changed from not_spamming() to always true
+	if (not_spamming()) {
 		if(!post_password_required()) {
 			if($email_type == 2){
 				$output .= email_popup_form_header(false, (!empty($error_field['id']) ? $error_field['id'] : 0));
