@@ -1139,12 +1139,12 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	if (!is_array($error_field)) {
 		$error_field = array();
 	}
-	print "";
+	print "&nbsp;";
 	$error_field = apply_filters('email_form-fieldvalues', $error_field);
 	if (!is_array($error_field)) {
 		$error_field = array();
 	}
-
+	print "&nbsp;
 	$output = '';
 	// Template - Subtitle
 	if($subtitle) {
