@@ -1213,6 +1213,11 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 		$output .= '</div>'."\n";
 	}
 	email_removefilters();
+	// When used as a filter (only 1 argument passed), always return instead of echo
+	// Filter functions must return a value, not echo
+	if(func_num_args() == 1) {
+		return $output;
+	}
 	if($echo) {
 		echo $output;
 	} else {

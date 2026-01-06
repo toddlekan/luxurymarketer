@@ -75,13 +75,9 @@ if (have_posts()) :
 
 						<div class="entry-content">
 							<?php 
-							// Call email_form directly with echo=false to get the output
-							if (function_exists('email_form')) {
-								echo email_form('', false, true, true, '');
-							} else {
-								// Fallback: use the_content which should have the filter applied
-								the_content();
-							}
+							// Use the_content() which should have the email_form filter applied
+							// The filter is added on loop_start by email-standalone.php
+							the_content();
 							?>
 						</div>
 
