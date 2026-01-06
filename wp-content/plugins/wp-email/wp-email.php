@@ -1120,20 +1120,35 @@ function process_email_form() {
 function email_form($content, $echo = true, $subtitle = true, $div = true, $error_field = '') {
   global $wpdb, $multipage;
 
-
+	error_log('EMAIL_FORM: Function called');
   // Variables
 	$multipage = false;
+	error_log('EMAIL_FORM: After multipage = false');
 	$post_title = email_get_title();
+	error_log('EMAIL_FORM: After email_get_title');
 	$post_author = the_author('', false);
+	error_log('EMAIL_FORM: After the_author');
 	$post_date = get_the_time(get_option('date_format').' ('.get_option('time_format').')', '', '', false);
+	error_log('EMAIL_FORM: After get_the_time');
 	$post_category = email_category(__(',', 'wp-email').' ');
+	error_log('EMAIL_FORM: After email_category');
 	$post_category_alt = strip_tags($post_category);
 	$email_fields = get_option('email_fields');
+	error_log('EMAIL_FORM: After get_option email_fields');
 	$email_image_verify = intval(get_option('email_imageverify'));
+	error_log('EMAIL_FORM: After get_option email_imageverify');
 	$email_options = get_option('email_options');
+	error_log('EMAIL_FORM: After get_option email_options: ' . (is_array($email_options) ? 'is_array' : 'NOT_ARRAY'));
+	if (!is_array($email_options)) {
+		error_log('EMAIL_FORM: ERROR - email_options is not an array!');
+		return '';
+	}
 	$email_type = intval($email_options['email_type']);
+	error_log('EMAIL_FORM: After email_type');
 	$error_field = apply_filters('email_form-fieldvalues', $error_field);
+	error_log('EMAIL_FORM: After apply_filters');
 	$output = '';
+	error_log('EMAIL_FORM: Output initialized');
 	// Template - Subtitle
 	if($subtitle) {
 		$template_subtitle = stripslashes(get_option('email_template_subtitle'));
@@ -1150,8 +1165,12 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	if($div) {
 		$output .= '<div id="wp-email-content" class="wp-email">'."\n";
 	}
+	error_log('EMAIL_FORM: Checking not_spamming');
 	if (not_spamming()) {
+		error_log('EMAIL_FORM: not_spamming returned true');
+		error_log('EMAIL_FORM: Checking post_password_required');
 		if(!post_password_required()) {
+			error_log('EMAIL_FORM: post_password_required returned false');
 			if($email_type == 2){
 				$output .= email_popup_form_header(false, (!empty($error_field['id']) ? $error_field['id'] : 0));
 			} else {
