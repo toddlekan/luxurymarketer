@@ -683,7 +683,8 @@ h3,
 
 .navbar.search,
 .navbar.popular,
-.navbar.subscribe {
+.navbar.subscribe,
+.navbar.latest {
   height: 0;
   overflow: hidden;
 }
