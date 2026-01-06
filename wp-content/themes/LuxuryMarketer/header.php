@@ -522,11 +522,15 @@ $url_root = get_template_directory_uri();
     </div>
 
     <span class="label subscribe">
+
+      <a href="#" id="latest-mobile" target="latest">Latest Headlines</a>
+      <span style="color: #ccc;"> &nbsp; &nbsp; </span> 
+
       <a href="#" id="popular-mobile" target="popular">Most Read</a>
       <span style="color: #ccc;"> &nbsp; &nbsp; </span>
 
       <a class="sign-in-subscribe pop-subscribe loggedout" 
-      style="display: none;" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" 
+        style="display: none;" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" 
         id="subscribe-mobile">
         Subscribe
       </a>
@@ -559,6 +563,14 @@ $url_root = get_template_directory_uri();
       </div>
     </form>
 
+  </div>
+</div>
+
+<div class="navbar fold latest">
+  <div class="latest-inner">
+    <ol class="">
+      <?php include($file_root.'/inc/sidebar/nav-latest.php') ?>
+    </ol>
   </div>
 </div>
 

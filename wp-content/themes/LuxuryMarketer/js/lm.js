@@ -410,7 +410,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".navbar-toggle", function (e) {
     e.preventDefault();
-    $("#popular-mobile, #date-mobile, .pop-subscribe").toggle();
+    $("#latest-mobile, #popular-mobile, #date-mobile, .pop-subscribe").toggle();
   });
 
   /*COMMENTS*/
@@ -641,6 +641,12 @@ $(document).ready(function () {
     e.preventDefault();
 
     toggleUtil(".navbar.popular", $(this));
+  });
+
+  $(document).on("click", "#latest-mobile", function (e) {
+    e.preventDefault();
+
+    toggleUtil(".navbar.latest", $(this));
   });
 
   /*UTIL FUNCTIONS*/
