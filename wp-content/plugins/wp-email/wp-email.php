@@ -1145,8 +1145,18 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	}
 	$email_type = intval($email_options['email_type']);
 	print 'EMAIL_FORM: After email_type<br>';
+	// Ensure $error_field is an array before applying filters
+	if (!is_array($error_field)) {
+		$error_field = array();
+	}
+	print 'EMAIL_FORM: error_field before filter: ' . print_r($error_field, true) . '<br>';
 	$error_field = apply_filters('email_form-fieldvalues', $error_field);
-	print 'EMAIL_FORM: After apply_filters<br>';
+	print 'EMAIL_FORM: After apply_filters - error_field: ' . print_r($error_field, true) . '<br>';
+	if (!is_array($error_field)) {
+		print 'EMAIL_FORM: ERROR - error_field is not an array after filter!<br>';
+		$error_field = array();
+	}
+	print 'EMAIL_FORM: After apply_filters check<br>';
 	$output = '';
 	print 'EMAIL_FORM: Output initialized<br>';
 	// Template - Subtitle
@@ -1223,6 +1233,7 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 			$output .= '</form>'."\n";
 		} else {
 			$output .= get_the_password_form();
+			print $output;
 		} // End if(!post_password_required())
 	} else {
 		$output .= '<p>'.sprintf(_n('Please wait for <strong>%s Minute</strong> before sending the next article.', 'Please wait for <strong>%s Minutes</strong> before sending the next article.', email_flood_interval(false), 'wp-email'), email_flood_interval(false)).'</p>'."\n";
@@ -1231,6 +1242,7 @@ function email_form($content, $echo = true, $subtitle = true, $div = true, $erro
 	if($div) {
 		$output .= '</div>'."\n";
 	}
+	print $output;
 	email_removefilters();
 	// Filter functions must return a value, not echo
 	// When used as a filter, WordPress only passes the content (1 arg)
