@@ -708,7 +708,7 @@ h3,
   margin: 100px auto 20px auto;
 }
 
-.navbar.popular .popular-inner {
+.navbar.popular .popular-inner, .navbar.latest .latest-inner {
   font-family: "Neue-Frutiger-W04-Light", Georgia, "Times New Roman", Times, serif;
 
 }
