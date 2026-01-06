@@ -541,11 +541,13 @@ $url_root = get_template_directory_uri();
 
 </div>
 
-</div>
 
 <div class="col-lg-12">
   <div class="newswell-divider section divider"></div>
 </div>
+
+</div>
+
 
 
 
