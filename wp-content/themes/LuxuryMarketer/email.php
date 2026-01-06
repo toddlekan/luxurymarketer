@@ -28,9 +28,6 @@ if (have_posts()) :
 
 
 			<?php
-			// Ensure loop_start fires so email_addfilters() is called
-			do_action('loop_start');
-			
 			while (have_posts()) : the_post();
 
 			?>
@@ -78,7 +75,7 @@ if (have_posts()) :
 
 						<div class="entry-content">
 							<?php 
-							// Call email_form directly to display the form
+							// Call email_form directly with echo=false to get the output
 							if (function_exists('email_form')) {
 								echo email_form('', false, true, true, '');
 							} else {
