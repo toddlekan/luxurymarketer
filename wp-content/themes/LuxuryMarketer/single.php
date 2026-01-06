@@ -108,62 +108,70 @@ if (have_posts()) :
 					<div class="divider">&nbsp;</div>
 
 					<?php
-					$content = str_replace(chr(194) . chr(160), ' ', $content);
-					preg_match_all('#(By \<a )#', $content, $bylines);
-
-					if (count($bylines)) {
-						if (!count($bylines[0])) {
-					?>
-							<p class="byline-container">
-								By <a style="color:#777; font-size: 13px;" class="byline reverse" href="<?= ld16_get_author_url() ?>"><?= ld16_get_author_name() ?></a>
-
-							</p>
-					<?php
-						}
-					}
-
-					$paragraphAfter = 3; //shows the ad after paragraph 1
-					$lockAfter = ld16_is_locked() ? 3 : -1;
-
-
-					$content = explode("</p>", $content);
-					$hide_content = false;
-
-					?>
-
-					<div class="body <?= isset($locked) ? $locked : '' ?>" post-id="<?= $post->ID ?>" token="<?= ld16_get_token($post->ID) ?>">
-
-						<?php
-
-						for ($i = 0; $i < count($content); $i++) {
-							echo $content[$i] . "</p>";
-
-							if ($i == $lockAfter && ld16_is_locked()) {
+					// Check if this is an email page - if so, use the_content() so wp-email plugin can filter it
+					if (get_query_var('email') == 1) {
 						?>
-								<div class="row call-to-action" style="display:block;">
+						<div class="entry-content">
+							<?php the_content(); ?>
+						</div>
+						<?php
+					} else {
+						$content = str_replace(chr(194) . chr(160), ' ', $content);
+						preg_match_all('#(By \<a )#', $content, $bylines);
 
-									<div class="col-lg-12">
+						if (count($bylines)) {
+							if (!count($bylines[0])) {
+						?>
+								<p class="byline-container">
+									By <a style="color:#777; font-size: 13px;" class="byline reverse" href="<?= ld16_get_author_url() ?>"><?= ld16_get_author_name() ?></a>
 
-										<center>
-											This content is accessible only to subscribers of Luxury Marketer. We would love for you to become a subscriber and enjoy the many benefits soon after. <a href="https://www.cambeywest.com/subscribe2/?p=LXM&f=paid" target="_blank">Please click here to enroll as a subscriber of Luxury Marketer.</a> Already a subscriber? 
-											<a href="/log-in?redirect=<?= get_the_permalink() ?>" class="pop-login">Please log in.</a>
+								</p>
+						<?php
+							}
+						}
 
-										</center>
+						$paragraphAfter = 3; //shows the ad after paragraph 1
+						$lockAfter = ld16_is_locked() ? 3 : -1;
 
-									</div>
-								</div>
 
+						$content = explode("</p>", $content);
+						$hide_content = false;
+
+						?>
+
+						<div class="body <?= isset($locked) ? $locked : '' ?>" post-id="<?= $post->ID ?>" token="<?= ld16_get_token($post->ID) ?>">
 
 							<?php
-								break;
-							}
 
+							for ($i = 0; $i < count($content); $i++) {
+								echo $content[$i] . "</p>";
 
-							if ($i == $paragraphAfter) {
-
+								if ($i == $lockAfter && ld16_is_locked()) {
 							?>
+									<div class="row call-to-action" style="display:block;">
 
-								<!--p class="banner">
+										<div class="col-lg-12">
+
+											<center>
+												This content is accessible only to subscribers of Luxury Marketer. We would love for you to become a subscriber and enjoy the many benefits soon after. <a href="https://www.cambeywest.com/subscribe2/?p=LXM&f=paid" target="_blank">Please click here to enroll as a subscriber of Luxury Marketer.</a> Already a subscriber? 
+												<a href="/log-in?redirect=<?= get_the_permalink() ?>" class="pop-login">Please log in.</a>
+
+											</center>
+
+										</div>
+									</div>
+
+
+								<?php
+									break;
+								}
+
+
+								if ($i == $paragraphAfter) {
+
+								?>
+
+									<!--p class="banner">
 
                               <a href="https://pubads.g.doubleclick.net/gampad/jump?iu=/60923973/mid-article-micro-bar&sz=234x60&c=85099116&tile=1" target="_blank">
                               <img src="https://pubads.g.doubleclick.net/gampad/ad?iu=/60923973/mid-article-micro-bar&sz=234x60&c=85099116&tile=1" width="">
@@ -171,14 +179,17 @@ if (have_posts()) :
 
                       </p-->
 
-						<?php
+							<?php
 
+								}
 							}
-						}
 
-						?>
+							?>
 
-					</div>
+						</div>
+					<?php
+					}
+					?>
 
 					<div id="encrypted" style="display:none;">
 						<?php
