@@ -28,6 +28,13 @@ if (have_posts()) :
 
 
 			<?php
+			// Ensure the email filter is added before the loop starts
+			global $emailfilters_count;
+			$emailfilters_count = 0;
+			if (function_exists('email_addfilters')) {
+				email_addfilters();
+			}
+			
 			while (have_posts()) : the_post();
 
 			?>
@@ -74,7 +81,24 @@ if (have_posts()) :
 					<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 						<div class="entry-content">
-							<?php the_content(); ?>
+							<?php 
+							// Ensure filter is added before calling the_content
+							if (function_exists('email_addfilters')) {
+								print "EMAIL ADD FILTERS EXISTS";
+								global $emailfilters_count;
+								if (!isset($emailfilters_count)) {
+									$emailfilters_count = 0;
+								}
+								// Manually add the filter if not already added
+								if (!has_filter('the_content', 'email_form')) {
+									print "ADDING FILTER";
+									add_filter('the_content', 'email_form', 10, 5);
+								}
+							}
+							print "THE CONTENT";
+							the_content(); 
+							print "THE CONTENT END";
+							?>
 						</div>
 
 					</article>
