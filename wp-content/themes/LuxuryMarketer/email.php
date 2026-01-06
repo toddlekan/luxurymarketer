@@ -82,23 +82,13 @@ if (have_posts()) :
 
 						<div class="entry-content">
 							<?php 
-							// Ensure filter is added before calling the_content
-							if (function_exists('email_addfilters')) {
-								global $emailfilters_count;
-								if (!isset($emailfilters_count)) {
-									$emailfilters_count = 0;
-								}
-								// Manually add the filter if not already added
-								if (!has_filter('the_content', 'email_form')) {
-									add_filter('the_content', 'email_form', 10, 5);
-								}
-								// DEBUG: Check if filter is registered
-								$has_filter = has_filter('the_content', 'email_form');
-								error_log('EMAIL.PHP - has_filter check: ' . ($has_filter ? 'YES' : 'NO'));
+							// Call email_form directly to display the form
+							if (function_exists('email_form')) {
+								// Call with: content='', echo=true, subtitle=true, div=true, error_field=''
+								email_form('', true, true, true, '');
+							} else {
+								the_content();
 							}
-							$content_before = apply_filters('the_content', get_the_content());
-							error_log('EMAIL.PHP - content after filter: ' . (empty($content_before) ? 'EMPTY' : 'NOT EMPTY (' . strlen($content_before) . ' chars)'));
-							echo $content_before;
 							?>
 						</div>
 
