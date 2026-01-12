@@ -2639,37 +2639,7 @@ ul.no-bullet {
   display: block;
 }
 
-#newsletterlist .input_button input[type="submit"],
-#newsletter-form input[type="submit"] {
-  display: inline-block;
-  padding: 12px 30px;
-  font-family: "News Cycle", "Arial Narrow Bold", sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #fff;
-  background-color: #333;
-  border: 2px solid #333;
-  border-radius: 3px;
-  cursor: pointer;
-  -webkit-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-}
-
-#newsletterlist .input_button input[type="submit"]:hover,
-#newsletter-form input[type="submit"]:hover {
-  background-color: #000;
-  border-color: #000;
-}
-
-#newsletterlist .input_button input[type="submit"]:disabled,
-#newsletter-form input[type="submit"]:disabled {
-  background-color: #999;
-  border-color: #999;
-  cursor: not-allowed;
-}
+/* Newsletter form submit button - uses default input[type=submit] styling to match comment form */
 
 #newsletterlist hr {
   border: 0;
