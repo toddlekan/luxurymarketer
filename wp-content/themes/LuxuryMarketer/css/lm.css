@@ -416,6 +416,8 @@ body {
   outline: none;
 }
 
+.container.main{margin-top: 76px;}
+
 .container.main>iframe,
 .hide-iframe>iframe {
   position: absolute;
