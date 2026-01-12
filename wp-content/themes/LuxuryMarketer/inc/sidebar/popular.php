@@ -1,4 +1,4 @@
-<div class="heading">
+<div class="heading most-read">
 	MOST READ
 </div>
 

@@ -338,7 +338,7 @@ if (have_posts()) :
 
 				<div style="clear: both;"></br></div>
 
-				<div class="heading">
+				<div class="heading most-read">
 					MOST READ
 				</div>
 
