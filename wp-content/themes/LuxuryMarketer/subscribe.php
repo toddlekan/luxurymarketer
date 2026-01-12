@@ -4,17 +4,31 @@
  * Processes subscription form submissions and adds subscribers to Mailchimp via API
  */
 
+// Prevent caching
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+
+// Debug logging
+error_log('=== SUBSCRIBE.PHP STARTED ===');
+error_log('Request Method: ' . $_SERVER['REQUEST_METHOD']);
+error_log('POST data: ' . print_r($_POST, true));
+
 // Load WordPress FIRST - before any output or function calls
 if (!defined('ABSPATH')) {
     require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php');
 }
 
+error_log('WordPress loaded, home_url: ' . home_url());
+
 // Check if this is a POST request with form data
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_POST)) {
+    error_log('No POST data, redirecting to form');
     // No form data - redirect back to form
-    wp_safe_redirect(home_url('/subscription-form/'));
+    header('Location: ' . home_url('/subscription-form/'), true, 302);
     exit;
 }
+
+error_log('Processing form submission...');
 
 // Define functions only if not already defined
 if (!function_exists('lm_mailchimp_api_request')) {
@@ -93,9 +107,12 @@ if (!function_exists('lm_verify_recaptcha')) {
 $mailchimp_api_key = defined('MAILCHIMP_API_KEY') ? MAILCHIMP_API_KEY : (getenv('MAILCHIMP_API_KEY') ?: '');
 
 if (empty($mailchimp_api_key) || $mailchimp_api_key === 'YOUR_MAILCHIMP_API_KEY_HERE') {
-    wp_safe_redirect(home_url('/subscription-form/') . '?error=config');
+    error_log('Mailchimp API key not configured');
+    header('Location: ' . home_url('/subscription-form/') . '?error=config', true, 302);
     exit;
 }
+
+error_log('API key found, continuing...');
 
 // Extract data center from API key (format: xxxxxxxx-us12)
 $data_center = 'us12'; // Default
@@ -193,7 +210,9 @@ if (!empty($recaptcha_secret)) {
 if (!empty($errors)) {
     $error_params = implode(',', $errors);
     $redirect_url = home_url('/subscription-form/') . '?error=validation&fields=' . urlencode($error_params);
-    wp_redirect($redirect_url);
+    error_log('Validation errors: ' . $error_params);
+    error_log('Redirecting to: ' . $redirect_url);
+    header('Location: ' . $redirect_url, true, 302);
     exit;
 }
 
@@ -240,12 +259,19 @@ $subscriber_data = array(
     'merge_fields' => $merge_fields
 );
 
+// Log what we're about to send
+error_log('Sending to Mailchimp: ' . json_encode($subscriber_data));
+error_log('Endpoint: ' . $api_endpoint);
+error_log('Data center: ' . $data_center);
+
 // Try to add or update subscriber
 try {
     $response = lm_mailchimp_api_request($api_endpoint, 'POST', $mailchimp_api_key, $subscriber_data);
+    error_log('Mailchimp response: ' . print_r($response, true));
     
     if ($response['success']) {
-        wp_redirect(home_url('/subscription-form/') . '?step=thankyou');
+        error_log('Mailchimp API success!');
+        header('Location: ' . home_url('/subscription-form/') . '?step=thankyou', true, 302);
         exit;
     } else {
         $formatted_response = json_decode($response['body'], true);
@@ -266,15 +292,18 @@ try {
         }
         
         if ($is_duplicate) {
+            error_log('Subscriber exists, updating...');
             $subscriber_hash = lm_mailchimp_subscriber_hash($email);
             $update_url = "https://{$data_center}.api.mailchimp.com/3.0/lists/{$list_id}/members/{$subscriber_hash}";
             $update_response = lm_mailchimp_api_request($update_url, 'PATCH', $mailchimp_api_key, $subscriber_data);
             
             if ($update_response['success']) {
-                wp_redirect(home_url('/subscription-form/') . '?step=thankyou');
+                error_log('Update success!');
+                header('Location: ' . home_url('/subscription-form/') . '?step=thankyou', true, 302);
                 exit;
             } else {
-                wp_redirect(home_url('/subscription-form/') . '?error=update');
+                error_log('Update failed: ' . print_r($update_response, true));
+                header('Location: ' . home_url('/subscription-form/') . '?error=update', true, 302);
                 exit;
             }
         } else {
@@ -282,12 +311,13 @@ try {
             if ($formatted_response && isset($formatted_response['detail'])) {
                 $error_message = urlencode($formatted_response['detail']);
             }
-            wp_redirect(home_url('/subscription-form/') . '?error=api&msg=' . $error_message);
+            error_log('API error: ' . $error_message);
+            header('Location: ' . home_url('/subscription-form/') . '?error=api&msg=' . $error_message, true, 302);
             exit;
         }
     }
 } catch (Exception $e) {
     error_log('Mailchimp Exception: ' . $e->getMessage());
-    wp_redirect(home_url('/subscription-form/') . '?error=exception');
+    header('Location: ' . home_url('/subscription-form/') . '?error=exception', true, 302);
     exit;
 }
