@@ -1875,6 +1875,7 @@ a.img-container.main img {
 
 .above-fold-rail a.img-container.main img{
   max-width: 326px;
+  margin-right: 3px;
 } 
 .above-fold-center-top a.img-container.main img{
   max-width: initial;

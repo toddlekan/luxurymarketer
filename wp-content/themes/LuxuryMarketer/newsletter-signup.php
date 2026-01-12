@@ -143,7 +143,7 @@ Template Name: Newsletter Signup Template
 								$prefill_email = is_email($raw_email) ? sanitize_email($raw_email) : '';
 							}
 							?>
-							<form method="POST" action="<?php echo esc_url(home_url('/wp-content/themes/LuxuryMarketer/subscribe.php')); ?>" id="newsletter-form" class="comment-form">
+							<form method="POST" action="<?php echo esc_url(get_template_directory_uri() . '/subscribe.php'); ?>" id="newsletter-form" class="comment-form">
 
 								<p><input type="text" name="FNAME" id="first_name" value="<?php echo isset($_POST['FNAME']) ? esc_attr(stripslashes($_POST['FNAME'])) : ''; ?>" size="22" tabindex="1" class="form-control input-box placeholder" placeholder="FIRST NAME *"></p>
 								<br>

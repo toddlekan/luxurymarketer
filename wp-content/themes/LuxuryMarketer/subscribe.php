@@ -9,82 +9,84 @@ if (!defined('ABSPATH')) {
     require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php');
 }
 
-// Now we can safely use WordPress functions
-// Disable error display in production (errors go to log only)
-if (!WP_DEBUG) {
-    error_reporting(0);
-    ini_set('display_errors', 0);
+// Check if this is a POST request with form data
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_POST)) {
+    // No form data - redirect back to form
+    wp_safe_redirect(home_url('/subscription-form/'));
+    exit;
 }
 
-// Function to make Mailchimp API call using curl
-function lm_mailchimp_api_request($url, $method, $api_key, $data = null) {
-    $ch = curl_init();
-    
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json',
-        'Authorization: apikey ' . $api_key
-    ));
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    
-    if ($method === 'POST') {
+// Define functions only if not already defined
+if (!function_exists('lm_mailchimp_api_request')) {
+    function lm_mailchimp_api_request($url, $method, $api_key, $data = null) {
+        $ch = curl_init();
+        
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Authorization: apikey ' . $api_key
+        ));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        
+        if ($method === 'POST') {
+            curl_setopt($ch, CURLOPT_POST, true);
+            if ($data) {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            }
+        } elseif ($method === 'PATCH') {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+            if ($data) {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            }
+        }
+        
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch);
+        curl_close($ch);
+        
+        return array(
+            'success' => ($http_code >= 200 && $http_code < 300),
+            'http_code' => $http_code,
+            'body' => $response,
+            'error' => $curl_error
+        );
+    }
+}
+
+if (!function_exists('lm_mailchimp_subscriber_hash')) {
+    function lm_mailchimp_subscriber_hash($email) {
+        return md5(strtolower($email));
+    }
+}
+
+if (!function_exists('lm_verify_recaptcha')) {
+    function lm_verify_recaptcha($secret, $response, $remote_ip) {
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $data = array(
+            'secret' => $secret,
+            'response' => $response,
+            'remoteip' => $remote_ip
+        );
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, true);
-        if ($data) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        
+        if ($result === false) {
+            return false;
         }
-    } elseif ($method === 'PATCH') {
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-        if ($data) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        }
+        
+        $json = json_decode($result, true);
+        return isset($json['success']) && $json['success'] === true;
     }
-    
-    $response = curl_exec($ch);
-    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $curl_error = curl_error($ch);
-    curl_close($ch);
-    
-    return array(
-        'success' => ($http_code >= 200 && $http_code < 300),
-        'http_code' => $http_code,
-        'body' => $response,
-        'error' => $curl_error
-    );
-}
-
-// Function to generate subscriber hash (MD5 of lowercase email)
-function lm_mailchimp_subscriber_hash($email) {
-    return md5(strtolower($email));
-}
-
-// Function to verify reCAPTCHA using Google's API directly
-function lm_verify_recaptcha($secret, $response, $remote_ip) {
-    $url = 'https://www.google.com/recaptcha/api/siteverify';
-    $data = array(
-        'secret' => $secret,
-        'response' => $response,
-        'remoteip' => $remote_ip
-    );
-    
-    $options = array(
-        'http' => array(
-            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method' => 'POST',
-            'content' => http_build_query($data)
-        )
-    );
-    
-    $context = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
-    
-    if ($result === false) {
-        return false;
-    }
-    
-    $json = json_decode($result, true);
-    return isset($json['success']) && $json['success'] === true;
 }
 
 // Get Mailchimp API key from wp-config or environment variable
@@ -190,7 +192,8 @@ if (!empty($recaptcha_secret)) {
 // If there are validation errors, redirect back to form
 if (!empty($errors)) {
     $error_params = implode(',', $errors);
-    wp_safe_redirect(home_url('/subscription-form/') . '?error=validation&fields=' . urlencode($error_params));
+    $redirect_url = home_url('/subscription-form/') . '?error=validation&fields=' . urlencode($error_params);
+    wp_redirect($redirect_url);
     exit;
 }
 
@@ -242,7 +245,7 @@ try {
     $response = lm_mailchimp_api_request($api_endpoint, 'POST', $mailchimp_api_key, $subscriber_data);
     
     if ($response['success']) {
-        wp_safe_redirect(home_url('/subscription-form/') . '?step=thankyou');
+        wp_redirect(home_url('/subscription-form/') . '?step=thankyou');
         exit;
     } else {
         $formatted_response = json_decode($response['body'], true);
@@ -258,7 +261,7 @@ try {
                 strpos($error_title, 'Subscriber Exists') !== false ||
                 strpos($error_detail, 'already a list subscriber') !== false ||
                 strpos($error_detail, 'Subscriber Exists') !== false ||
-                ($http_code === 400 && strpos($error_title, 'Member Exists') !== false)
+                strpos($error_title, 'Member Exists') !== false
             );
         }
         
@@ -268,10 +271,10 @@ try {
             $update_response = lm_mailchimp_api_request($update_url, 'PATCH', $mailchimp_api_key, $subscriber_data);
             
             if ($update_response['success']) {
-                wp_safe_redirect(home_url('/subscription-form/') . '?step=thankyou');
+                wp_redirect(home_url('/subscription-form/') . '?step=thankyou');
                 exit;
             } else {
-                wp_safe_redirect(home_url('/subscription-form/') . '?error=update');
+                wp_redirect(home_url('/subscription-form/') . '?error=update');
                 exit;
             }
         } else {
@@ -279,13 +282,12 @@ try {
             if ($formatted_response && isset($formatted_response['detail'])) {
                 $error_message = urlencode($formatted_response['detail']);
             }
-            wp_safe_redirect(home_url('/subscription-form/') . '?error=api&msg=' . $error_message);
+            wp_redirect(home_url('/subscription-form/') . '?error=api&msg=' . $error_message);
             exit;
         }
     }
 } catch (Exception $e) {
     error_log('Mailchimp Exception: ' . $e->getMessage());
-    wp_safe_redirect(home_url('/subscription-form/') . '?error=exception');
+    wp_redirect(home_url('/subscription-form/') . '?error=exception');
     exit;
 }
-
