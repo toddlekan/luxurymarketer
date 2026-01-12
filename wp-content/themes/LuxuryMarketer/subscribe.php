@@ -17,8 +17,9 @@ if (!defined('ABSPATH')) {
 // Include reCAPTCHA library for validation
 $recaptcha_options = get_option('recaptcha_options', array());
 $recaptcha_secret = isset($recaptcha_options['secret']) ? $recaptcha_options['secret'] : '';
-if (!empty($recaptcha_secret)) {
-    require_once(dirname(dirname(__FILE__)) . '/plugins/wp-recaptcha/recaptchalib.php');
+$recaptcha_lib_path = dirname(dirname(dirname(__FILE__))) . '/plugins/wp-recaptcha/recaptchalib.php';
+if (!empty($recaptcha_secret) && file_exists($recaptcha_lib_path)) {
+    require_once($recaptcha_lib_path);
 }
 
 // Get Mailchimp API key from wp-config or environment variable
