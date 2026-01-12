@@ -402,9 +402,9 @@ if (have_posts()) {
 						$category_arr = array(
 							'art-and-auctions', 'cars-jets-and-yachts', 'china', 'education', 'entertainment', 
 							'fashion-and-leather-goods', 'health-and-wellness', 'legal-and-regulation', 'marketing', 
-							'media-and-publishing', 'outlook', 'perfumes-and-cosmetics', 'philanthropy', 'profiles',
-							'real-estate-and-design', 'research', 'retail', 'sports', 'sustainability', 'tech-ai-and-automation', 
-							'travel-and-hospitality', 'watches-and-jewelry', 'wealth-management', 'wines-and-spirits');
+							'media-and-publishing', 'outlook', 'perfumes-and-cosmetics', 'philanthropy-foundations-and-nonprofits', 'profiles',
+							'real-estate', 'research', 'retail', 'sports', 'environment-and-sustainability', 'ai-and-automation', 
+							'travel-and-hospitality', 'watches-and-jewelry', 'wealth-management', 'food-fine-dining-wines-and-spirits');
 
 						// Limit to 6 rows × 4 columns = 24 categories
 						$category_arr = array_slice($category_arr, 0, 24);
