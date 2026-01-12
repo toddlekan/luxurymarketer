@@ -154,8 +154,8 @@ if (empty($category)) {
     $errors[] = 'category';
 }
 
-// Validate reCAPTCHA if configured
-if (!empty($recaptcha_secret)) {
+// Validate reCAPTCHA if configured and library is available
+if (!empty($recaptcha_secret) && class_exists('ReCaptcha')) {
     if (empty($_POST['g-recaptcha-response'])) {
         $errors[] = 'captcha';
     } else {

@@ -5,6 +5,18 @@ $(document).ready(function () {
   /*INIT*/
   checkLogin();
 
+  /*AUTO-POPULATE EMAIL FROM URL*/
+  (function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var emailFromUrl = urlParams.get('email');
+    if (emailFromUrl) {
+      // Populate all email input fields on the page
+      $('input[name="EMAIL"], input[name="email"], input#EMAIL, input#email, input#mce-EMAIL').val(emailFromUrl);
+      // Also populate confirmation email field
+      $('input[name="email2"], input#email2').val(emailFromUrl);
+    }
+  })();
+
   /*RESPONSIVE*/
   if (!$("body").hasClass("pdf")) {
     responsiveImages();
@@ -575,7 +587,7 @@ $(document).ready(function () {
     var val = $(this).closest(".clr").find(".form-control").val();
 
     //location.href="/newsletter?email=" + encodeURI(val);
-    location.href = "/subscription-form-2?f=newsletter&email=" + encodeURI(val);
+    location.href = "/subscription-form/?error=validation&fields=captcha&email=" + encodeURIComponent(val);
   });
 
   $(".subscribe .form-control").keypress(function (e) {
@@ -587,8 +599,7 @@ $(document).ready(function () {
       var val = $(this).val();
 
       //location.href="/subscribe?email=" + encodeURI(val);
-      location.href =
-        "/subscription-form-2/?f=newsletter&email=" + encodeURI(val);
+      location.href = "/subscription-form/?error=validation&fields=captcha&email=" + encodeURIComponent(val);
     }
   });
 
