@@ -50,7 +50,6 @@ if (have_posts()) {
 
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="newswell-divider section divider"></div>
 					<div class="newswell">
 
 						<div class="mobile-only">
