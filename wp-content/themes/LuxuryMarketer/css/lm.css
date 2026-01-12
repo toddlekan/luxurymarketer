@@ -717,6 +717,7 @@ h3,
 
 .container-fluid.main {
   position: relative;
+  margin-top: 59px;
 }
 
 .container-fluid.main .overlay {
