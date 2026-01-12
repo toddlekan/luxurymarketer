@@ -143,50 +143,22 @@ Template Name: Newsletter Signup Template
 								$prefill_email = is_email($raw_email) ? sanitize_email($raw_email) : '';
 							}
 							?>
-							<form method="POST" action="<?php echo esc_url(home_url('/wp-content/themes/LuxuryMarketer/subscribe.php')); ?>" id="newsletter-form">
+							<form method="POST" action="<?php echo esc_url(home_url('/wp-content/themes/LuxuryMarketer/subscribe.php')); ?>" id="newsletter-form" class="comment-form">
 
-
-								<table cellspacing=3>
-									<tr>
-										<td width=130> <label for="first_name">First name<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='FNAME' id='first_name' class='form_element' style='' value='<?php echo isset($_POST['FNAME']) ? htmlspecialchars(stripslashes($_POST['FNAME']), ENT_QUOTES) : ''; ?>' /></span> </td>
-									</tr>
-
-
-									<tr>
-										<td width=130> <label for="last_name">Last name<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='LNAME' id='last_name' class='form_element' style='' value='<?php echo isset($_POST['LNAME']) ? htmlspecialchars(stripslashes($_POST['LNAME']), ENT_QUOTES) : ''; ?>' /></span> </td>
-									</tr>
-
-
-									<tr>
-										<td width=130> <label for="email">Email address<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='EMAIL' id='email' class='form_element' style='' value='<?php echo !empty($prefill_email) ? htmlspecialchars($prefill_email, ENT_QUOTES) : (isset($_POST['EMAIL']) ? htmlspecialchars(wp_unslash($_POST['EMAIL']), ENT_QUOTES) : ''); ?>' /></span> </td>
-									</tr>
-									
-									<!-- Email2 field for email confirmation - user must enter manually -->
-									<tr>
-										<td width=130> <label for="email2">Confirm Email<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='email2' id='email2' class='form_element' style='' value='<?php echo isset($_POST['email2']) ? htmlspecialchars(wp_unslash($_POST['email2']), ENT_QUOTES) : ''; ?>' /></span> </td>
-									</tr>
-
-
-									<tr>
-										<td width=130> <label for="title">Title<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='TITLE' id='title' class='form_element' style='' value='' /></span> </td>
-									</tr>
-
-
-									<tr>
-										<td width=130> <label for="company">Company<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class="input_left"><input type='textbox' name='COMPANY' id='company' class='form_element' style='' value='' /></span> </td>
-									</tr>
-
-
-									<tr>
-										<td width=130> <label for="country_id">Country<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class="input_left"><select name='COUNTRY' class='form_element' id='country_id'>
-													<option value=''>Please select</option>
+								<p><input type="text" name="FNAME" id="first_name" value="<?php echo isset($_POST['FNAME']) ? esc_attr(stripslashes($_POST['FNAME'])) : ''; ?>" size="22" tabindex="1" class="form-control input-box placeholder" placeholder="FIRST NAME *"></p>
+								<br>
+								<p><input type="text" name="LNAME" id="last_name" value="<?php echo isset($_POST['LNAME']) ? esc_attr(stripslashes($_POST['LNAME'])) : ''; ?>" size="22" tabindex="2" class="form-control input-box placeholder" placeholder="LAST NAME *"></p>
+								<br>
+								<p><input type="text" name="EMAIL" id="email" value="<?php echo !empty($prefill_email) ? esc_attr($prefill_email) : (isset($_POST['EMAIL']) ? esc_attr(wp_unslash($_POST['EMAIL'])) : ''); ?>" size="22" tabindex="3" class="form-control input-box placeholder" placeholder="EMAIL ADDRESS *"></p>
+								<br>
+								<p><input type="text" name="email2" id="email2" value="<?php echo isset($_POST['email2']) ? esc_attr(wp_unslash($_POST['email2'])) : ''; ?>" size="22" tabindex="4" class="form-control input-box placeholder" placeholder="CONFIRM EMAIL *"></p>
+								<br>
+								<p><input type="text" name="TITLE" id="title" value="<?php echo isset($_POST['TITLE']) ? esc_attr(stripslashes($_POST['TITLE'])) : ''; ?>" size="22" tabindex="5" class="form-control input-box placeholder" placeholder="TITLE *"></p>
+								<br>
+								<p><input type="text" name="COMPANY" id="company" value="<?php echo isset($_POST['COMPANY']) ? esc_attr(stripslashes($_POST['COMPANY'])) : ''; ?>" size="22" tabindex="6" class="form-control input-box placeholder" placeholder="COMPANY *"></p>
+								<br>
+								<p><select name="COUNTRY" id="country_id" tabindex="7" class="form-control input-box">
+													<option value=''>COUNTRY *</option>
 													<option value='Afghanistan'> Afghanistan </option>
 													<option value='Albania'> Albania </option>
 													<option value='Algeria'> Algeria </option>
@@ -436,15 +408,11 @@ Template Name: Newsletter Signup Template
 													<option value=' Yugoslavia'> Yugoslavia </option>
 													<option value=' Zaire'> Zaire </option>
 													<option value=' Zambia'> Zambia </option>
-													<option value=' Zimbabwe'> Zimbabwe </option>
-												</select></span> </td>
-									</tr>
-
-
-									<tr>
-										<td width=130> <label for="job_industry_id">Industry<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class="input_left"><select name='CATEGORY' class='form_element' id='job_industry_id'>
-													<option value=''>Please select</option>
+														<option value=' Zimbabwe'> Zimbabwe </option>
+								</select></p>
+								<br>
+								<p><select name="CATEGORY" id="job_industry_id" tabindex="8" class="form-control input-box">
+													<option value=''>INDUSTRY *</option>
 													<option value='Ad networks'>Ad networks</option>
 													<option value='Advertising'>Advertising</option>
 													<option value='Advertising agencies'>Advertising agencies</option>
@@ -489,156 +457,34 @@ Template Name: Newsletter Signup Template
 													<option value='Television'>Television</option>
 													<option value='Travel'>Travel</option>
 													<option value='Video'>Video</option>
-													<option value='Other'>Other</option>
-												</select></span> </td>
-									</tr>
-
-
-									<tr>
-										<td width=130> <label for="city">City<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='CITY' id='city' class='form_element' style='' value='<?php echo isset($_POST['CITY']) ? htmlspecialchars(stripslashes($_POST['CITY']), ENT_QUOTES) : ''; ?>' /></span> </td>
-									</tr>
-									
-									<tr>
-										<td width=130> <label for="state">State<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='STATE' id='state' class='form_element' style='' value='<?php echo isset($_POST['STATE']) ? htmlspecialchars(stripslashes($_POST['STATE']), ENT_QUOTES) : ''; ?>' /></span> </td>
-									</tr>
-									
-									<tr>
-										<td width=130> <label for="postal_code">ZIP/post code<span class='requiredLabelRight'>*</span></label> </td>
-										<td> <span class='input_left'><input type='textbox' name='ZIPCODE' id='postal_code' class='form_element' style='' value='<?php echo isset($_POST['ZIPCODE']) ? htmlspecialchars(stripslashes($_POST['ZIPCODE']), ENT_QUOTES) : ''; ?>' /></span> </td>
-
-									</tr>
-
-
-									<tr>
-										<td width=130> </td>
-
-										<td>
-
-
-
-
-
-										</td>
-									</tr>
-
-
-									</fieldset>
-								</table>
-
-								<hr><br />
+														<option value='Other'>Other</option>
+								</select></p>
+								<br>
+								<p><input type="text" name="CITY" id="city" value="<?php echo isset($_POST['CITY']) ? esc_attr(stripslashes($_POST['CITY'])) : ''; ?>" size="22" tabindex="9" class="form-control input-box placeholder" placeholder="CITY *"></p>
+								<br>
+								<p><input type="text" name="STATE" id="state" value="<?php echo isset($_POST['STATE']) ? esc_attr(stripslashes($_POST['STATE'])) : ''; ?>" size="22" tabindex="10" class="form-control input-box placeholder" placeholder="STATE *"></p>
+								<br>
+								<p><input type="text" name="ZIPCODE" id="postal_code" value="<?php echo isset($_POST['ZIPCODE']) ? esc_attr(stripslashes($_POST['ZIPCODE'])) : ''; ?>" size="22" tabindex="11" class="form-control input-box placeholder" placeholder="ZIP/POST CODE *"></p>
+								<br>
 								
 								<?php 
 								// Display reCAPTCHA if configured
 								$recaptcha_options = get_option('recaptcha_options', array());
 								$recaptcha_site_key = isset($recaptcha_options['site_key']) ? $recaptcha_options['site_key'] : '';
-								$recaptcha_theme = isset($recaptcha_options['comments_theme']) ? $recaptcha_options['comments_theme'] : 'light';
+								$recaptcha_theme = isset($recaptcha_options['comments_theme']) ? $recaptcha_options['comments_theme'] : 'standard';
 								$recaptcha_language = isset($recaptcha_options['recaptcha_language']) ? $recaptcha_options['recaptcha_language'] : 'en';
 								
 								if (!empty($recaptcha_site_key)) {
-									echo '<div style="margin: 15px 0;">';
 									echo '<div class="g-recaptcha" data-sitekey="' . esc_attr($recaptcha_site_key) . '" data-theme="' . esc_attr($recaptcha_theme) . '"></div>';
 									echo '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=' . esc_attr($recaptcha_language) . '"></script>';
-									echo '</div>';
 								}
 								?>
-								
-								<span class='input_button'><input name="Submit" value="Subscribe" border="0" name="imageField" width="78" height="29" type="submit"></span>
+								<div id="recaptcha-submit-btn-area">
+									<input name="submit" type="submit" id="submit" tabindex="12" value="Subscribe">
+									<span id="comment-status"></span>
+								</div>
 							</form>
 							
-							<script type="text/javascript">
-							jQuery(document).ready(function($) {
-								$('#newsletter-form').on('submit', function(e) {
-									e.preventDefault();
-									
-									var form = $(this);
-									var formContainer = $('#newsletterlist');
-									var submitButton = form.find('input[type="submit"]');
-									var originalButtonValue = submitButton.val();
-									
-									// Validate reCAPTCHA
-									var recaptchaResponse = form.find('[name="g-recaptcha-response"]').val();
-									if (!recaptchaResponse || recaptchaResponse === '') {
-										var errorHtml = '<div style="color:#d32f2f; background-color:#ffebee; margin-bottom:15px; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px;">';
-										errorHtml += '<strong>Error:</strong> Please complete the reCAPTCHA verification.';
-										errorHtml += '</div>';
-										formContainer.prepend(errorHtml);
-										return false;
-									}
-									
-									// Disable submit button and show loading state
-									submitButton.prop('disabled', true).val('Subscribing...');
-									
-									// Remove any existing error/success messages
-									formContainer.find('div[style*="background-color:#ffebee"], div[style*="background-color:#e8f5e9"]').remove();
-									
-									// Serialize form data and add AJAX flag
-									var formData = form.serialize() + '&ajax=1';
-									
-									// Submit via AJAX
-									$.ajax({
-										url: form.attr('action'),
-										type: 'POST',
-										data: formData,
-										dataType: 'json',
-										beforeSend: function(xhr) {
-											xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-										},
-										success: function(response) {
-											if (response && response.success) {
-												// Success - replace form with success message
-												var successHtml = '<div style="color:#2e7d32; background-color:#e8f5e9; padding:30px; border:2px solid #4caf50; border-radius:4px; text-align:center;">';
-												successHtml += '<h2 style="color:#2e7d32; margin-top:0;">Success!</h2>';
-												successHtml += '<p style="font-size:16px; margin-bottom:0;">' + (response.message || 'Thank you! Your subscription has been confirmed.') + '</p>';
-												successHtml += '</div>';
-												formContainer.html(successHtml);
-											} else {
-												// Error - show error message above form
-												var errorMessage = response && response.message ? response.message : 'There was an error submitting your subscription. Please try again.';
-												var errorHtml = '<div style="color:#d32f2f; background-color:#ffebee; margin-bottom:15px; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px;">';
-												errorHtml += '<strong>Error:</strong> ' + errorMessage;
-												errorHtml += '</div>';
-												formContainer.prepend(errorHtml);
-												
-												// Re-enable submit button
-												submitButton.prop('disabled', false).val(originalButtonValue);
-												
-												// Reset reCAPTCHA if it exists
-												if (typeof grecaptcha !== 'undefined') {
-													grecaptcha.reset();
-												}
-											}
-										},
-										error: function(xhr, status, error) {
-											// Try to parse JSON error response
-											var errorMessage = 'There was an error submitting your subscription. Please try again.';
-											try {
-												var errorResponse = JSON.parse(xhr.responseText);
-												if (errorResponse && errorResponse.message) {
-													errorMessage = errorResponse.message;
-												}
-											} catch (e) {
-												// Not JSON, use default message
-											}
-											
-											var errorHtml = '<div style="color:#d32f2f; background-color:#ffebee; margin-bottom:15px; padding:15px; border:2px solid #f44336; border-radius:4px; font-weight:bold; font-size:14px;">';
-											errorHtml += '<strong>Error:</strong> ' + errorMessage;
-											errorHtml += '</div>';
-											formContainer.prepend(errorHtml);
-											
-											// Re-enable submit button
-											submitButton.prop('disabled', false).val(originalButtonValue);
-											
-											// Reset reCAPTCHA if it exists
-											if (typeof grecaptcha !== 'undefined') {
-												grecaptcha.reset();
-											}
-										}
-									});
-								});
-							});
-							</script>
 						</div>
 
 

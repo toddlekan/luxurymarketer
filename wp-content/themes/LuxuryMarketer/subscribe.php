@@ -4,53 +4,20 @@
  * Processes subscription form submissions and adds subscribers to Mailchimp via API
  */
 
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
-// Load WordPress if not already loaded
+// Load WordPress FIRST - before any output or function calls
 if (!defined('ABSPATH')) {
     require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php');
 }
 
-// Include reCAPTCHA library for validation
-$recaptcha_options = get_option('recaptcha_options', array());
-$recaptcha_secret = isset($recaptcha_options['secret']) ? $recaptcha_options['secret'] : '';
-$recaptcha_lib_path = dirname(dirname(dirname(__FILE__))) . '/plugins/wp-recaptcha/recaptchalib.php';
-if (!empty($recaptcha_secret) && file_exists($recaptcha_lib_path)) {
-    require_once($recaptcha_lib_path);
+// Now we can safely use WordPress functions
+// Disable error display in production (errors go to log only)
+if (!WP_DEBUG) {
+    error_reporting(0);
+    ini_set('display_errors', 0);
 }
-
-// Get Mailchimp API key from wp-config or environment variable
-$mailchimp_api_key = defined('MAILCHIMP_API_KEY') ? MAILCHIMP_API_KEY : (getenv('MAILCHIMP_API_KEY') ?: '');
-
-// Log API key status for debugging (first 10 chars only for security)
-$api_key_status = empty($mailchimp_api_key) ? 'NOT SET' : substr($mailchimp_api_key, 0, 10) . '...';
-error_log('Mailchimp API Key Check: ' . $api_key_status);
-echo "<!-- Mailchimp API Key Check: " . htmlspecialchars($api_key_status) . " -->\n";
-
-if (empty($mailchimp_api_key) || $mailchimp_api_key === 'YOUR_MAILCHIMP_API_KEY_HERE') {
-    // Redirect with error if API key is not configured
-    $error_msg = 'Mailchimp API Key not configured properly';
-    error_log($error_msg);
-    echo "<!-- ERROR: " . htmlspecialchars($error_msg) . " -->\n";
-    header("Location: " . home_url('/subscription-form/') . "?error=config");
-    exit;
-}
-
-// Extract data center from API key (format: xxxxxxxx-us12)
-$data_center = 'us12'; // Default
-if (strpos($mailchimp_api_key, '-') !== false) {
-    list(, $data_center) = explode('-', $mailchimp_api_key, 2);
-}
-
-// Mailchimp list ID and API endpoint
-$list_id = '066a49a9fa';
-$api_endpoint = "https://{$data_center}.api.mailchimp.com/3.0/lists/{$list_id}/members";
 
 // Function to make Mailchimp API call using curl
-function mailchimp_api_request($url, $method, $api_key, $data = null) {
+function lm_mailchimp_api_request($url, $method, $api_key, $data = null) {
     $ch = curl_init();
     
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -88,9 +55,55 @@ function mailchimp_api_request($url, $method, $api_key, $data = null) {
 }
 
 // Function to generate subscriber hash (MD5 of lowercase email)
-function mailchimp_subscriber_hash($email) {
+function lm_mailchimp_subscriber_hash($email) {
     return md5(strtolower($email));
 }
+
+// Function to verify reCAPTCHA using Google's API directly
+function lm_verify_recaptcha($secret, $response, $remote_ip) {
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = array(
+        'secret' => $secret,
+        'response' => $response,
+        'remoteip' => $remote_ip
+    );
+    
+    $options = array(
+        'http' => array(
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'POST',
+            'content' => http_build_query($data)
+        )
+    );
+    
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    
+    if ($result === false) {
+        return false;
+    }
+    
+    $json = json_decode($result, true);
+    return isset($json['success']) && $json['success'] === true;
+}
+
+// Get Mailchimp API key from wp-config or environment variable
+$mailchimp_api_key = defined('MAILCHIMP_API_KEY') ? MAILCHIMP_API_KEY : (getenv('MAILCHIMP_API_KEY') ?: '');
+
+if (empty($mailchimp_api_key) || $mailchimp_api_key === 'YOUR_MAILCHIMP_API_KEY_HERE') {
+    wp_safe_redirect(home_url('/subscription-form/') . '?error=config');
+    exit;
+}
+
+// Extract data center from API key (format: xxxxxxxx-us12)
+$data_center = 'us12'; // Default
+if (strpos($mailchimp_api_key, '-') !== false) {
+    list(, $data_center) = explode('-', $mailchimp_api_key, 2);
+}
+
+// Mailchimp list ID and API endpoint
+$list_id = '066a49a9fa';
+$api_endpoint = "https://{$data_center}.api.mailchimp.com/3.0/lists/{$list_id}/members";
 
 // Sanitize and validate form data
 $email = isset($_POST['EMAIL']) ? sanitize_email($_POST['EMAIL']) : '';
@@ -154,18 +167,21 @@ if (empty($category)) {
     $errors[] = 'category';
 }
 
-// Validate reCAPTCHA if configured and library is available
-if (!empty($recaptcha_secret) && class_exists('ReCaptcha')) {
+// Validate reCAPTCHA
+$recaptcha_options = get_option('recaptcha_options', array());
+$recaptcha_secret = isset($recaptcha_options['secret']) ? $recaptcha_options['secret'] : '';
+
+if (!empty($recaptcha_secret)) {
     if (empty($_POST['g-recaptcha-response'])) {
         $errors[] = 'captcha';
     } else {
-        $recaptcha = new ReCaptcha($recaptcha_secret);
-        $recaptcha_response = $recaptcha->verifyResponse(
-            $_SERVER['REMOTE_ADDR'],
-            $_POST['g-recaptcha-response']
+        $captcha_valid = lm_verify_recaptcha(
+            $recaptcha_secret,
+            $_POST['g-recaptcha-response'],
+            $_SERVER['REMOTE_ADDR']
         );
         
-        if (!$recaptcha_response->success) {
+        if (!$captcha_valid) {
             $errors[] = 'captcha';
         }
     }
@@ -174,10 +190,7 @@ if (!empty($recaptcha_secret) && class_exists('ReCaptcha')) {
 // If there are validation errors, redirect back to form
 if (!empty($errors)) {
     $error_params = implode(',', $errors);
-    $validation_error = 'Validation errors: ' . $error_params;
-    error_log($validation_error);
-    echo "<!-- VALIDATION ERROR: " . htmlspecialchars($validation_error) . " -->\n";
-    header("Location: " . home_url('/subscription-form/') . "?error=validation&fields=" . urlencode($error_params));
+    wp_safe_redirect(home_url('/subscription-form/') . '?error=validation&fields=' . urlencode($error_params));
     exit;
 }
 
@@ -187,15 +200,11 @@ if ($category === 'Other' && !empty($category_other)) {
 }
 
 // Prepare merge fields for Mailchimp
-// Note: You may need to adjust these merge field tags to match your Mailchimp list
 $merge_fields = array(
     'FNAME' => $first_name,
     'LNAME' => $last_name,
 );
 
-// Add optional merge fields if they exist in your Mailchimp list
-// Common merge field tags: TITLE, COMPANY, CITY, STATE, ZIPCODE, COUNTRY, PHONE, CATEGORY
-// You'll need to check your Mailchimp list settings to see the exact merge field tags
 if (!empty($title)) {
     $merge_fields['TITLE'] = $title;
 }
@@ -230,21 +239,16 @@ $subscriber_data = array(
 
 // Try to add or update subscriber
 try {
-    // First, try to add the subscriber
-    $response = mailchimp_api_request($api_endpoint, 'POST', $mailchimp_api_key, $subscriber_data);
+    $response = lm_mailchimp_api_request($api_endpoint, 'POST', $mailchimp_api_key, $subscriber_data);
     
-    // Check if the request was successful
     if ($response['success']) {
-        // Success - redirect to confirmation page
-        header("Location: " . home_url('/subscription-form/') . "?step=thankyou");
+        wp_safe_redirect(home_url('/subscription-form/') . '?step=thankyou');
         exit;
     } else {
-        // Get error details
         $formatted_response = json_decode($response['body'], true);
         $http_code = $response['http_code'];
-        $curl_error = $response['error'];
         
-        // Check if subscriber already exists (error code 400 with specific message)
+        // Check if subscriber already exists
         $is_duplicate = false;
         if ($formatted_response) {
             $error_title = isset($formatted_response['title']) ? $formatted_response['title'] : '';
@@ -254,79 +258,34 @@ try {
                 strpos($error_title, 'Subscriber Exists') !== false ||
                 strpos($error_detail, 'already a list subscriber') !== false ||
                 strpos($error_detail, 'Subscriber Exists') !== false ||
-                ($http_code === 400 && isset($formatted_response['title']) && 
-                 (strpos($formatted_response['title'], 'Subscriber Exists') !== false))
+                ($http_code === 400 && strpos($error_title, 'Member Exists') !== false)
             );
         }
         
-        // If subscriber already exists, try to update them
         if ($is_duplicate) {
-            // Get subscriber hash
-            $subscriber_hash = mailchimp_subscriber_hash($email);
-            
-            // Update existing subscriber
+            $subscriber_hash = lm_mailchimp_subscriber_hash($email);
             $update_url = "https://{$data_center}.api.mailchimp.com/3.0/lists/{$list_id}/members/{$subscriber_hash}";
-            $update_response = mailchimp_api_request($update_url, 'PATCH', $mailchimp_api_key, $subscriber_data);
+            $update_response = lm_mailchimp_api_request($update_url, 'PATCH', $mailchimp_api_key, $subscriber_data);
             
             if ($update_response['success']) {
-                // Success - redirect to confirmation page
-                header("Location: " . home_url('/subscription-form/') . "?step=thankyou");
+                wp_safe_redirect(home_url('/subscription-form/') . '?step=thankyou');
                 exit;
             } else {
-                // Log error and redirect
-                $update_error_response = json_decode($update_response['body'], true);
-                $update_error_msg = 'Mailchimp Update Error: ' . print_r($update_error_response, true);
-                $update_http_code = 'HTTP Code: ' . $update_response['http_code'];
-                error_log($update_error_msg);
-                error_log($update_http_code);
-                echo "<!-- UPDATE ERROR: " . htmlspecialchars($update_error_msg) . " -->\n";
-                echo "<!-- " . htmlspecialchars($update_http_code) . " -->\n";
-                header("Location: " . home_url('/subscription-form/') . "?error=update");
+                wp_safe_redirect(home_url('/subscription-form/') . '?error=update');
                 exit;
             }
         } else {
-            // Other error occurred - log detailed error information
-            $api_error_details = array(
-                'HTTP Code' => $http_code,
-                'Formatted Response' => $formatted_response,
-                'cURL Error' => $curl_error,
-                'API Key (first 10 chars)' => substr($mailchimp_api_key, 0, 10) . '...',
-                'List ID' => $list_id,
-                'Subscriber Data' => $subscriber_data
-            );
-            
-            error_log('Mailchimp API Error Details:');
-            foreach ($api_error_details as $key => $value) {
-                error_log($key . ': ' . print_r($value, true));
-                echo "<!-- API ERROR - " . htmlspecialchars($key) . ": " . htmlspecialchars(print_r($value, true)) . " -->\n";
-            }
-            
-            // Extract error message from formatted response
             $error_message = 'api_error';
-            if ($formatted_response) {
-                if (isset($formatted_response['detail'])) {
-                    $error_message = urlencode($formatted_response['detail']);
-                } elseif (isset($formatted_response['title'])) {
-                    $error_message = urlencode($formatted_response['title']);
-                }
+            if ($formatted_response && isset($formatted_response['detail'])) {
+                $error_message = urlencode($formatted_response['detail']);
             }
-            if ($error_message === 'api_error' && !empty($curl_error)) {
-                $error_message = urlencode($curl_error);
-            }
-            
-            header("Location: " . home_url('/subscription-form/') . "?error=api&msg=" . $error_message);
+            wp_safe_redirect(home_url('/subscription-form/') . '?error=api&msg=' . $error_message);
             exit;
         }
     }
 } catch (Exception $e) {
-    // Log exception and redirect
-    $exception_msg = 'Mailchimp Exception: ' . $e->getMessage();
-    $exception_trace = $e->getTraceAsString();
-    error_log($exception_msg);
-    error_log('Exception Trace: ' . $exception_trace);
-    echo "<!-- EXCEPTION: " . htmlspecialchars($exception_msg) . " -->\n";
-    echo "<!-- EXCEPTION TRACE: " . htmlspecialchars($exception_trace) . " -->\n";
-    header("Location: " . home_url('/subscription-form/') . "?error=exception");
+    error_log('Mailchimp Exception: ' . $e->getMessage());
+    wp_safe_redirect(home_url('/subscription-form/') . '?error=exception');
     exit;
 }
-?>
+
