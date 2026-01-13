@@ -2443,7 +2443,8 @@ footer .search {
   }
 
   footer input.form-control, footer input.form-control:focus {
-    width: 231px;
+    width: 203px;
+    margin-left: 19px;
   }
 
   .container-fluid .main .divider{
@@ -2456,6 +2457,7 @@ footer .search {
 
   footer .search .clr, footer .subscribe .clr {
     display: initial;
+    margin-left: -5px;
   }
 
 }
