@@ -2443,7 +2443,7 @@ footer .search {
   }
 
   footer input.form-control, footer input.form-control:focus {
-    width: 230px;
+    width: 275px;
     margin-left: 29px;
   }
 
@@ -2457,6 +2457,10 @@ footer .search {
 
   footer .search .clr, footer .subscribe .clr {
     display: initial;
+  }
+
+  .subscribe .heading {
+    padding-left: 14px;
   }
 
   footer .search .clr .heading{
@@ -2473,7 +2477,7 @@ footer .search {
   }
 
   .footer-subscribe{
-    margin-top: 5px;
+    margin-top: -2px;
   }
 
   footer .search .heading {
