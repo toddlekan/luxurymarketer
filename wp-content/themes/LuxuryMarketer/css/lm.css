@@ -2444,7 +2444,7 @@ footer .search {
 
   footer input.form-control, footer input.form-control:focus {
     width: 230px;
-    margin-left: 19px;
+    margin-left: 29px;
   }
 
   .container-fluid .main .divider{
@@ -2457,6 +2457,10 @@ footer .search {
 
   footer .search .clr, footer .subscribe .clr {
     display: initial;
+  }
+
+  footer .search .clr .heading{
+    padding-left: 15px;
   }
 
   footer .search .clr .heading{
@@ -2476,8 +2480,16 @@ footer .search {
     padding-left: 15px;
   }
 
+  footer .search li {
+    margin-left: 1px;
+  }
+
   .footer-magnify {
     margin-top: 5px;
+  }
+
+  .mobile{
+    margin-top: 11px;
   }
 
 }
