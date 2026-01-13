@@ -183,7 +183,7 @@ if (have_posts()) {
 					<div class="ad large rectangle ad-1">
 			
 						<div id='large-rectangle-1-home' style='height:280px; width:336px;'>
-			BANNERS!
+
 						<?php $banners = get_banner_posts();
 
 						if ($banners && count($banners) > 0) {
@@ -213,9 +213,19 @@ if (have_posts()) {
 					<div class="ad large rectangle ad-2">
 			
 						<div id='large-rectangle-1-home' style='height:280px; width:336px;'>
-						<a href="https://americanmarketer.com/subscription-form/" target="_blank" alt="American Marketer 336x280 large rectangle banner">
-							<img src="https://americanmarketer.com/wp-content/uploads/2024/03/American-Marketer-336x280-large-rectangle-banner.png" width="">
-						</a>
+		
+						
+						<?php $banners = get_banner_posts();
+
+						if ($banners && count($banners) > 1) {
+						?>
+							<a href="<?= get_field('hyperlink', $banners[1]->ID) ?: "#" ?>" target="_blank" alt="<?= $banners[1]->post_title ?: "" ?>">
+								<img src=<?= $banners[1]->guid ?> style="object-fit: cover; width: 100%; height: 100%;">
+							</a>
+						<?php }
+
+						?>
+
 						</div>
 					</div>
 
@@ -224,9 +234,18 @@ if (have_posts()) {
 					<div class="ad large rectangle ad-3">
 			
 						<div id='large-rectangle-1-home' style='height:280px; width:336px;'>
-						<a href="https://americanmarketer.com/subscription-form/" target="_blank" alt="American Marketer 336x280 large rectangle banner">
-							<img src="https://americanmarketer.com/wp-content/uploads/2024/03/American-Marketer-336x280-large-rectangle-banner.png" width="">
-						</a>
+
+						<?php $banners = get_banner_posts();
+
+						if ($banners && count($banners) > 2) {
+						?>
+							<a href="<?= get_field('hyperlink', $banners[2]->ID) ?: "#" ?>" target="_blank" alt="<?= $banners[2]->post_title ?: "" ?>">
+								<img src=<?= $banners[2]->guid ?> style="object-fit: cover; width: 100%; height: 100%;">
+							</a>
+						<?php }
+
+						?>
+
 						</div>
 					</div>
 					

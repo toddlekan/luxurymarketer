@@ -62,9 +62,16 @@
 <div class="ad large rectangle ad-2">
 
   <div id='large-rectangle-2-home' style='height:280px; width:336px;'>
-  <script>
-  googletag.cmd.push(function() { googletag.display('large-rectangle-2-home'); });
-  </script>
+  <?php $banners = get_banner_posts();
+
+    if ($banners && count($banners) > 1) {
+    ?>
+        <a href="<?= get_field('hyperlink', $banners[1]->ID) ?: "#" ?>" target="_blank" alt="<?= $banners[1]->post_title ?: "" ?>">
+            <img src=<?= $banners[1]->guid ?> style="object-fit: cover; width: 100%; height: 100%;">
+        </a>
+    <?php }
+
+    ?>
   </div>
 
 </div>

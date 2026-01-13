@@ -351,14 +351,16 @@ if (have_posts()) :
 				<div style="clear: both;"></div>
 
 				<div class="ad large rectangle ad-2">
-					<!-- /60923973/am-large-rectangle-1-article -->
-					<div id='am-large-rectangle-2-home' style='height:280px; width:336px;'>
-						<script>
-							googletag.cmd.push(function() {
-								googletag.display('am-large-rectangle-2-home');
-							});
-						</script>
-					</div>
+				<?php $banners = get_banner_posts();
+
+				if ($banners && count($banners) > 1) {
+				?>
+					<a href="<?= get_field('hyperlink', $banners[1]->ID) ?: "#" ?>" target="_blank" alt="<?= $banners[1]->post_title ?: "" ?>">
+						<img src=<?= $banners[1]->guid ?> style="object-fit: cover; width: 100%; height: 100%;">
+					</a>
+				<?php }
+
+				?>
 				</div>
 
 				<div style="clear: both;"></div>
