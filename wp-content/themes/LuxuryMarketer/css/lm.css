@@ -416,7 +416,7 @@ body {
   outline: none;
 }
 
-.container.main{margin-top: 88px;}
+.container.main{margin-top: 98px;}
 
 .container.main>iframe,
 .hide-iframe>iframe {
@@ -2441,6 +2441,23 @@ footer .search {
   .tools.top li.articlesponsor {
     display: none;
   }
+
+  footer input.form-control, footer input.form-control:focus {
+    width: 231px;
+  }
+
+  .container-fluid .main .divider{
+    display: none;
+  }
+
+  .navbar.popular, .navbar.latest { 
+    margin-top: 13px;
+  }
+
+  footer .search .clr, footer .subscribe .clr {
+    display: initial;
+  }
+
 }
 
 .tools.bottom {
