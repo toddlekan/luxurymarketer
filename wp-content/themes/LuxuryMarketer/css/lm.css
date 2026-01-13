@@ -3217,7 +3217,7 @@ ul.no-bullet {
     width: 102%;
   }
 
-  .container-fluid .main .section.divider{
+  .container-fluid .main .section.divider, #footer-divider{
     display: none!important;
   }
 
