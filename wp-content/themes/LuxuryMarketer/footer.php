@@ -81,7 +81,8 @@ $url_root = ld16_cdn(get_template_directory_uri());
 			<a class="reverse" href="mailto:news@napean.com">news@napean.com</a> &nbsp;
 
 			<br class="mobile" />
-
+			<br class="mobile" />
+			
 			<span class="heading">SPONSORSHIPS: </span> &nbsp;
 
 			<a class="reverse" href="mailto:ads@napean.com">ads@napean.com</a> &nbsp;
