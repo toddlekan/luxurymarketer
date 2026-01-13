@@ -2447,10 +2447,6 @@ footer .search {
     margin-left: 29px;
   }
 
-  .container-fluid .main .divider{
-    display: none!important;
-  }
-
   .navbar.popular, .navbar.latest { 
     margin-top: 13px;
   }
@@ -3219,6 +3215,10 @@ ul.no-bullet {
   .section.divider {
     margin-left: -6px;
     width: 102%;
+  }
+
+  .container-fluid .main .divider{
+    display: none!important;
   }
 
   .section-7 a.img-container.main img {
