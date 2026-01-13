@@ -2448,7 +2448,7 @@ footer .search {
   }
 
   .container-fluid .main .divider{
-    display: none;
+    display: none!important;
   }
 
   .navbar.popular, .navbar.latest { 
