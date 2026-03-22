@@ -63,20 +63,20 @@ $(document).ready(function () {
     var redirect = form.find(".redirect").val();
 
     posting = true;
-    var actionUrl = (form.attr("action") || "").trim();
-    if (
-      !actionUrl ||
-      actionUrl.indexOf("login.php") === -1 ||
-      actionUrl.indexOf("..") !== -1
-    ) {
-      actionUrl =
-        (window.location.origin || "") +
-        "/wp-content/plugins/cambey/login.php";
+    // Prefer wp-admin/admin-ajax.php — many hosts return 403 on direct POST to wp-content/plugins/*.php
+    var adminAjaxUrl = (form.data("adminAjaxUrl") || "").trim();
+    if (!adminAjaxUrl) {
+      adminAjaxUrl =
+        (window.location.origin || "") + "/wp-admin/admin-ajax.php";
+    }
+    var formData = form.serialize();
+    if (formData.indexOf("action=") === -1) {
+      formData += "&action=cambey_login";
     }
     $.ajax({
-      type: form.attr("method"),
-      url: actionUrl,
-      data: form.serialize(),
+      type: "POST",
+      url: adminAjaxUrl,
+      data: formData,
       dataType: "text",
       cache: false,
     })
@@ -130,7 +130,14 @@ $(document).ready(function () {
               hint
           )
           .show();
-        console.error("cambey login ajax fail", actionUrl, xhr.status, xhr.responseText, status, err);
+        console.error(
+          "cambey login ajax fail",
+          adminAjaxUrl,
+          xhr.status,
+          xhr.responseText,
+          status,
+          err
+        );
       });
   });
 

@@ -13,6 +13,15 @@ Version: 0.1
 Author URI: http://toddlekan.com
 */
 
+/**
+ * Login via WordPress admin-ajax.php so hosts that block direct access to wp-content/plugins/*.php (403) still work.
+ */
+add_action( 'wp_ajax_nopriv_cambey_login', 'cambey_ajax_login' );
+add_action( 'wp_ajax_cambey_login', 'cambey_ajax_login' );
+function cambey_ajax_login() {
+	require_once dirname( __FILE__ ) . '/login.php';
+	exit;
+}
 
 function cambey_login() {
 	//extract data from the post

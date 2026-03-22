@@ -39,7 +39,7 @@ get_header();
                 <div class="col-lg-12">
 
 
-                    <form class="form-horizontal" id="cambey-login" action="<?php echo esc_url( $cambey_login_action ); ?>" method="POST">
+                    <form class="form-horizontal" id="cambey-login" action="<?php echo esc_url( $cambey_login_action ); ?>" method="POST" data-admin-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
                         <input class="redirect" name="redirect" type="hidden" value="<?php echo isset( $_GET['redirect'] ) ? esc_attr( wp_unslash( $_GET['redirect'] ) ) : ''; ?>" />
                         <fieldset>
 

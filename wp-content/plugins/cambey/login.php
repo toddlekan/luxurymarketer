@@ -1,6 +1,7 @@
 <?php
-require(dirname(__FILE__) . "/shared.php");
+require dirname( __FILE__ ) . '/shared.php';
 
+if ( ! function_exists( 'cambey_pick_subscriber_data' ) ) {
 /**
  * Pick the SubscriberData node that actually contains account identifiers (SOAP may nest multiple nodes).
  *
@@ -66,6 +67,7 @@ function cambey_unwrap_asmx_response( $raw ) {
 	}
 	return str_replace( array( '&gt;', '&lt;' ), array( '>', '<' ), $raw );
 }
+} // end function_exists guard for cambey XML helpers
 
 //extract data from the post
 //set POST variables
@@ -92,7 +94,7 @@ if ($fields['subscriber_email'] == '' || $fields['subscriber_pass'] == '') {
 
 	header( 'Content-Type: application/json; charset=utf-8' );
     print json_encode($arr);
-    return;
+    exit;
 }
 
 
@@ -278,3 +280,4 @@ $arr = array(
 
 header( 'Content-Type: application/json; charset=utf-8' );
 print json_encode($arr);
+exit;
