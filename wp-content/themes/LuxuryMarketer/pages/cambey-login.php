@@ -9,6 +9,14 @@ Template Name: Cambey Login
 $file_root = ld16_get_file_root();
 $url_root = get_template_directory_uri();
 
+// Absolute URL — do not build from theme URI + ../../plugins (breaks with CDN / some hosts).
+$cambey_login_action = function_exists( 'content_url' )
+	? content_url( 'plugins/cambey/login.php' )
+	: '/wp-content/plugins/cambey/login.php';
+if ( defined( 'WP_PLUGIN_DIR' ) && file_exists( WP_PLUGIN_DIR . '/cambey/login.php' ) ) {
+	$cambey_login_action = plugins_url( 'login.php', WP_PLUGIN_DIR . '/cambey/cambey.php' );
+}
+
 get_header();
 
 ?>
@@ -31,7 +39,7 @@ get_header();
                 <div class="col-lg-12">
 
 
-                    <form class="form-horizontal" id="cambey-login" action="<?= $url_root ?>/../../plugins/cambey/login.php" method="POST">
+                    <form class="form-horizontal" id="cambey-login" action="<?php echo esc_url( $cambey_login_action ); ?>" method="POST">
                         <input class="redirect" name="redirect" type="hidden" value="<?php echo isset( $_GET['redirect'] ) ? esc_attr( wp_unslash( $_GET['redirect'] ) ) : ''; ?>" />
                         <fieldset>
 

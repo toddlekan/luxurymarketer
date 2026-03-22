@@ -63,11 +63,22 @@ $(document).ready(function () {
     var redirect = form.find(".redirect").val();
 
     posting = true;
+    var actionUrl = (form.attr("action") || "").trim();
+    if (
+      !actionUrl ||
+      actionUrl.indexOf("login.php") === -1 ||
+      actionUrl.indexOf("..") !== -1
+    ) {
+      actionUrl =
+        (window.location.origin || "") +
+        "/wp-content/plugins/cambey/login.php";
+    }
     $.ajax({
       type: form.attr("method"),
-      url: form.attr("action"),
+      url: actionUrl,
       data: form.serialize(),
       dataType: "text",
+      cache: false,
     })
       .done(function (text) {
         posting = false;
@@ -107,12 +118,19 @@ $(document).ready(function () {
       })
       .fail(function (xhr, status, err) {
         posting = false;
+        var hint =
+          xhr.status === 0
+            ? " (network or blocked request — check URL / HTTPS)"
+            : xhr.status
+              ? " (HTTP " + xhr.status + ")"
+              : "";
         $(".msg")
           .html(
-            "Unable to reach the login service. Please try again or refresh the page."
+            "Unable to reach the login service. Please try again or refresh the page." +
+              hint
           )
           .show();
-        console.error("cambey login ajax fail", xhr.status, xhr.responseText, status, err);
+        console.error("cambey login ajax fail", actionUrl, xhr.status, xhr.responseText, status, err);
       });
   });
 
