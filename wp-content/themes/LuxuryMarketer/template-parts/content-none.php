@@ -23,16 +23,21 @@
 		<?php elseif ( is_search() ) : ?>
 
 			<p><?php //_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'twentysixteen' ); ?></p>
-			<?php //get_search_form(); ?>
-			<ul class="clr">
-				<li><input type="text" class="form-control" placeholder="SEARCH"></li>
-				<li><a href="#" class="footer-magnify"
+			<div class="row search">
+				<ul class="clr">
+					<li>
+						<form class="no-results-site-search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" style="display:inline;">
+							<input type="search" name="s" class="form-control" placeholder="SEARCH" value="<?php echo esc_attr( get_search_query() ); ?>" autocomplete="off">
+						</form>
+					</li>
+					<li><a href="#" class="footer-magnify"
 
-					style="height: 39px; width: 39px; margin-top: 0px"
-					><img src="<?=$url_root?>/img/magnify-new.png"
-						style="width: 32px;"
-					></a></li>
-			</ul>
+						style="height: 39px; width: 39px; margin-top: 0px"
+						><img src="<?=$url_root?>/img/magnify-new.png"
+							style="width: 32px;"
+						></a></li>
+				</ul>
+			</div>
 
 		<?php else : ?>
 

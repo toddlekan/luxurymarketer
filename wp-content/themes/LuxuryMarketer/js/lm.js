@@ -590,17 +590,16 @@ $(document).ready(function () {
     location.href = "/subscription-form/?error=validation&fields=captcha&email=" + encodeURIComponent(val);
   });
 
-  $(".subscribe .form-control").keypress(function (e) {
-    var keycode = event.keyCode ? event.keyCode : event.which;
-
-    if (keycode == "13") {
-      e.preventDefault();
-
-      var val = $(this).val();
-
-      //location.href="/subscribe?email=" + encodeURI(val);
-      location.href = "/subscription-form/?error=validation&fields=captcha&email=" + encodeURIComponent(val);
+  $(document).on("keydown", ".subscribe .form-control", function (e) {
+    var key = e.keyCode != null ? e.keyCode : e.which;
+    if (key !== 13) {
+      return;
     }
+    e.preventDefault();
+    var val = $(this).val();
+    location.href =
+      "/subscription-form/?error=validation&fields=captcha&email=" +
+      encodeURIComponent(val);
   });
 
   /*SEARCH*/
@@ -620,22 +619,41 @@ $(document).ready(function () {
     function (e) {
       e.preventDefault();
 
-      var val = $(this).closest(".clr").find(".form-control").val();
+      var raw = $(this).closest(".clr").find(".form-control").first().val();
+      var val = raw === undefined || raw === null ? "" : String(raw);
 
-      location.href = "/?s=" + encodeURI(val);
+      location.href = "/?s=" + encodeURIComponent(val);
     }
   );
 
-  $(".search .form-control").keypress(function (e) {
-    var keycode = event.keyCode ? event.keyCode : event.which;
-
-    if (keycode == "13") {
-      e.preventDefault();
-
-      var val = $(this).val();
-
-      location.href = "/?s=" + encodeURI(val);
+  $(document).on(
+    "keydown",
+    ".search .form-control, form.search-form input[name='s'], form.search-form textarea[name='s']",
+    function (e) {
+    var key = e.keyCode != null ? e.keyCode : e.which;
+    if (key !== 13) {
+      return;
     }
+    var $form = $(this).closest("form");
+    var method = String($form.attr("method") || "get").toLowerCase();
+    if (
+      $form.length &&
+      (method === "get" || method === "") &&
+      $form.find("input[name='s'], textarea[name='s']").length
+    ) {
+      return;
+    }
+    var el = e.target;
+    if (el && el.nodeName !== "INPUT" && el.nodeName !== "TEXTAREA") {
+      el = this;
+    }
+    var raw =
+      el && (el.nodeName === "INPUT" || el.nodeName === "TEXTAREA")
+        ? $(el).val()
+        : $(this).val();
+    var val = raw === undefined || raw === null ? "" : String(raw);
+    e.preventDefault();
+    location.href = "/?s=" + encodeURIComponent(val);
   });
 
   /*MOBILE*/
@@ -660,7 +678,16 @@ $(document).ready(function () {
   });
 
   /*UTIL FUNCTIONS*/
-  
+
+  /** Mobile Latest Headlines / Most Read: clear active state + focus so color returns to grey after close */
+  function mobileHeadlineTabsReset() {
+    $("#latest-mobile, #popular-mobile").removeClass("tab-active");
+    var ae = document.activeElement;
+    if (ae && (ae.id === "latest-mobile" || ae.id === "popular-mobile")) {
+      ae.blur();
+    }
+  }
+
   function toggleUtil(sel, caller) {
     if (!animating) {
       animating = true;
@@ -693,12 +720,16 @@ $(document).ready(function () {
               overlay.fadeOut("fast", function () {
                 util.css("height", "0");
 
+                mobileHeadlineTabsReset();
                 animating = false;
               });
 
               //item showing is not current item
             } else {
               fold.removeClass("unfolded");
+
+              $("#latest-mobile, #popular-mobile").removeClass("tab-active");
+              caller.addClass("tab-active");
 
               util.addClass("unfolded");
 
@@ -717,6 +748,9 @@ $(document).ready(function () {
 
         //item is not showing
       } else {
+        $("#latest-mobile, #popular-mobile").removeClass("tab-active");
+        caller.addClass("tab-active");
+
         util.addClass("unfolded");
 
         util.css("height", "0px");
@@ -756,7 +790,9 @@ $(document).ready(function () {
         function () {
           fold.removeClass("unfolded");
 
-          overlay.fadeOut("fast");
+          overlay.fadeOut("fast", function () {
+            mobileHeadlineTabsReset();
+          });
         }
       );
     }

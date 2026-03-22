@@ -70,7 +70,7 @@ get_header();
 
                                 <div class="col-lg-10 action" style="color: red!important; font-weight: bold!important; text-transform: uppercase!important">
 
-                                    <a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">
+                                    <a href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&f=paid">
                                         Click here to enroll</a>
 
                                 </div>

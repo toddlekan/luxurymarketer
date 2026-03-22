@@ -265,6 +265,43 @@ if (have_posts()) {
 
 
 		<?php $post_id += 1; ?>
+
+		<!-- section: Research (above Columns) -->
+		<section id=<?= "hero-section-" . $post_id ?> class="section clearfix categories ">
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="newswell-divider section divider"></div>
+				</div>
+				<div class="col-lg-12">
+
+					<div class="newswell">
+
+					<div class="heading">
+						<a href="/category/research/">RESEARCH</a>
+					</div>
+
+					<?php
+					$opinion_args['posts_per_page'] = 3;
+					$opinion_args['category_name'] = 'research';
+					query_posts($opinion_args);
+
+					while (have_posts()) : the_post();
+
+						get_template_part('template-parts/content', 'section-3');
+
+					endwhile;
+					wp_reset_query();
+					?>
+					</div>
+
+					<a class="more reverse" href="/category/research/"><span class="gt-label">More Research</span> <span class="glyphicon glyphicon-menu-right gt-one"></span><span class="glyphicon glyphicon-menu-right gt-two"></span></a>
+
+				</div>
+			</div>
+		</section>
+
+		<?php $post_id += 1; ?>
 		
 		<!-- section 3 -->
 		<section id=<?= "hero-section-" . $post_id ?> class="section clearfix categories ">
@@ -392,7 +429,7 @@ if (have_posts()) {
 					The posts should be limited to 4 columns.
 					The posts should be limited to 4 posts per category.
 		-->
-		<section id=<?= "hero-section-" . $post_id ?> class="section clearfix categories ">
+		<section id=<?= "hero-section-" . $post_id ?> class="section clearfix categories home-category-grid">
 
 			<div class="row">
 				<div class="col-lg-12">
@@ -459,13 +496,17 @@ if (have_posts()) {
 							);
 							query_posts($opinion_args);
 
-							// Get category object for proper name
+							// Get category object for proper name and canonical permalink
 							$category_obj = get_category_by_slug($category);
 							$category_name = $category_obj ? $category_obj->name : ucwords(str_replace('-', ' ', $category));
-							
-						    $category_name = str_replace(' And ', ' &amp; ', $category_name);
-						    
-							$category_link = get_category_link($category_obj ? $category_obj->term_id : 0);
+
+							$category_name = str_replace(' And ', ' &amp; ', $category_name);
+
+							if ( $category_obj ) {
+								$category_link = get_category_link( $category_obj->term_id );
+							} else {
+								$category_link = home_url( '/category/' . rawurlencode( $category ) . '/' );
+							}
 
 							print '<div class="col-lg-3 section-7">';	
 							print '<div class="heading sector"><a href="'.esc_url($category_link).'">'.esc_html($category_name).'</a></div>';

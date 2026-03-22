@@ -117,13 +117,19 @@ $url_root = get_template_directory_uri();
 
 </head>
 
-<body <?php if (ld16_is_pdf()) {
-        print 'class="pdf"';
-      } ?> <?php if (is_home()) {
-              print 'class="home"';
-            } else {
-              print 'class="home inner"';
-            } ?>>
+<?php
+if ( ld16_is_pdf() ) {
+	$lm_body_classes = array( 'pdf' );
+} elseif ( is_home() ) {
+	$lm_body_classes = array( 'home' );
+} else {
+	$lm_body_classes = array( 'home', 'inner' );
+}
+if ( is_search() ) {
+	$lm_body_classes[] = 'search';
+}
+?>
+<body class="<?php echo esc_attr( implode( ' ', $lm_body_classes ) ); ?>">
   <?php
 
 
@@ -227,7 +233,7 @@ $url_root = get_template_directory_uri();
                       <li class="reverse"><a href="/contact-us" class="grey">Contact Us</a></li>
                       <li class="reverse"><a href="/category/networking-and-events/master-class" class="grey">Master Class</a></li>
                       
-                      <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" class="grey">Subscribe</a></li>
+                      <li class="reverse"><a href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&f=paid" class="grey">Subscribe</a></li>
 
               
                     </ul>
@@ -275,7 +281,7 @@ $url_root = get_template_directory_uri();
                 </li>
                 <li class="label subscribe">
 
-                  <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="https://www.cambeywest.com/subscribe2/?p=LXM&f=paid" style="">
+                  <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&f=paid" style="">
                     SUBSCRIBE</a>
                 </li>
 
@@ -344,7 +350,7 @@ $url_root = get_template_directory_uri();
           <li class="item"><a href="/category/research" class="grey">Research</a></li>
           <li class="item"><a href="/category/news/columns" class="grey">Columns</a></li>
     
-          <li class="dropdown item"> <a href="/category/news" class="dropdown-toggle grey" data-toggle="dropdown" role="button" aria-expanded="false">
+          <li class="dropdown item"> <a href="#" class="dropdown-toggle grey" data-toggle="dropdown" role="button" aria-expanded="false">
             More <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="/category/research/china">China</a></li>
@@ -380,7 +386,7 @@ $url_root = get_template_directory_uri();
           <li><a href="/category/networking-and-events/podcasts">Podcasts</a></li>
           <li><a href="/category/networking-and-events/conferences">Conferences</a></li>
         </ul>
-        
+        </li>
                 <li class="dropdown item most-read"> <a href="#" class="dropdown-toggle grey" data-toggle="dropdown" role="button" aria-expanded="false">
             Most Read<span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -428,10 +434,9 @@ $url_root = get_template_directory_uri();
           <li class="reverse"><a href="/category/research">Research</a></li>
           <li class="reverse"><a href="/category/news/columns">Columns</a></li>
           <li><a href="/category/networking-and-events">Events</a></li>
-          <li><a class="reverse join" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">Subscribe</a></li>
+          <li><a class="reverse join" href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&f=paid">Subscribe</a></li>
         </ul>
       </li>
-    </li>
     </ul>
   </div>
 
@@ -487,7 +492,7 @@ $url_root = get_template_directory_uri();
                   <li class="reverse"><a href="/contact-us" class="grey">Contact Us</a></li>
                   <li class="reverse"><a href="/category/networking-and-events/master-class" class="grey">Master Class</a></li>
                   
-                  <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" class="grey">Subscribe</a></li>
+                  <li class="reverse"><a href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&f=paid" class="grey">Subscribe</a></li>
 
 
                   </ul>
@@ -505,7 +510,7 @@ $url_root = get_template_directory_uri();
 
 
       <span class="sign-in-subscribe pop-subscribe loggedout" 
-      style="display: none;" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" 
+      style="display: none;" href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&f=paid" 
         id="subscribe-mobile">
           <script>
               var options = {
@@ -530,7 +535,7 @@ $url_root = get_template_directory_uri();
       <span style="color: #ccc;"> &nbsp; &nbsp; </span>
 
       <a class="sign-in-subscribe pop-subscribe loggedout" 
-        style="display: none;" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" 
+        style="display: none;" href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&f=paid" 
         id="subscribe-mobile">
         Subscribe
       </a>
@@ -555,11 +560,11 @@ $url_root = get_template_directory_uri();
 
   <div class="search-inner">
 
-    <form class="navbar-form navbar-left search" role="search">
+    <form class="navbar-form navbar-left search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
       <div class="form-group">
         <ul class="clr">
           <li>
-            <input type="text" class="form-control" placeholder="Search">
+            <input type="search" name="s" class="form-control" placeholder="Search" value="<?php echo esc_attr( get_search_query() ); ?>" autocomplete="off">
           </li>
           <li>
             <a href="#" class="popup-magnify"><img src="<?= $url_root ?>/img/magnify-new.png"></a>

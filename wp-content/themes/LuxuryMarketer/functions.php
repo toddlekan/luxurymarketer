@@ -61,6 +61,20 @@ function feedFilter($query)
 }
 add_filter('pre_get_posts', 'feedFilter');
 
+/**
+ * Empty or whitespace-only search (?s=): force no posts so search.php shows "no results".
+ */
+function lm_search_empty_query( $query ) {
+	if ( is_admin() || ! $query->is_main_query() || ! $query->is_search() ) {
+		return;
+	}
+	$s = $query->get( 's' );
+	if ( '' === trim( (string) $s ) ) {
+		$query->set( 'post__in', array( 0 ) );
+	}
+}
+add_action( 'pre_get_posts', 'lm_search_empty_query' );
+
 function feedContentFilter($content)
 {
 	$content = '';
@@ -733,27 +747,23 @@ function ld16_showkey($id = 0, $newsletter = false)
 
 function ld16_is_locked($id = 0)
 {
-
-	return false;
-	
 	if (!$id) {
 		$id = get_the_ID();
 	}
 
-	$unlocked = (bool)get_post_meta($id, 'unlocked', true);
-	$lock = true;
-
-	if ($unlocked) {		
-		$lock = false;
-	} else {		
-		$logged_in = $_COOKIE['_QAS3247adjl'] ?? null;
-
-		if ($logged_in) {
-			$lock = false;
-		}
+	// Free / open article when the "unlocked" custom field is set (any truthy value).
+	$unlocked = get_post_meta($id, 'unlocked', true);
+	if ($unlocked) {
+		return false;
 	}
 
-	return $lock;
+	// Logged-in subscribers see full content.
+	if (ld16_logged_in()) {
+		return false;
+	}
+
+	// Default: paywalled for anonymous visitors.
+	return true;
 }
 
 function ld16_get_custom_field($key, $single = true, $id = 0)
@@ -1036,6 +1046,65 @@ function ld16_cat_name($id)
 	}
 
 	return $category_name;
+}
+
+/**
+ * Category for "More In" on single posts: prefer post meta `cat` (full category URL from CMS checkbox),
+ * so the slug matches the exact sector (e.g. retail) instead of get_cat_ID(catname) which can match the wrong term.
+ *
+ * @param int $post_id Post ID.
+ * @return WP_Term|null Category term or null.
+ */
+function ld16_get_more_in_category_term( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( ! $post_id ) {
+		return null;
+	}
+
+	$cat_url = get_post_meta( $post_id, 'cat', true );
+	if ( $cat_url ) {
+		$cat_url = str_replace(
+			array(
+				'https://www.luxurymarketer.com',
+				'https://luxurymarketer.com',
+				'http://www.luxurymarketer.com',
+				'http://luxurymarketer.com',
+			),
+			'',
+			$cat_url
+		);
+		$cat_url = trim( $cat_url, '/' );
+		$parts   = array_values( array_filter( explode( '/', $cat_url ), 'strlen' ) );
+		if ( ! empty( $parts ) && isset( $parts[0] ) && 'category' === $parts[0] ) {
+			array_shift( $parts );
+		}
+		$slug = end( $parts );
+		if ( $slug ) {
+			$term = get_term_by( 'slug', $slug, 'category' );
+			if ( $term && ! is_wp_error( $term ) ) {
+				return $term;
+			}
+		}
+	}
+
+	$name = get_post_meta( $post_id, 'catname', true );
+	if ( $name ) {
+		$by_name = get_term_by( 'name', $name, 'category' );
+		if ( $by_name && ! is_wp_error( $by_name ) ) {
+			return $by_name;
+		}
+		$tid = get_cat_ID( $name );
+		if ( $tid ) {
+			return get_category( $tid );
+		}
+	}
+
+	$cats = get_the_category( $post_id );
+	if ( ! empty( $cats ) ) {
+		return $cats[0];
+	}
+
+	return null;
 }
 
 function ld16_get_the_excerpt()
@@ -1761,3 +1830,28 @@ function filter_rest_allow_anonymous_comments()
 	return true;
 }
 add_filter('rest_allow_anonymous_comments', 'filter_rest_allow_anonymous_comments');
+
+/**
+ * Show Luxury Marketer role labels in the admin instead of legacy Luxury Roundtable names.
+ * Role slugs and capabilities are unchanged; only the display name is overridden per request.
+ */
+add_action('init', 'luxury_marketer_rename_roles_display', 999);
+function luxury_marketer_rename_roles_display()
+{
+	global $wp_roles;
+	if (! isset($wp_roles) || ! is_object($wp_roles)) {
+		return;
+	}
+	$map = array(
+		'Luxury Roundtable Intelligence' => 'Luxury Marketer Intelligence',
+		'Luxury Roundtable Columnist'    => 'Luxury Marketer Columnist',
+	);
+	foreach ($wp_roles->roles as $slug => $role) {
+		if (empty($role['name'])) {
+			continue;
+		}
+		if (isset($map[ $role['name'] ])) {
+			$wp_roles->roles[ $slug ]['name'] = $map[ $role['name'] ];
+		}
+	}
+}

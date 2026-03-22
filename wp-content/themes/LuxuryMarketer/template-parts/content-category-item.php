@@ -1,8 +1,12 @@
 <?php
 $url_root = get_template_directory_uri();
+$column = 1;
+if ( isset( $args ) && is_array( $args ) && isset( $args['column'] ) ) {
+	$column = (int) $args['column'];
+}
 ?>
 <div class="col-lg-4 newsbox left">
-	<?php $column = $args['column'];
+	<?php
 	//echo $column; 
 	?>
 

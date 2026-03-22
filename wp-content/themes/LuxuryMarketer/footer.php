@@ -100,7 +100,11 @@ $url_root = ld16_cdn(get_template_directory_uri());
 
 				<ul class="clr">
 					<li><span class="heading">SEARCH: </span> &nbsp;</li>
-					<li><input type="text" class="form-control" placeholder="SEARCH"></li>
+					<li>
+						<form class="footer-site-search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" style="display:inline;">
+							<input type="search" name="s" class="form-control" placeholder="SEARCH" value="<?php echo esc_attr( get_search_query() ); ?>" autocomplete="off">
+						</form>
+					</li>
 					<li><a href="#" class="footer-magnify"><img src="<?= $url_root ?>/img/magnify-new.png"></a></li>
 				</ul>
 			</div>
@@ -130,7 +134,7 @@ $url_root = ld16_cdn(get_template_directory_uri());
 				<li>
 					<a href="/contact-us">Contact Us</a>
 				</li>
-				<li><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">Subscribe</a></li>
+				<li><a href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&f=paid">Subscribe</a></li>
 			</ul>
 
 		</div>

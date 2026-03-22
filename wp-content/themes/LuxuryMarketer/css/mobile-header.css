@@ -51,7 +51,16 @@ body{padding-top:0px;}
 
 /* #mobile-sub-menu{display: block; border-top: 1px solid #f3f3f3;} */
 
-#popular-mobile, #latest-mobile{color: #1169aa; font-family: Verdana,Geneva,Tahoma,sans-serif; font-size: 12px;}
+/* Default grey; .tab-active (set in lm.js when panel open) uses blue — avoids stuck light/hover on touch */
+#popular-mobile, #latest-mobile {
+  color: #999;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 12px;
+}
+#popular-mobile.tab-active,
+#latest-mobile.tab-active {
+  color: #1169aa;
+}
 
 .popular-inner ul{list-style-type: none; margin-left: -13px;}
 .latest-inner ul{list-style-type: none; margin-left: -13px;}

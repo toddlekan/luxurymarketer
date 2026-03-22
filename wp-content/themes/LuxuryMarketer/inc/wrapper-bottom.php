@@ -151,8 +151,8 @@
 	            		<span class="heading">SEARCH: </span>
 					</li>
 					<li class="input-box">
-			            <form class="navbar-form">
-			                <input type="text" class="form-control input-box" placeholder="Search"/>
+			            <form class="navbar-form" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+			                <input type="search" name="s" class="form-control input-box" placeholder="Search" value="<?php echo esc_attr( get_search_query() ); ?>" autocomplete="off"/>
 
 			            </form>
 	        		</li>

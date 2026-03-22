@@ -7,6 +7,8 @@ Template Name: More Stories Archive
 $file_root = ld16_get_file_root();
 $url_root = ld16_cdn(get_template_directory_uri());
 
+$label = 'stories';
+
 $showposts = 21;
 
 $offset = 16;
@@ -15,14 +17,14 @@ $page = 1;
 $prev = 0;
 $next = 2;
 
-$current_page = get_query_var("paged");
-$latest = $_REQUEST['newer'];
+$current_page = get_query_var( 'paged' );
+$latest = isset( $_REQUEST['newer'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['newer'] ) ) : null;
 if ($current_page && is_numeric($current_page)) {
     $page = $current_page;
     $prev = $page - 1;
     $next = $page + 1;
     $offset = ($prev * $showposts) +  $offset;
-} else if (isset($latest) && $latest == true) {
+} elseif ( null !== $latest && ( $latest === true || $latest === 'true' || $latest === '1' ) ) {
     $offset = 0;
     $prev = -1;
     $next = $prev + 1;
@@ -48,9 +50,15 @@ get_header();
 
             query_posts($query);
             $newswell_count = 0;
+            $column = 1;
             while (have_posts()) : the_post();
 
-                get_template_part('template-parts/content', 'category-item');
+                get_template_part('template-parts/content', 'category-item', array( 'column' => $column ) );
+                if ( $column < 4 ) {
+                    $column++;
+                } else {
+                    $column = 1;
+                }
 
                 $newswell_count++;
 

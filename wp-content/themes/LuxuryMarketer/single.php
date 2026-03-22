@@ -61,12 +61,6 @@ if (have_posts()) :
 						<font color="gray">
 							<?php
 
-							$id = $post->ID;
-
-							$category = get_post_meta($id, 'catname', true);
-							$category_id = get_cat_ID($category);
-							$category_link = get_category_link($category_id);
-
 							//parse up content
 							$content = get_the_content();
 							$content = '<p>' . str_replace("\r\n", '</p><p>', $content) . '</p>';
@@ -145,7 +139,7 @@ if (have_posts()) :
 									<div class="col-lg-12">
 
 										<center>
-											This content is accessible only to subscribers of Luxury Marketer. We would love for you to become a subscriber and enjoy the many benefits soon after. <a href="https://www.cambeywest.com/subscribe2/?p=LXM&f=paid" target="_blank">Please click here to enroll as a subscriber of Luxury Marketer.</a> Already a subscriber? 
+											This content is accessible only to subscribers of Luxury Marketer. We would love for you to become a subscriber and enjoy the many benefits soon after. <a href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&f=paid" target="_blank">Please click here to enroll as a subscriber of Luxury Marketer.</a> Already a subscriber? 
 											<a href="/log-in?redirect=<?= get_the_permalink() ?>" class="pop-login">Please log in.</a>
 
 										</center>
@@ -388,34 +382,66 @@ if (have_posts()) :
 			<div class="col-lg-12 related">
 
 				<!--RELATED START-->
+				<?php
+				$id = get_queried_object_id();
+				$more_in_term = ld16_get_more_in_category_term( $id );
+				if ( $more_in_term ) {
+					$category = $more_in_term->name;
+					$category_link = get_category_link( $more_in_term->term_id );
+					$category_id = (int) $more_in_term->term_id;
+				} else {
+					$category = '';
+					$category_link = '#';
+					$category_id = 0;
+				}
+
+				$more_in_tax_query = $category_id
+					? array(
+						array(
+							'taxonomy'         => 'category',
+							'field'            => 'term_id',
+							'terms'            => $category_id,
+							'include_children' => false,
+						),
+					)
+					: array();
+				?>
+
+				<?php if ( $category_id ) : ?>
 
 				<div class="col-lg-12">
 
 					<hr />
 					<br class="clear" />
 					<div class="heading">
-						<a href="<?= $category_link ?>">MORE IN <?= $category ?></a>
+						<a href="<?= esc_url( $category_link ) ?>">MORE IN <?= esc_html( $category ) ?></a>
 					</div>
 				</div>
 
 				<div class="col-lg-12">
 
 					<?php
-					//$args = "post__not_in=$id&cat=$category_id&showposts=6";
+					$args = array(
+						'post__not_in'   => array( $id ),
+						'posts_per_page' => 3,
+						'orderby'        => 'date',
+						'order'          => 'DESC',
+						'tax_query'      => $more_in_tax_query,
+					);
 
-					$args = array('post__not_in' => array($id), 'cat' => $category_id, 'showposts' => 3);
-
-					query_posts($args);
+					query_posts( $args );
 					$column = 1;
-					while (have_posts()) : the_post();
+					while ( have_posts() ) :
+						the_post();
 
-						get_template_part('template-parts/content', 'related-item', ['column' => $column]);
-						if ($column < 4) {
+						get_template_part( 'template-parts/content', 'related-item', array( 'column' => $column ) );
+						if ( $column < 4 ) {
 							$column++;
 						} else {
 							$column = 1;
 						}
 					endwhile;
+					wp_reset_query();
 					?>
 
 				</div>
@@ -423,24 +449,33 @@ if (have_posts()) :
 				<div class="col-lg-12">
 
 					<?php
-					//$args = "post__not_in=$id&cat=$category_id&showposts=6";
+					$args = array(
+						'post__not_in'   => array( $id ),
+						'posts_per_page' => 3,
+						'offset'         => 3,
+						'orderby'        => 'date',
+						'order'          => 'DESC',
+						'tax_query'      => $more_in_tax_query,
+					);
 
-					$args = array('post__not_in' => array($id), 'cat' => $category_id, 'showposts' => 3, 'offset' => 3);
+					query_posts( $args );
 
-					query_posts($args);
+					while ( have_posts() ) :
+						the_post();
 
-					while (have_posts()) : the_post();
-
-						get_template_part('template-parts/content', 'related-item', ['column' => $column]);
-						if ($column < 4) {
+						get_template_part( 'template-parts/content', 'related-item', array( 'column' => $column ) );
+						if ( $column < 4 ) {
 							$column++;
 						} else {
 							$column = 1;
 						}
 					endwhile;
+					wp_reset_query();
 					?>
 
 				</div>
+
+				<?php endif; ?>
 
 				<br class="clear" />
 
