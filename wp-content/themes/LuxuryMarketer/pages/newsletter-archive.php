@@ -25,16 +25,19 @@ get_header();
 
 			<div class="col-lg-12">
 
+				<?php
+				while ( have_posts() ) :
+					the_post();
+					if ( ld16_is_locked() ) :
+						?>
+				<div class="entry-content">
+						<?php ld16_the_page_content(); ?>
+				</div>
+						<?php
+					else :
+						?>
 				<div id="newsletter" style="display:none;">
-					<?php
-
-						while ( have_posts() ) : the_post();
-
-							the_content();
-
-						endwhile;
-
-					?>
+						<?php the_content(); ?>
 				</div>
 
 				<iframe id="contents"></iframe>
@@ -48,8 +51,10 @@ get_header();
 						});
 					});
 				</script>
-
-
+						<?php
+					endif;
+				endwhile;
+				?>
 			</div>
         </div>
 

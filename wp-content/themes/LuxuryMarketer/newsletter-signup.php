@@ -45,7 +45,13 @@ Template Name: Newsletter Signup Template
 
 					<h1>Subscribe to Luxury Marketer newsletters for free</h1>
 					<div class="entry">
-						<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
+						<?php
+						if ( ld16_is_locked() ) {
+							ld16_the_page_content();
+						} else {
+							the_content( '<p class="serif">Read the rest of this page &raquo;</p>' );
+						}
+						?>
 
 
 

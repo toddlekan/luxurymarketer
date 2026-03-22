@@ -28,7 +28,12 @@ get_header();
         <div class="col-lg-12">
 
         	<div class="subscription-promotion">
-        		<?the_content()?>
+        		<?php
+				while ( have_posts() ) :
+					the_post();
+					ld16_the_page_content();
+				endwhile;
+				?>
         	</div>
 
 

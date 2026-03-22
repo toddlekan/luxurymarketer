@@ -37,7 +37,7 @@ get_header();
 
 						while ( have_posts() ) : the_post();
 
-							the_content();
+							ld16_the_page_content();
 
 						endwhile;
 

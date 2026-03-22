@@ -25,22 +25,24 @@ get_header();
 
 			<div class="col-lg-12">
 
+				<?php
+				while ( have_posts() ) :
+					the_post();
+					if ( ld16_is_locked() ) :
+						?>
+				<div class="entry-content">
+						<?php ld16_the_page_content(); ?>
+				</div>
+						<?php
+					else :
+						?>
 				<div id="newsletter" style="display:none;">
-					<?php
-
-						while ( have_posts() ) : the_post();
-
-							$content = get_the_content();
-
-							$content = str_replace("https://luxurydaily.com//ads", "https://www.luxurydaily.com/ads", $content);
-
-							$content = str_replace("http://", "https://", $content);
-
-							print $content;
-
-						endwhile;
-
-					?>
+						<?php
+						$content = get_the_content();
+						$content = str_replace( 'https://luxurydaily.com//ads', 'https://www.luxurydaily.com/ads', $content );
+						$content = str_replace( 'http://', 'https://', $content );
+						print $content;
+						?>
 				</div>
 
 
@@ -91,9 +93,10 @@ get_header();
 
 				<div style="float: right;">Scroll below to see newsletter</div>
 				<iframe id="contents" style="width: 100%; height: 600; border: 0;"></iframe>
-
-
-
+						<?php
+					endif;
+				endwhile;
+				?>
 
 			</div>
         </div>

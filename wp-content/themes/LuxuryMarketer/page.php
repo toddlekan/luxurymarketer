@@ -33,23 +33,23 @@ get_header();
 
 			<div class="col-lg-12">
 
+			<?php
+			while ( have_posts() ) :
+				the_post();
+				?>
 
 			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 				<div class="entry-content">
 
-					<?php
-
-						while ( have_posts() ) : the_post();
-
-							the_content();
-
-						endwhile;
-
-					?>
+					<?php ld16_the_page_content(); ?>
 				</div>
 
 			</article>
+
+				<?php
+			endwhile;
+			?>
 
 			</div>
         </div>

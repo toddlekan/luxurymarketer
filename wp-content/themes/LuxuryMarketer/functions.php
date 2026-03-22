@@ -745,10 +745,40 @@ function ld16_showkey($id = 0, $newsletter = false)
 	return $output;
 }
 
+/**
+ * Newsletter signup / archive pages: always public (no paywall), regardless of subscriber state.
+ *
+ * @param int $post_id Post ID.
+ * @return bool
+ */
+function ld16_is_newsletter_template_page( $post_id ) {
+	if ( ! $post_id || ! is_page( $post_id ) ) {
+		return false;
+	}
+	$tpl = get_page_template_slug( $post_id );
+	if ( ! $tpl ) {
+		return false;
+	}
+	if ( false !== stripos( $tpl, 'newsletter' ) ) {
+		return true;
+	}
+	// Template file names without the substring "newsletter"
+	$unlock = array(
+		'News_Archive.php',
+		'Signup.php',
+	);
+	return in_array( $tpl, $unlock, true );
+}
+
 function ld16_is_locked($id = 0)
 {
 	if (!$id) {
 		$id = get_the_ID();
+	}
+
+	// Newsletter-related page templates: never paywalled.
+	if ( $id && ld16_is_newsletter_template_page( $id ) ) {
+		return false;
 	}
 
 	// Free / open article when the "unlocked" custom field is set (any truthy value).
@@ -764,6 +794,18 @@ function ld16_is_locked($id = 0)
 
 	// Default: paywalled for anonymous visitors.
 	return true;
+}
+
+/**
+ * Echo page content: full HTML when open, or paywall partial + encrypted body when ld16_is_locked().
+ * Call inside the Loop after the_post().
+ */
+function ld16_the_page_content() {
+	if ( ld16_is_locked() ) {
+		get_template_part( 'template-parts/page', 'paywall-content' );
+	} else {
+		the_content();
+	}
 }
 
 function ld16_get_custom_field($key, $single = true, $id = 0)
