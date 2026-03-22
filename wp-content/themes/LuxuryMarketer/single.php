@@ -29,7 +29,11 @@ if (have_posts()) :
 
 
 			<?php
-			while (have_posts()) : the_post();
+			while (have_posts()) :
+				the_post();
+				// Preserve single post ID: sidebar query_posts() below clobbers the main query, so
+				// get_queried_object_id() is wrong for "MORE IN" / related blocks without reset.
+				$single_post_id = (int) get_the_ID();
 
 			?>
 
@@ -298,6 +302,8 @@ if (have_posts()) :
 
 					endwhile; //next 3
 
+					wp_reset_query();
+
 					?>
 
 				</ul>
@@ -383,7 +389,7 @@ if (have_posts()) :
 
 				<!--RELATED START-->
 				<?php
-				$id = get_queried_object_id();
+				$id = isset( $single_post_id ) ? $single_post_id : (int) get_queried_object_id();
 				$more_in_term = ld16_get_more_in_category_term( $id );
 				if ( $more_in_term ) {
 					$category = $more_in_term->name;
