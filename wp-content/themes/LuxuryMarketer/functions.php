@@ -714,28 +714,16 @@ function ld16_is_pdf()
 	return $output;
 }
 
-function ld16_showkey($id = 0, $newsletter = false)
-{
+function ld16_showkey( $id = 0, $newsletter = false ) {
 
-	if (ld16_is_pdf()) {
-
+	if ( ld16_is_pdf() ) {
 		return '';
-	}
-
-	if (!$id) {
-		$id = get_the_ID();
 	}
 
 	$output = '';
 
-	if ($newsletter) {
+	if ( $newsletter ) {
 		$output = '<span style="color:#BCBCBC; font-size: 9px;">COMPLIMENTARY</span>';
-	}
-
-	// Locked (subscriber-only) indicator for guests — use ic_lock.png, not ic_unlock.png.
-	if ( ! ld16_logged_in() && ld16_is_locked( $id ) ) {
-		$url_root = ld16_cdn( get_template_directory_uri() );
-		$output  .= '<img src="' . esc_url( $url_root . '/img/ic_lock.svg' ) . '" alt="' . esc_attr__( 'Subscriber content', 'twentysixteen' ) . '" width="12" height="12" style="vertical-align:middle;margin-left:4px;opacity:0.65;" />';
 	}
 
 	return $output;
