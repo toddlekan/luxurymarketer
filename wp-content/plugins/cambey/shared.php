@@ -3,6 +3,11 @@
 //error_reporting(E_ALL);
 //ini_set('display_errors', 1);
 
+// When shared.php is loaded from login.php included inside a function (e.g. admin-ajax),
+// assignments must target the global scope or bake_cred/trash_cookies see empty $cred_name
+// and PHP 8+ fatals: setcookie(): Argument #1 ($name) must not be empty.
+global $cred_salt, $cred_name, $day_pass_salt, $day_pass_name, $debug;
+
 date_default_timezone_set('America/New_York');
 
 $cred_salt = "asjdf9792relkjsd2903892988*^*&%%sa;ldkjAKLEALKJFfl";
