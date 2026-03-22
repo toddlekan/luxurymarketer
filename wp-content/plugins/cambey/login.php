@@ -1,16 +1,82 @@
 <?php
 require(dirname(__FILE__) . "/shared.php");
 
+/**
+ * Pick the SubscriberData node that actually contains account identifiers (SOAP may nest multiple nodes).
+ *
+ * @param SimpleXMLElement $xml Parsed outer or inner XML.
+ * @return SimpleXMLElement|null
+ */
+function cambey_pick_subscriber_data( SimpleXMLElement $xml ) {
+	$nodes = $xml->xpath( '//*[local-name()="SubscriberData"]' );
+	if ( empty( $nodes ) ) {
+		return null;
+	}
+	foreach ( $nodes as $node ) {
+		$acct = trim( (string) $node->acctno );
+		$cw   = trim( (string) $node->cwrec_id );
+		$res  = strtolower( trim( (string) $node->result ) );
+		if ( ( $res === 'true' || $res === '1' ) && ( $acct !== '' || $cw !== '' ) ) {
+			return $node;
+		}
+	}
+	foreach ( $nodes as $node ) {
+		$acct = trim( (string) $node->acctno );
+		$cw   = trim( (string) $node->cwrec_id );
+		if ( $acct !== '' || $cw !== '' ) {
+			return $node;
+		}
+	}
+	return $nodes[0];
+}
+
+/**
+ * If the ASMX response is SOAP-wrapped, return inner XML string for the subscriber payload.
+ *
+ * @param string $raw Raw HTTP body.
+ * @return string XML fragment to parse with simplexml_load_string.
+ */
+function cambey_unwrap_asmx_response( $raw ) {
+	$raw = trim( $raw );
+	if ( $raw === '' ) {
+		return '';
+	}
+	// UTF-8 BOM
+	if ( strncmp( $raw, "\xEF\xBB\xBF", 3 ) === 0 ) {
+		$raw = substr( $raw, 3 );
+	}
+	// Try SOAP: inner payload often lives in GetSubscriberDataResult (may be CDATA + entity-encoded XML).
+	if ( preg_match( '/<GetSubscriberDataResult[^>]*>([\s\S]*?)<\/GetSubscriberDataResult>/i', $raw, $m ) ) {
+		$inner = trim( $m[1] );
+		if ( preg_match( '/^<!\[CDATA\[/', $inner ) ) {
+			$inner = preg_replace( '/^<!\[CDATA\[/', '', $inner );
+			$inner = preg_replace( '/\]\]>\s*$/', '', $inner );
+			$inner = trim( $inner );
+		}
+		$inner = html_entity_decode( $inner, ENT_QUOTES | ENT_XML1, 'UTF-8' );
+		$inner = trim( $inner );
+		if ( $inner !== '' ) {
+			return $inner;
+		}
+	}
+	// Original path: strip first XML declaration and use remainder (legacy direct string response).
+	$xml_start = strpos( $raw, '?>' );
+	if ( $xml_start !== false ) {
+		$raw = substr( $raw, $xml_start + 2 );
+	}
+	return str_replace( array( '&gt;', '&lt;' ), array( '>', '<' ), $raw );
+}
+
 //extract data from the post
 //set POST variables
 
 $url = 'https://www.cambeywest.com/api/service.asmx/GetSubscriberData';
 $fields = array(
-    'subscriber_email' => urlencode($_POST['subscriber_email']),
-    'subscriber_pass' => urlencode($_POST['subscriber_pass']),
-    'pub_acronym' => urlencode('LXM'),
-    'auth_user' => urlencode('API231018'),
-    'auth_pass' => urlencode('5358Q3R2XQ'),
+	'subscriber_email' => isset( $_POST['subscriber_email'] ) ? stripslashes( (string) $_POST['subscriber_email'] ) : '',
+	'subscriber_pass'  => isset( $_POST['subscriber_pass'] ) ? stripslashes( (string) $_POST['subscriber_pass'] ) : '',
+	'pub_acronym'      => 'LXM',
+	'auth_user'        => 'API231018',
+	'auth_pass'        => '5358Q3R2XQ',
 );
 
 if ($fields['subscriber_email'] == '' || $fields['subscriber_pass'] == '') {
@@ -30,13 +96,7 @@ if ($fields['subscriber_email'] == '' || $fields['subscriber_pass'] == '') {
 }
 
 
-$fields_string = "";
-
-//url-ify the data for the POST
-foreach ($fields as $key => $value) {
-    $fields_string .= $key . '=' . $value . '&';
-}
-rtrim($fields_string, '&');
+$fields_string = http_build_query( $fields );
 
 //open connection
 $curl = curl_init();
@@ -153,80 +213,60 @@ if ($result === false || $result === '') {
 	exit;
 }
 
-$xml_start = strpos( $result, '?>' );
-if ( $xml_start !== false ) {
-	$result = substr( $result, $xml_start + 2 );
-}
-
-$result = str_replace(array('&gt;', '&lt;'), array('>', '<'), $result);
-
-$xml = @simplexml_load_string($result);
+$payload = cambey_unwrap_asmx_response( $result );
+$xml     = @simplexml_load_string( $payload );
 
 if ( ! $xml ) {
 	$arr = array(
-		'msg'         => 'Login service returned an unexpected response. Please try again.',
-		'url'         => '',
-		'url_label'   => '',
-		'acctno'      => '',
+		'msg'       => 'Login service returned an unexpected response. Please try again.',
+		'url'       => '',
+		'url_label' => '',
+		'acctno'    => '',
 	);
 	header( 'Content-Type: application/json; charset=utf-8' );
 	print json_encode( $arr );
 	exit;
 }
 
-$data = $xml->SubscriberData;
-
-/*
-SimpleXMLElement Object
-(
-    [SubscriberDataRoot] => SimpleXMLElement Object
-        (
-            [SubscriberData] => SimpleXMLElement Object
-                (
-                    [acctno] => 00001004
-*/
-
-if (!$data) {
-    $data = $xml->SubscriberDataRoot->SubscriberData;
-}
+$data = cambey_pick_subscriber_data( $xml );
 
 if ( ! $data ) {
 	$arr = array(
-		'msg'         => 'Login service returned incomplete data. Please try again.',
-		'url'         => '',
-		'url_label'   => '',
-		'acctno'      => '',
+		'msg'       => 'Login service returned incomplete data. Please try again.',
+		'url'       => '',
+		'url_label' => '',
+		'acctno'    => '',
 	);
 	header( 'Content-Type: application/json; charset=utf-8' );
 	print json_encode( $arr );
 	exit;
 }
 
-$msg = (string)$data->frienderrormsg;
-$url = (string)$data->friendhttp;
-$url_label = (string)$data->friendcorrectiveaction;
+$msg       = (string) $data->frienderrormsg;
+$url       = (string) $data->friendhttp;
+$url_label = (string) $data->friendcorrectiveaction;
 
-if (!trim($data->friendcorrectiveaction)) {
+$fc        = trim( (string) $data->friendcorrectiveaction );
+$acctno    = trim( (string) $data->acctno );
+$cwrec_id  = trim( (string) $data->cwrec_id );
+$result_ok = in_array( strtolower( trim( (string) $data->result ) ), array( 'true', '1' ), true );
+$has_ids   = ( $acctno !== '' || $cwrec_id !== '' );
 
-    $cwrec_id = (string)$data->cwrec_id;
-    $acctno = (string)$data->acctno;
-
-    if ($acctno !== "" || $cwrec_id !== "") {
-        bake_cred($cwrec_id, $acctno);
-        bake_day_pass($cwrec_id, $acctno);
-
-        $msg = "You have been logged in!";
-        $url = "";
-        $url_label = "";
-    } else {
-        $msg = "Your account information was not found. Please try again or click the link below to start a subscription.";
-        $url = "https://join.luxurymarketer.com/LXR/?f=paid";
-        $url_label = "Subscribe";
-        trash_cookies();
-    }
+// Success when we have account identifiers and either <result> is true or there is no "friend" corrective action (legacy).
+// Fixes cases where friendcorrectiveaction is still populated but login succeeded (result + acctno present).
+if ( $has_ids && ( $result_ok || $fc === '' ) ) {
+	bake_cred( $cwrec_id, $acctno );
+	bake_day_pass( $cwrec_id, $acctno );
+	$msg       = 'You have been logged in!';
+	$url       = '';
+	$url_label = '';
+} elseif ( $fc !== '' ) {
+	trash_cookies();
 } else {
-
-    trash_cookies();
+	$msg       = 'Your account information was not found. Please try again or click the link below to start a subscription.';
+	$url       = 'https://join.luxurymarketer.com/LXR/?f=paid';
+	$url_label = 'Subscribe';
+	trash_cookies();
 }
 
 $arr = array(
