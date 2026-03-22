@@ -24,6 +24,7 @@ if ($fields['subscriber_email'] == '' || $fields['subscriber_pass'] == '') {
         'acctno' => isset($acctno) ? $acctno : ""
     );
 
+	header( 'Content-Type: application/json; charset=utf-8' );
     print json_encode($arr);
     return;
 }
@@ -43,23 +44,12 @@ $curl = curl_init();
 //set the url, number of POST vars, POST data
 curl_setopt($curl, CURLOPT_URL, $url);
 curl_setopt($curl, CURLOPT_POST, count($fields));
-// curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($curl, CURLOPT_POSTFIELDS, $fields_string);
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
-// $fp = fopen(dirname(__FILE__).'/errorlog.txt', 'w');
-// curl_setopt($curl, CURLOPT_VERBOSE, 1);
-// curl_setopt($curl, CURLOPT_STDERR, $fp);
-
-//execute post
-ob_start();
-
-curl_exec($curl);
-
-$result = ob_get_contents();
-
-ob_end_clean();
+$result = curl_exec($curl);
 
 //close connection
 curl_close($curl);
@@ -151,13 +141,40 @@ $result = "
 </string>
 	*/
 
-$result = substr($result, strpos($result, '?' . '>') + 2);
+if ($result === false || $result === '') {
+	$arr = array(
+		'msg'         => 'Login service temporarily unavailable. Please try again.',
+		'url'         => '',
+		'url_label'   => '',
+		'acctno'      => '',
+	);
+	header( 'Content-Type: application/json; charset=utf-8' );
+	print json_encode( $arr );
+	exit;
+}
+
+$xml_start = strpos( $result, '?>' );
+if ( $xml_start !== false ) {
+	$result = substr( $result, $xml_start + 2 );
+}
 
 $result = str_replace(array('&gt;', '&lt;'), array('>', '<'), $result);
 
-$xml = simplexml_load_string($result);
+$xml = @simplexml_load_string($result);
 
-$data =  $xml->SubscriberData;
+if ( ! $xml ) {
+	$arr = array(
+		'msg'         => 'Login service returned an unexpected response. Please try again.',
+		'url'         => '',
+		'url_label'   => '',
+		'acctno'      => '',
+	);
+	header( 'Content-Type: application/json; charset=utf-8' );
+	print json_encode( $arr );
+	exit;
+}
+
+$data = $xml->SubscriberData;
 
 /*
 SimpleXMLElement Object
@@ -171,6 +188,18 @@ SimpleXMLElement Object
 
 if (!$data) {
     $data = $xml->SubscriberDataRoot->SubscriberData;
+}
+
+if ( ! $data ) {
+	$arr = array(
+		'msg'         => 'Login service returned incomplete data. Please try again.',
+		'url'         => '',
+		'url_label'   => '',
+		'acctno'      => '',
+	);
+	header( 'Content-Type: application/json; charset=utf-8' );
+	print json_encode( $arr );
+	exit;
 }
 
 $msg = (string)$data->frienderrormsg;
@@ -207,4 +236,5 @@ $arr = array(
     'acctno' => isset($acctno) ? $acctno : ""
 );
 
+header( 'Content-Type: application/json; charset=utf-8' );
 print json_encode($arr);

@@ -55,41 +55,65 @@ $(document).ready(function () {
 
   /*CAMBEY LOGIN*/
   $("form#cambey-login").submit(function (event) {
+    event.preventDefault();
+    if (posting) {
+      return false;
+    }
     var form = $(this);
+    var redirect = form.find(".redirect").val();
 
-    var redirect = $(this).find(".redirect").val();
-
-    // process the form
+    posting = true;
     $.ajax({
-      type: form.attr("method"), // define the type of HTTP verb we want to use (POST for our form)
+      type: form.attr("method"),
       url: form.attr("action"),
       data: form.serialize(),
-      dataType: "json",
-    }).done(function (data) {
-      if (data.msg) {
-        $(".msg").html(data.msg);
-        $(".msg").show();
-      } else {
-        $(".msg").hide();
-      }
-
-      if (data.url) {
-        $(".action a").attr("href", data.url);
-        $(".action a").html(data.url_label);
-
-        $(".action").show();
-      } else {
-        $(".action").hide();
-        if (redirect) {
-          location.href = redirect;
-        } else {
-          location.href = "/";
+      dataType: "text",
+    })
+      .done(function (text) {
+        posting = false;
+        var data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          $(".msg")
+            .html(
+              "Login could not be completed (invalid response). Please try again."
+            )
+            .show();
+          console.error("cambey login JSON parse error", e, text);
+          return;
         }
-      }
-    });
 
-    // stop the form from submitting the normal way and refreshing the page
-    event.preventDefault();
+        if (data.msg) {
+          $(".msg").html(data.msg);
+          $(".msg").show();
+        } else {
+          $(".msg").hide();
+        }
+
+        if (data.url) {
+          $(".action a").attr("href", data.url);
+          $(".action a").html(data.url_label);
+
+          $(".action").show();
+        } else {
+          $(".action").hide();
+          if (redirect) {
+            location.href = redirect;
+          } else {
+            location.href = "/";
+          }
+        }
+      })
+      .fail(function (xhr, status, err) {
+        posting = false;
+        $(".msg")
+          .html(
+            "Unable to reach the login service. Please try again or refresh the page."
+          )
+          .show();
+        console.error("cambey login ajax fail", xhr.status, xhr.responseText, status, err);
+      });
   });
 
   $(document).on("click", ".logout-link", function (e) {

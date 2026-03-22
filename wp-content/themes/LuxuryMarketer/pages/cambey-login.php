@@ -32,7 +32,7 @@ get_header();
 
 
                     <form class="form-horizontal" id="cambey-login" action="<?= $url_root ?>/../../plugins/cambey/login.php" method="POST">
-                        <input class="redirect" name="redirect" type="hidden" value="<?php if(array_key_exists('redirect', $_GET)){print $_GET['redirect'];} ?>" />
+                        <input class="redirect" name="redirect" type="hidden" value="<?php echo isset( $_GET['redirect'] ) ? esc_attr( wp_unslash( $_GET['redirect'] ) ) : ''; ?>" />
                         <fieldset>
 
                             <div class="form-group">
