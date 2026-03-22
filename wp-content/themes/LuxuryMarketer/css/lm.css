@@ -1434,6 +1434,17 @@ footer .navbar-form .form-control {
 }
 
 .section.divider {
+  border: 1px solid #999;
+  margin-bottom: 10px;
+  height: 4px;
+  border-left: 0px;
+  border-right: 0px;
+
+
+  
+}
+
+.header.section.divider {
     border: 1px solid #999;
     margin-bottom: 10px;
     height: 4px;

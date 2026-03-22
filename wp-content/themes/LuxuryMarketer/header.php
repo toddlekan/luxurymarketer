@@ -548,7 +548,7 @@ if ( is_search() ) {
 
 
 <div class="col-lg-12">
-  <div class="newswell-divider section divider"></div>
+  <div class="header section divider"></div>
 </div>
 
 </div>
