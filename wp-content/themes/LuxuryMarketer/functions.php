@@ -732,10 +732,10 @@ function ld16_showkey($id = 0, $newsletter = false)
 		$output = '<span style="color:#BCBCBC; font-size: 9px;">COMPLIMENTARY</span>';
 	}
 
-	// Key icon marks subscriber-only articles for anonymous visitors (was inverted: showed only when not locked).
+	// Locked (subscriber-only) indicator for guests — use ic_lock.png, not ic_unlock.png.
 	if ( ! ld16_logged_in() && ld16_is_locked( $id ) ) {
 		$url_root = ld16_cdn( get_template_directory_uri() );
-		$output  .= '<img src="' . esc_url( $url_root . '/img/ic_unlock.png' ) . '" alt="" width="12" height="12" style="vertical-align:middle;margin-left:4px;" />';
+		$output  .= '<img src="' . esc_url( $url_root . '/img/ic_lock.svg' ) . '" alt="' . esc_attr__( 'Subscriber content', 'twentysixteen' ) . '" width="12" height="12" style="vertical-align:middle;margin-left:4px;opacity:0.65;" />';
 	}
 
 	return $output;
