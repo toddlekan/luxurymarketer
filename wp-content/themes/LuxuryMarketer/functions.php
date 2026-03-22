@@ -753,7 +753,7 @@ function ld16_showkey( $id = 0, $newsletter = false ) {
 	// Open-to-all readers (not subscriber-only paywall).
 	if ( $id && ld16_is_publicly_unlocked_article( $id ) ) {
 		$url_root = ld16_cdn( get_template_directory_uri() );
-		$output  .= '<img src="' . esc_url( $url_root . '/img/ic_unlock.svg' ) . '" alt="' . esc_attr__( 'Open to all readers', 'luxurymarketer' ) . '" width="12" height="12" style="vertical-align:middle;margin-left:4px;opacity:0.65;" />';
+		$output  .= '<img src="' . esc_url( $url_root . '/img/ic_unlock.png' ) . '" alt="' . esc_attr__( 'Open to all readers', 'luxurymarketer' ) . '" width="12" height="12" style="vertical-align:middle;margin-left:4px;opacity:0.65;" />';
 	}
 
 	return $output;
