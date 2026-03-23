@@ -267,11 +267,10 @@ if ( is_search() ) {
               <a href="/" id="logo"><img class="main-logo" src="<?= $url_root ?>/img/LuxuryMarketer.png"></a>
             </center>
           </div>
-          <div class="col-lg-2 logo-side">
+          <div class="col-lg-2 logo-side logo-side-right">
 
-
-              <br />
-              <ul class="nav navbar-nav" style="float: right;">
+              <div class="logo-side-masthead logo-side-masthead-right">
+                <ul class="nav navbar-nav logo-side-nav-actions">
                 
                 <li class="label subscribe">
 
@@ -280,14 +279,12 @@ if ( is_search() ) {
                 </li>
                 <li class="label subscribe">
 
-                  <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&f=paid" style="">
+                  <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&amp;f=paid" style="">
                     SUBSCRIBE</a>
                 </li>
 
               </ul>
-              
-                <br />
-                <ul class="nav navbar-nav nav-master-class-search" style="float: right;margin-left: 32px;margin-top: -12px;">
+                <ul class="nav navbar-nav nav-master-class-search logo-side-nav-actions">
                 
                 <li class="label subscribe">
 
@@ -300,7 +297,7 @@ if ( is_search() ) {
                 </li>
 
               </ul>
-              
+              </div>
               
           </div>
         </div>
