@@ -3082,7 +3082,7 @@ ul.no-bullet {
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  column-gap: 18px;
+  column-gap: 3px;
   margin-bottom: 8px;
 }
 .logo-side-masthead .initials {
@@ -3109,7 +3109,7 @@ ul.no-bullet {
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  column-gap: 18px;
+  column-gap: 3px;
   margin: 0;
   float: none;
 }
@@ -3117,7 +3117,7 @@ ul.no-bullet {
   float: none !important;
 }
 .logo-side-masthead .logo-side-masthead-nav > li > a {
-  padding: 0 2px !important;
+  padding: 0 1px !important;
 }
 .logo-side-masthead .logo-side-masthead-nav > li > a.desktop.dropdown-toggle {
   display: flex;
