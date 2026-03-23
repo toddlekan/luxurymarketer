@@ -3076,26 +3076,17 @@ ul.no-bullet {
 }
 
 /*TOGGLE*/
-/* Luxury Roundtable — top-left only (beside hamburger when toggle is visible); not in the category tab bar */
-.lr-header-roundtable-link {
-  position: absolute;
-  top: 10px;
-  left: 52px;
-  z-index: 999999999;
+/* Luxury Roundtable — second item in logo-side .nav (beside hamburger dropdown), grey tab type */
+.logo-side .navbar-nav > .lr-header-roundtable-item {
+  float: left;
+}
+.logo-side .navbar-nav > .lr-header-roundtable-item > a.grey {
   font-family: "News Cycle", "Arial Narrow Bold", sans-serif;
   font-weight: 600;
   font-size: 14px;
-  line-height: 36px;
-  height: 36px;
-  text-decoration: none;
+  padding: 9px 4px 9px 10px;
+  line-height: 1.25;
   white-space: nowrap;
-}
-
-/* Wide desktop: hamburger hidden — sit label at the left margin (same vertical band as the old toggle slot) */
-@media (min-width: 1281px) {
-  .lr-header-roundtable-link {
-    left: 10px;
-  }
 }
 
 .navbar-toggle {
@@ -3454,7 +3445,7 @@ ul.no-bullet {
 }
 
 /* Nav, masthead, category & in-content link hovers — brand red */
-#lr-header .lr-header-roundtable-link.grey:hover,
+#lr-header .lr-header-roundtable-item > a.grey:hover,
 #lr-header .navbar-nav a:hover,
 #lr-header .navbar-nav a.grey:hover,
 #lr-header .navbar-nav a.reverse.grey:hover,

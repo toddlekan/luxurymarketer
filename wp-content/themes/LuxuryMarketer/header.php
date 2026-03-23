@@ -161,8 +161,6 @@ if ( is_search() ) {
       <div class="navbar-toggle-inner"></div>
     </button>
 
-    <a href="<?php echo esc_url( 'https://luxuryroundtable.com/' ); ?>" class="lr-header-roundtable-link grey" target="_blank" rel="noopener noreferrer">Luxury Roundtable</a>
-
     <div class="navbar-header">
 
       <div class="container-fluid logo-container">
@@ -239,6 +237,9 @@ if ( is_search() ) {
               
                     </ul>
 
+                  </li>
+                  <li class="lr-header-roundtable-item">
+                    <a href="<?php echo esc_url( 'https://luxuryroundtable.com/' ); ?>" class="grey" target="_blank" rel="noopener noreferrer">Luxury Roundtable</a>
                   </li>
                 </ul>
               </div>
@@ -449,6 +450,7 @@ if ( is_search() ) {
   <div class="navbar-collapse collapse" id="navbar-main">
   <ul class="no-bullet mobile-menu" style="float: left;">
   <li><a class="reverse grey" href="/">Home</a></li>
+  <li><a class="reverse grey" href="<?php echo esc_url( 'https://luxuryroundtable.com/' ); ?>" target="_blank" rel="noopener noreferrer">Luxury Roundtable</a></li>
                   
                   <li class="reverse dropdown item">
                     <a href="/category/news/research-news" class="dropdown-toggle grey" data-toggle="dropdown" role="button" 
