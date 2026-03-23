@@ -3076,16 +3076,63 @@ ul.no-bullet {
 }
 
 /*TOGGLE*/
-/* Luxury Roundtable — second item in logo-side .nav (beside hamburger dropdown), grey tab type */
-.logo-side .navbar-nav > .lr-header-roundtable-item {
-  float: left;
+/* Logo-side: initials | hamburger | Luxury Roundtable — vertical center, equal column-gap */
+.logo-side-masthead {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  column-gap: 18px;
+  margin-bottom: 8px;
 }
-.logo-side .navbar-nav > .lr-header-roundtable-item > a.grey {
+.logo-side-masthead .initials {
+  float: none;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  line-height: 0;
+}
+.logo-side-masthead .initials img {
+  display: block;
+  max-height: 50px;
+  width: auto;
+}
+.logo-side-masthead .logo-side-inline-nav {
+  flex: 0 1 auto;
+  min-height: 0 !important;
+  margin-bottom: 0;
+  border: 0;
+  border-radius: 0;
+}
+.logo-side-masthead .logo-side-masthead-nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  column-gap: 18px;
+  margin: 0;
+  float: none;
+}
+.logo-side-masthead .logo-side-masthead-nav > li {
+  float: none !important;
+}
+.logo-side-masthead .logo-side-masthead-nav > li > a {
+  padding: 0 2px !important;
+}
+.logo-side-masthead .logo-side-masthead-nav > li > a.desktop.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+}
+.logo-side-masthead .lr-header-roundtable-item > a.grey {
   font-family: "News Cycle", "Arial Narrow Bold", sans-serif;
   font-weight: 600;
   font-size: 14px;
-  padding: 9px 4px 9px 10px;
-  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  line-height: 1.2;
   white-space: nowrap;
 }
 

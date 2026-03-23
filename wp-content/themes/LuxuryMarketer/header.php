@@ -168,14 +168,14 @@ if ( is_search() ) {
         <div class="logo-row">
           <div class="col-lg-2 logo-side">
 
-              <br />
+              <div class="logo-side-masthead">
               <a href="/" class="initials">
-                <img src="/wp-content/themes/LuxuryMarketer/img/lm-initials-50.png">
+                <img src="/wp-content/themes/LuxuryMarketer/img/lm-initials-50.png" alt="">
               </a>
 
-              <div class="navbar">
+              <div class="navbar logo-side-inline-nav">
 
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav logo-side-masthead-nav">
                   <li class="dropdown">
                     <a href="#" class="desktop dropdown-toggle" type="button" data-toggle="dropdown" role="button" aria-expanded="false">
                       <ul class="clr">
@@ -242,6 +242,7 @@ if ( is_search() ) {
                     <a href="<?php echo esc_url( 'https://luxuryroundtable.com/' ); ?>" class="grey" target="_blank" rel="noopener noreferrer">Luxury Roundtable</a>
                   </li>
                 </ul>
+              </div>
               </div>
 
               <div class="label date grey">New York,
