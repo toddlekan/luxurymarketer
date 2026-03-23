@@ -175,6 +175,10 @@ if (have_posts()) {
 					?>
 
 					</div>
+
+					<div class="clearfix home-more-articles-wrap">
+						<a class="more reverse pull-right" href="/more-stories"><span class="gt-label">More Articles</span> <span class="glyphicon glyphicon-menu-right gt-one"></span><span class="glyphicon glyphicon-menu-right gt-two"></span></a>
+					</div>
 	
 				</div>
 
@@ -250,14 +254,6 @@ if (have_posts()) {
 					</div>
 					
 					<div style="clear: both;"></div>
-					
-					<footer class="">
-						<div class="row copyright">
-						
-							<a class="more reverse" href="/more-stories"><span class="gt-label">More Articles</span> <span class="glyphicon glyphicon-menu-right gt-one"></span><span class="glyphicon glyphicon-menu-right gt-two"></span></a>
-			
-					    </div>
-					</footer>
 					
 				</div>
 			</div>
