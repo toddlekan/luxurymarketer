@@ -37,3 +37,6 @@ deleteme*
 *.tgz
 *.sql
 
+# Allow versioned theme migration scripts (*.sql above ignores DB dumps by default)
+!wp-content/themes/LuxuryMarketer/sql/migrate_research_categories.sql
+
