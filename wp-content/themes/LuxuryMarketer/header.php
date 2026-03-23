@@ -284,7 +284,7 @@ if ( is_search() ) {
 
               </ul>
 
-                <ul class="nav navbar-nav nav-master-class-search" style="float: right;margin-left: 32px;margin-top: -12px;">
+                <ul class="nav navbar-nav nav-master-class-search">
                 
                 <li class="label subscribe">
 

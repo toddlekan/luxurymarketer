@@ -1272,11 +1272,28 @@ button.navbar-toggle.desktop .label {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  gap: 12px;
+  gap: 3px;
 }
 
 .nav-master-class-search .header-magnify {
   margin-top: 0;
+}
+
+/* Logo column: Master Class + search — 3px gap, flush right (no margin-left offset / extra right gutter) */
+.logo-side .nav-master-class-search {
+  float: right;
+  margin-top: -12px;
+  margin-left: 0;
+  margin-right: 0;
+  padding-right: 0;
+}
+.logo-side .nav-master-class-search > li:last-child {
+  margin-right: 0;
+  padding-right: 0;
+}
+.logo-side .nav-master-class-search > li:last-child > a.header-magnify {
+  margin-right: 0;
+  padding-right: 0 !important;
 }
 
 .header-magnify {
