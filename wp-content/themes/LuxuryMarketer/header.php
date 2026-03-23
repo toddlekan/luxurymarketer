@@ -317,7 +317,6 @@ if ( is_search() ) {
     <div class="navbar collapse navbar-collapse menu">
       <ul class="nav navbar-nav" style="float: none; margin: 0 auto; width: auto; gap:1rem; display:flex; justify-content: center;">
 
-        <li class="item lr-header-roundtable-desktop"><a href="<?php echo esc_url( 'https://luxuryroundtable.com/' ); ?>" class="grey" target="_blank" rel="noopener noreferrer">Luxury Roundtable</a></li>
         <li class="item"><a href="/category/fashion-and-leather-goods" class="grey">Fashion &amp; Leather Goods</a></li>
         <li class="item"><a href="/category/real-estate" class="grey">Real Estate &amp; Design</a></li>
         <li class="item"><a href="/category/retail" class="grey">Retail</a></li>

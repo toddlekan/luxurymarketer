@@ -3076,7 +3076,7 @@ ul.no-bullet {
 }
 
 /*TOGGLE*/
-/* External sister site — same grey as category tabs; hidden on wide desktop where masthead tabs show */
+/* Luxury Roundtable — top-left only (beside hamburger when toggle is visible); not in the category tab bar */
 .lr-header-roundtable-link {
   position: absolute;
   top: 10px;
@@ -3091,9 +3091,10 @@ ul.no-bullet {
   white-space: nowrap;
 }
 
+/* Wide desktop: hamburger hidden — sit label at the left margin (same vertical band as the old toggle slot) */
 @media (min-width: 1281px) {
   .lr-header-roundtable-link {
-    display: none !important;
+    left: 10px;
   }
 }
 
