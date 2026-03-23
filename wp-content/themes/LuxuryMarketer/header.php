@@ -269,8 +269,6 @@ if ( is_search() ) {
           </div>
           <div class="col-lg-2 logo-side">
 
-
-              <br />
               <ul class="nav navbar-nav" style="float: right;">
                 
                 <li class="label subscribe">
@@ -285,8 +283,7 @@ if ( is_search() ) {
                 </li>
 
               </ul>
-              
-                <br />
+
                 <ul class="nav navbar-nav nav-master-class-search" style="float: right;margin-left: 32px;margin-top: -12px;">
                 
                 <li class="label subscribe">
