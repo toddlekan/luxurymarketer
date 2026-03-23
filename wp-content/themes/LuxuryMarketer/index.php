@@ -254,7 +254,7 @@ if (have_posts()) {
 					<footer class="">
 						<div class="row copyright">
 						
-							<a class="more articles reverse " href="/more-stories"><span class="gt-label">More Articles</span> <span class="glyphicon glyphicon-menu-right gt-one"></span><span class="glyphicon glyphicon-menu-right gt-two"></span></a>
+							<a class="more reverse" href="/more-stories"><span class="gt-label">More Articles</span> <span class="glyphicon glyphicon-menu-right gt-one"></span><span class="glyphicon glyphicon-menu-right gt-two"></span></a>
 			
 					    </div>
 					</footer>
@@ -278,13 +278,21 @@ if (have_posts()) {
 					<div class="newswell">
 
 					<div class="heading">
-						<a href="/category/research/">RESEARCH</a>
+						<a href="/category/news/research-news/">RESEARCH</a>
 					</div>
 
 					<?php
-					$opinion_args['posts_per_page'] = 3;
-					$opinion_args['category_name'] = 'research';
-					query_posts($opinion_args);
+					$opinion_args = array(
+						'posts_per_page' => 3,
+						'tax_query'        => array(
+							array(
+								'taxonomy' => 'category',
+								'field'    => 'slug',
+								'terms'    => 'research-news',
+							),
+						),
+					);
+					query_posts( $opinion_args );
 
 					while (have_posts()) : the_post();
 
@@ -295,7 +303,7 @@ if (have_posts()) {
 					?>
 					</div>
 
-					<a class="more reverse" href="/category/research/"><span class="gt-label">More Research</span> <span class="glyphicon glyphicon-menu-right gt-one"></span><span class="glyphicon glyphicon-menu-right gt-two"></span></a>
+					<a class="more reverse" href="/category/news/research-news/"><span class="gt-label">More Research</span> <span class="glyphicon glyphicon-menu-right gt-one"></span><span class="glyphicon glyphicon-menu-right gt-two"></span></a>
 
 				</div>
 			</div>
@@ -319,9 +327,11 @@ if (have_posts()) {
 					</div>
 
 					<?php
-					$opinion_args['posts_per_page'] = 3;
-					$opinion_args['category_name'] = 'columns';
-					query_posts($opinion_args);
+					$opinion_args = array(
+						'posts_per_page' => 3,
+						'category_name'  => 'columns',
+					);
+					query_posts( $opinion_args );
 
 					while (have_posts()) : the_post();
 
@@ -358,9 +368,11 @@ if (have_posts()) {
 						</div>
 
 						<?php
-						$opinion_args['posts_per_page'] = 3;
-						$opinion_args['category_name'] = 'profiles';
-						query_posts($opinion_args);
+						$opinion_args = array(
+							'posts_per_page' => 3,
+							'category_name'  => 'profiles',
+						);
+						query_posts( $opinion_args );
 
 						while (have_posts()) : the_post();
 
@@ -397,9 +409,11 @@ if (have_posts()) {
 					</div>
 
 					<?php
-					$opinion_args['posts_per_page'] = 3;
-					$opinion_args['category_name'] = 'networking-and-events';
-					query_posts($opinion_args);
+					$opinion_args = array(
+						'posts_per_page' => 3,
+						'category_name'  => 'networking-and-events',
+					);
+					query_posts( $opinion_args );
 
 					while (have_posts()) : the_post();
 
@@ -472,7 +486,7 @@ if (have_posts()) {
 							'art-and-auctions', 'cars-jets-and-yachts', 'china', 'education', 'entertainment', 
 							'fashion-and-leather-goods', 'health-and-wellness', 'legal-and-regulation', 'marketing', 
 							'media-and-publishing', 'outlook', 'perfumes-and-cosmetics', 'philanthropy-foundations-and-nonprofits', 'profiles',
-							'real-estate', 'research', 'retail', 'sports', 'environment-and-sustainability', 'ai-and-automation', 
+							'real-estate', 'research-news', 'retail', 'sports', 'environment-and-sustainability', 'ai-and-automation', 
 							'travel-and-hospitality', 'watches-and-jewelry', 'wealth-management', 'food-fine-dining-wines-and-spirits');
 
 						// Limit to 6 rows × 4 columns = 24 categories

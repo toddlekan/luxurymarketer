@@ -600,7 +600,7 @@ if (array_key_exists('date', $_GET)) {
                         <p style="font-family: 'Neue-Frutiger-W04-Light', arial, serif; font-size:13px">
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/about/">About</a> |
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/category/networking-and-events">Networking & Events</a> |
-                          <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/category/research">Research</a> |
+                          <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/category/news/research-news/">Research</a> |
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/category/news">News</a> |
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/subscription-form/">Free Newsletter</a> |
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/category/luxury-class">Luxury Class</a> |

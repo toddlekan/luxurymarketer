@@ -8,6 +8,23 @@ add_filter('acf/settings/remove_wp_meta_box', '__return_false');
 add_filter('wp_get_attachment_url', 'am19_url_change');
 update_option('image_default_size', 'full' );
 
+/** Raise media upload cap to 50 MB (also set upload_max_filesize/post_max_size in php.ini if host allows). */
+add_filter(
+	'upload_size_limit',
+	static function () {
+		return 50 * 1024 * 1024;
+	},
+	20
+);
+add_action(
+	'admin_init',
+	static function () {
+		@ini_set( 'upload_max_filesize', '50M' );
+		@ini_set( 'post_max_size', '55M' );
+	},
+	1
+);
+
 function am19_url_change($url)
 {
 
@@ -538,7 +555,11 @@ function ld16_get_video_thumbnail($field, $id = 0)
 function ld16_get_image()
 {
 
-	$guid = ld16_get_custom_field('main_img');
+	// Prefer hero (large lead) over main_img when both exist (home + listings).
+	$guid = ld16_get_custom_field( 'hero_img' );
+	if ( ! $guid ) {
+		$guid = ld16_get_custom_field( 'main_img' );
+	}
 
 	if (!$guid) {
 		$id = get_the_ID();

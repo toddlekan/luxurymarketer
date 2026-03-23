@@ -1268,6 +1268,17 @@ button.navbar-toggle.desktop .label {
   width: 27px;
 }
 
+.nav-master-class-search {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 12px;
+}
+
+.nav-master-class-search .header-magnify {
+  margin-top: 0;
+}
+
 .header-magnify {
   display: block;
   border: 1px solid #e2e2e2;
@@ -1962,6 +1973,14 @@ a.img-container.main img {
 }
 
 #hero-section-6 .heading{margin-left: 0; margin-top: 0px;}
+
+/* Home: Events strip — match section title alignment to Profiles strip above */
+.home-page #hero-section-6 .newswell > .heading {
+  margin-left: 0;
+  margin-top: 0;
+  margin-bottom: 14px;
+  padding-top: 0;
+}
 
 .home-category-grid .heading{margin-left: 0; margin-top: 0px;}
 
