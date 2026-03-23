@@ -3136,41 +3136,6 @@ ul.no-bullet {
   white-space: nowrap;
 }
 
-/* Right logo column: line breaks preserved (br) + stacked rows aligned with left masthead */
-.logo-side-masthead-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-  margin-bottom: 8px;
-}
-.logo-side-masthead-right .logo-side-nav-actions {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  column-gap: 3px;
-  margin: 0;
-  float: none !important;
-}
-.logo-side-masthead-right .logo-side-nav-actions > li {
-  float: none !important;
-}
-.logo-side-masthead-right .logo-side-nav-actions > li > a {
-  display: flex;
-  align-items: center;
-  min-height: 50px;
-  padding: 0 1px !important;
-}
-.logo-side-masthead-right .nav-master-class-search {
-  gap: 3px;
-  margin-left: 32px;
-  margin-top: -12px;
-}
-.logo-side-masthead-right .header-magnify {
-  margin-top: 0 !important;
-}
-
 .navbar-toggle {
   position: absolute;
   top: 10px;

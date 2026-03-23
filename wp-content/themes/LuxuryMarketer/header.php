@@ -267,12 +267,11 @@ if ( is_search() ) {
               <a href="/" id="logo"><img class="main-logo" src="<?= $url_root ?>/img/LuxuryMarketer.png"></a>
             </center>
           </div>
-          <div class="col-lg-2 logo-side logo-side-right">
+          <div class="col-lg-2 logo-side">
 
 
-              <div class="logo-side-masthead logo-side-masthead-right">
               <br />
-              <ul class="nav navbar-nav logo-side-nav-actions">
+              <ul class="nav navbar-nav" style="float: right;">
                 
                 <li class="label subscribe">
 
@@ -288,7 +287,7 @@ if ( is_search() ) {
               </ul>
               
                 <br />
-                <ul class="nav navbar-nav nav-master-class-search logo-side-nav-actions">
+                <ul class="nav navbar-nav nav-master-class-search" style="float: right;margin-left: 32px;margin-top: -12px;">
                 
                 <li class="label subscribe">
 
@@ -301,7 +300,7 @@ if ( is_search() ) {
                 </li>
 
               </ul>
-              </div>
+              
               
           </div>
         </div>
