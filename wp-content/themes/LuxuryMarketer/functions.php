@@ -31,6 +31,19 @@ function am19_url_change($url)
 	return $url; //str_replace('luxurymarketer.com', 'www.luxurymarketer.com', $url);
 }
 
+/**
+ * PHP 8+ throws ValueError when getimagesize() receives an empty string.
+ *
+ * @param string $path URL or local path.
+ * @return array|false Same shape as getimagesize(), or false when path is empty/unreadable.
+ */
+function lm_safe_getimagesize( $path ) {
+	if ( ! is_string( $path ) || '' === trim( $path ) ) {
+		return false;
+	}
+	return @getimagesize( $path );
+}
+
 if (array_key_exists('mobile', $_GET) && $_GET['mobile']) {
 
 	add_action('after_setup_theme', 'plugin_override');
@@ -222,7 +235,11 @@ function scrape_media($id)
 			$new_guid = $img->guid;
 			//$new_guid = str_replace('www.luxurydaily.com', 'cache.luxurydaily.com', $new_guid);
 
-			list($new_width, $height, $type, $attr) = getimagesize($new_guid);
+			$img_info = lm_safe_getimagesize( $new_guid );
+			if ( $img_info === false ) {
+				continue;
+			}
+			list($new_width, $height, $type, $attr) = $img_info;
 
 			if ($new_width > $width && $new_width >= $height) {
 				$main_img = $new_guid;
@@ -253,7 +270,11 @@ function scrape_media($id)
 		//file_put_contents("/tmp/ld.log", "checking: $new_width $new_guid\r\n", FILE_APPEND);
 
 		//$new_guid = str_replace('www.luxurydaily.com', 'cache.luxurydaily.com', $new_guid);
-		list($new_width, $height, $type, $attr) = getimagesize($new_guid);
+		$img_info = lm_safe_getimagesize( $new_guid );
+		if ( $img_info === false ) {
+			continue;
+		}
+		list($new_width, $height, $type, $attr) = $img_info;
 
 		if (!in_array($new_guid, $gallery_img)) {
 			$gallery_img[] = $new_guid;
@@ -291,7 +312,11 @@ function scrape_media($id)
 				$new_guid = $src[1];
 
 				//$new_guid = str_replace('www.luxurydaily.com', 'cache.luxurydaily.com', $new_guid);
-				list($new_width, $height, $type, $attr) = getimagesize($new_guid);
+				$img_info = lm_safe_getimagesize( $new_guid );
+				if ( $img_info === false ) {
+					continue;
+				}
+				list($new_width, $height, $type, $attr) = $img_info;
 
 				if ($new_width > $width && $new_width >= $height) {
 					$main_img = $new_guid;
@@ -321,58 +346,63 @@ function scrape_media($id)
 		add_post_meta($id, 'main_img', $main_img, true);
 
 		//$main_img = str_replace('www.luxurydaily.com', 'cache.luxurydaily.com', $main_img);
-		list($width, $height, $type, $attr) = getimagesize($main_img);
-
-		$new_width = 320;
-
-		if ($width > $new_width) {
-
-			$ratio_orig = $new_width * $height;
-
-			$new_height = $ratio_orig / $width;
-
-
-			$temp = explode('.', $main_img);
-			$ext = array_pop($temp);
-			$main_img_newsletter = implode('.', $temp) . "-320." . $ext;
-
-			//ini_set("log_errors", 1);
-			//ini_set("error_log", "/tmp/ld.log");
-
-			$image_p = imagecreatetruecolor($new_width, $new_height);
-
-			if ($ext == 'png') {
-				$image = imagecreatefrompng($main_img);
-			} else {
-				$image = imagecreatefromjpeg($main_img);
-			}
-
-			
-
-			imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-
-
-			$dir = dirname(__FILE__);
-
-			$pos = strpos($dir, "/wp-content");
-
-			$root = substr($dir, 0, $pos);
-
-			$pos = strpos($main_img_newsletter, "/wp-content");
-
-			$end = substr($main_img_newsletter, $pos);
-			
-			// Output
-			if ($ext == 'png') {
-				imagepng($image_p, $root . $end);
-			} else {
-				imagejpeg($image_p, $root . $end, 100);
-			}
-
-			add_post_meta($id, 'main_img_newsletter', $main_img_newsletter, true);
-		} else {
-
+		$img_info = lm_safe_getimagesize( $main_img );
+		if ( $img_info === false ) {
 			add_post_meta($id, 'main_img_newsletter', $main_img, true);
+		} else {
+			list($width, $height, $type, $attr) = $img_info;
+
+			$new_width = 320;
+
+			if ($width > $new_width) {
+
+				$ratio_orig = $new_width * $height;
+
+				$new_height = $ratio_orig / $width;
+
+
+				$temp = explode('.', $main_img);
+				$ext = array_pop($temp);
+				$main_img_newsletter = implode('.', $temp) . "-320." . $ext;
+
+				//ini_set("log_errors", 1);
+				//ini_set("error_log", "/tmp/ld.log");
+
+				$image_p = imagecreatetruecolor($new_width, $new_height);
+
+				if ($ext == 'png') {
+					$image = imagecreatefrompng($main_img);
+				} else {
+					$image = imagecreatefromjpeg($main_img);
+				}
+
+				
+
+				imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+
+				$dir = dirname(__FILE__);
+
+				$pos = strpos($dir, "/wp-content");
+
+				$root = substr($dir, 0, $pos);
+
+				$pos = strpos($main_img_newsletter, "/wp-content");
+
+				$end = substr($main_img_newsletter, $pos);
+				
+				// Output
+				if ($ext == 'png') {
+					imagepng($image_p, $root . $end);
+				} else {
+					imagejpeg($image_p, $root . $end, 100);
+				}
+
+				add_post_meta($id, 'main_img_newsletter', $main_img_newsletter, true);
+			} else {
+
+				add_post_meta($id, 'main_img_newsletter', $main_img, true);
+			}
 		}
 	}
 
@@ -575,11 +605,13 @@ function ld16_get_image()
 			if ($new_guid) {
 
 				//$new_guid = str_replace('www.luxurydaily.com', 'cache.luxurydaily.com', $new_guid);
-				list($new_width, $height, $type, $attr) = getimagesize($new_guid);
-
-				if ($new_width > $width && $new_width >= $height) {
-					$guid = $new_guid;
-					$width = $new_width;
+				$img_info = lm_safe_getimagesize( $new_guid );
+				if ( $img_info !== false ) {
+					list($new_width, $height, $type, $attr) = $img_info;
+					if ($new_width > $width && $new_width >= $height) {
+						$guid = $new_guid;
+						$width = $new_width;
+					}
 				}
 			}
 		}
@@ -591,11 +623,13 @@ function ld16_get_image()
 			if ($new_guid) {
 
 				//$new_guid = str_replace('www.luxurydaily.com', 'cache.luxurydaily.com', $new_guid);
-				list($new_width, $height, $type, $attr) = getimagesize($new_guid);
-
-				if ($new_width > $width && $new_width >= $height) {
-					$guid = $new_guid;
-					$width = $new_width;
+				$img_info = lm_safe_getimagesize( $new_guid );
+				if ( $img_info !== false ) {
+					list($new_width, $height, $type, $attr) = $img_info;
+					if ($new_width > $width && $new_width >= $height) {
+						$guid = $new_guid;
+						$width = $new_width;
+					}
 				}
 			}
 		}
@@ -619,10 +653,13 @@ function ld16_get_image()
 						if ($new_guid) {
 
 							//$new_guid = str_replace('www.luxurydaily.com', 'cache.luxurydaily.com', $new_guid);
-							list($new_width, $height, $type, $attr) = getimagesize($new_guid);
-							if ($new_width > $width && $new_width >= $height) {
-								$guid = $new_guid;
-								$width = $new_width;
+							$img_info = lm_safe_getimagesize( $new_guid );
+							if ( $img_info !== false ) {
+								list($new_width, $height, $type, $attr) = $img_info;
+								if ($new_width > $width && $new_width >= $height) {
+									$guid = $new_guid;
+									$width = $new_width;
+								}
 							}
 						}
 					}
