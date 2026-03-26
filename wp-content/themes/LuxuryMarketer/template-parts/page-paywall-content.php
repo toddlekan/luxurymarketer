@@ -48,7 +48,7 @@ for ( $i = 0; $i < count( $content ); $i++ ) {
 		<div class="row call-to-action" style="display:block;">
 			<div class="col-lg-12">
 				<center>
-					This content is accessible only to subscribers of Luxury Marketer. We would love for you to become a subscriber and enjoy the many benefits soon after. <a href="https://www.cambeywest.com/subscribe2_stage/?p=LXM&amp;f=paid" target="_blank">Please click here to enroll as a subscriber of Luxury Marketer.</a> Already a subscriber?
+					This content is accessible only to subscribers of Luxury Marketer. We would love for you to become a subscriber and enjoy the many benefits soon after. <a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" target="_blank">Please click here to enroll as a subscriber of Luxury Marketer.</a> Already a subscriber?
 					<a href="/log-in?redirect=<?php echo rawurlencode( get_permalink( $post ) ); ?>" class="pop-login">Please log in.</a>
 				</center>
 			</div>
