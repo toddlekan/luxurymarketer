@@ -1282,7 +1282,7 @@ button.navbar-toggle.desktop .label {
 /* Logo column: Master Class + search — 3px gap, flush right (no margin-left offset / extra right gutter) */
 .logo-side .nav-master-class-search {
   float: right;
-  margin-top: -12px;
+  margin-top: 0;
   margin-left: 0;
   margin-right: 0;
   padding-right: 0;
@@ -3100,7 +3100,7 @@ ul.no-bullet {
   flex-wrap: nowrap;
   align-items: center;
   column-gap: 3px;
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 .logo-side-masthead .initials {
   float: none;
@@ -3140,7 +3140,6 @@ ul.no-bullet {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 50px;
 }
 .logo-side-masthead .lr-header-roundtable-item > a.grey {
   font-family: "News Cycle", "Arial Narrow Bold", sans-serif;
@@ -3148,9 +3147,18 @@ ul.no-bullet {
   font-size: 14px;
   display: flex;
   align-items: center;
-  min-height: 50px;
   line-height: 1.2;
   white-space: nowrap;
+}
+
+/* No Bootstrap #eee hover/focus “plate” on masthead or right logo-column links */
+#lr-header .logo-side-masthead .logo-side-masthead-nav > li > a:hover,
+#lr-header .logo-side-masthead .logo-side-masthead-nav > li > a:focus,
+#lr-header .logo-side > ul.nav.navbar-nav > li > a:hover,
+#lr-header .logo-side > ul.nav.navbar-nav > li > a:focus {
+  background-color: transparent !important;
+  box-shadow: none;
+  outline: none;
 }
 
 .navbar-toggle {
@@ -3510,6 +3518,7 @@ ul.no-bullet {
 
 /* Nav, masthead, category & in-content link hovers — brand red */
 #lr-header .lr-header-roundtable-item > a.grey:hover,
+#lr-header .lr-header-roundtable-item > a.grey:focus,
 #lr-header .navbar-nav a:hover,
 #lr-header .navbar-nav a.grey:hover,
 #lr-header .navbar-nav a.reverse.grey:hover,
