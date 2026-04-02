@@ -317,7 +317,7 @@ if ( is_search() ) {
   <div class="page-header logo">
 
     <div class="navbar collapse navbar-collapse menu">
-      <ul class="nav navbar-nav" style="float: none; margin: 0 auto; width: auto; gap:1rem; display:flex; justify-content: center;">
+      <ul class="nav navbar-nav lm-category-nav">
 
         <li class="item"><a href="/category/fashion-and-leather-goods" class="grey">Fashion &amp; Leather Goods</a></li>
         <li class="item"><a href="/category/real-estate" class="grey">Real Estate &amp; Design</a></li>
