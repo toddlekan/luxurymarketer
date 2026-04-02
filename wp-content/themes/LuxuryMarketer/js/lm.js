@@ -270,7 +270,7 @@ $(document).ready(function () {
         "https://www.cambeywest.com/LXM/?f=custcare&a=" + acctno;
 
       if (!acctno) {
-        acctno_href = "https://www.cambeywest.com/subscribe2/LXM/?f=pa";
+        acctno_href = "https://luxurymarketer.subsmediahub.com/LXM/?f=pa";
         $(".label.subscribe .my").html("Forgot Password");
       }
 

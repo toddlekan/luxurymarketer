@@ -69,7 +69,7 @@ get_header();
                                 
 
                                 <div class="col-lg-10 forgot unlocked">
-                                    <a href="https://www.cambeywest.com/subscribe2/LXM/?f=pa">Forgot password?</a>
+                                    <a href="https://luxurymarketer.subsmediahub.com/LXM/?f=pa">Forgot password?</a>
                                 </div>
 
                                 <div class="col-lg-10 msg" style="display:none; color: red!important; font-weight: bold!important">

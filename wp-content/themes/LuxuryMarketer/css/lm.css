@@ -444,14 +444,16 @@ body {
   background-color: transparent!important;
 }
 
-.container-fluid.logo-container{
+.container-fluid.logo-container {
   width: 100%;
   max-width: 1434px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .logo-row {
   overflow: visible;
-  margin: 15px 0px 5px 0px;
+  margin: 15px 0px 0px 0px;
   width: 100%;
 }
 
@@ -3513,7 +3515,51 @@ ul.no-bullet {
 }
 
 @media (min-width:1281px) {
-  .logo-side{display: initial;}
+  .logo-side {
+    display: initial;
+  }
+
+  /* Match category bar width to logo row; align first nav link with left logo column content */
+  #lr-header .container-fluid.desktop-menu {
+    max-width: 1434px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #lr-header .navbar.menu .navbar-nav {
+    justify-content: flex-start;
+    padding-left: 30px;
+    padding-right: 30px;
+    box-sizing: border-box;
+  }
+
+  /* Tighten logo strip ↔ category nav (sections sit just above menu; net header height ~unchanged) */
+  #lr-header .navbar-header.menu-row {
+    margin-top: -10px;
+  }
+
+  /* Left: date line spacing ≈ right column gap between rows */
+  #lr-header .logo-row > .col-lg-2.logo-side:first-child .label.date {
+    display: block;
+    padding-top: 8px;
+    padding-bottom: 3px;
+    line-height: 1.25;
+  }
+
+  /* Right: stack Log In / Subscribe and Master Class / search with same rhythm as left */
+  #lr-header .logo-row > .col-lg-2.logo-side:last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  #lr-header .logo-row > .col-lg-2.logo-side:last-child > ul.nav.navbar-nav {
+    float: none !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
 }
 
 /* Nav, masthead, category & in-content link hovers — brand red */
