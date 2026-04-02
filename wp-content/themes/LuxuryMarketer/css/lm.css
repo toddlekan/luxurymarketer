@@ -3543,10 +3543,28 @@ ul.no-bullet {
     white-space: nowrap;
   }
 
-  /* Nudge masthead down equally on left and right (not only one column) */
-  #lr-header .logo-row > .col-lg-2.logo-side:first-child,
-  #lr-header .logo-row > .col-lg-2.logo-side:last-child {
-    padding-top: 10px;
+  /*
+   * Master Class row is the vertical anchor. Shift left masthead, center logo, and
+   * Log In/Subscribe down together; cancel offset on the Master Class row so it stays put.
+   */
+  #lr-header {
+    --lm-masthead-nudge: 20px;
+  }
+
+  #lr-header .logo-row > .col-lg-2.logo-side:first-child {
+    padding-top: var(--lm-masthead-nudge);
+  }
+
+  #lr-header .logo-row > .col-lg-8 {
+    padding-top: var(--lm-masthead-nudge);
+  }
+
+  #lr-header .logo-row > .col-lg-2.logo-side:last-child > ul.nav.navbar-nav:not(.nav-master-class-search) {
+    margin-top: var(--lm-masthead-nudge);
+  }
+
+  #lr-header .logo-row > .col-lg-2.logo-side:last-child ul.nav-master-class-search {
+    margin-top: calc(-1 * var(--lm-masthead-nudge));
   }
 
   /* Tight gap between logo strip and category nav */
@@ -3554,7 +3572,7 @@ ul.no-bullet {
     margin-top: -4px;
   }
 
-  /* Left: compact spacing masthead → date (no extra gap on right only) */
+  /* Left: masthead → date */
   #lr-header .logo-row > .col-lg-2.logo-side:first-child .label.date {
     display: block;
     padding-top: 6px;
