@@ -3337,17 +3337,6 @@ ul.no-bullet {
   display: flex;
 }
 
-/* Category nav: flex base (<1281px / tablet); desktop layout overridden in 1281px block */
-#lr-header .navbar.menu .navbar-nav.lm-category-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 0;
-  width: 100%;
-  box-sizing: border-box;
-}
-
 #navbar-main.navbar-collapse.collapse {
   width: 100%;
   margin: 0;
@@ -3538,23 +3527,27 @@ ul.no-bullet {
   }
 
   /*
-   * Masthead target (distinct from old “state 2”): no shrink-wrapped centered category nav
-   * (removed margin:0 auto + inline justify center from .lm-category-nav in header.php).
-   * Left/right two-line rhythm uses one gap token; masthead sits lower with clearer air
-   * before the category bar.
+   * Masthead: padding on each column (not only .logo-row) so LM / logo / Log In move down
+   * together. Flex stacks + one row-gap (roundtable→date = log in→master class). Category
+   * nav uses original centered inline style in header.php — do not override here.
    */
   #lr-header {
-    --lm-masthead-pad-top: 40px;
-    --lm-masthead-row-gap: 16px;
-    --lm-logo-strip-to-menu: 18px;
-    --lm-nav-inset: 30px;
+    --lm-masthead-pad-top: 28px;
+    --lm-masthead-row-gap: 12px;
   }
 
   #lr-header .logo-row {
-    margin-top: 12px;
+    margin-top: 10px;
     margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  /* Uniform vertical inset on all three columns (fixes “only Master Class moved”) */
+  #lr-header .logo-row > .col-lg-2.logo-side,
+  #lr-header .logo-row > .col-lg-8 {
     padding-top: var(--lm-masthead-pad-top);
-    padding-bottom: 4px;
+    box-sizing: border-box;
   }
 
   #lr-header .logo-side-col--left,
@@ -3590,32 +3583,19 @@ ul.no-bullet {
     line-height: 1.25;
   }
 
-  /* Sit category bar just under logo strip (overlap pull keeps fixed header height ~stable) */
   #lr-header .navbar-header.menu-row {
-    margin-top: calc(-1 * var(--lm-logo-strip-to-menu));
+    margin-top: 0;
   }
 
-  /* Full-width row, left-aligned (was: margin:0 auto + justify center → “state 2” look) */
-  #lr-header .navbar.menu .navbar-nav.lm-category-nav {
-    float: none;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: center;
-    margin: 0;
-    width: 100%;
-    max-width: none;
-    gap: 0.5rem;
-    padding-left: var(--lm-nav-inset);
-    padding-right: 15px;
-    box-sizing: border-box;
+  /* Category bar: one row; inline style centers the group — keep nowrap via CSS only */
+  #lr-header .navbar.menu .navbar-nav {
+    flex-wrap: nowrap !important;
   }
 
-  #lr-header .navbar.menu .navbar-nav.lm-category-nav > li > a {
+  #lr-header .navbar.menu .navbar-nav > li > a {
     white-space: nowrap;
   }
 
-  /* Align search icon with Master Class text (global .header-magnify has margin-top: 4px) */
   #lr-header .logo-side-col--right .header-magnify {
     margin-top: 0;
   }
