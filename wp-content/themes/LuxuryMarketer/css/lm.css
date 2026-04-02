@@ -3590,7 +3590,7 @@ ul.no-bullet {
 
   #lr-header .logo-side-col--right {
     align-items: flex-end;
-    margin-top: 29px;
+    margin-top: 36px;
     gap: calc(var(--lm-masthead-row-gap) - 3px);
   }
 
