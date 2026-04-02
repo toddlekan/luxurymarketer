@@ -3153,6 +3153,29 @@ ul.no-bullet {
   white-space: nowrap;
 }
 
+/* Right column: same two-block shell as left (masthead row + second row) */
+.logo-side-masthead--right {
+  justify-content: flex-end;
+  width: 100%;
+  column-gap: 6px;
+}
+.logo-side-masthead--right .logo-side-inline-nav {
+  flex: 0 1 auto;
+  min-width: 0;
+  margin-bottom: 0;
+}
+.logo-side-row2--right {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+.logo-side-row2--right .nav-master-class-search {
+  float: none;
+}
+
 /* No Bootstrap #eee hover/focus “plate” on masthead or right logo-column links */
 #lr-header .logo-side-masthead .logo-side-masthead-nav > li > a:hover,
 #lr-header .logo-side-masthead .logo-side-masthead-nav > li > a:focus,
@@ -3561,13 +3584,15 @@ ul.no-bullet {
 
   #lr-header .logo-side-col--left {
     align-items: flex-start;
+    margin-top: 38px;
+    margin-left: 1px;
   }
 
   #lr-header .logo-side-col--right {
     align-items: flex-end;
   }
 
-  #lr-header .logo-side-col--right > ul.nav.navbar-nav {
+  #lr-header .logo-side-col--right ul.nav.navbar-nav {
     float: none !important;
     margin: 0 !important;
     width: auto;
@@ -3575,6 +3600,16 @@ ul.no-bullet {
 
   #lr-header .logo-side-col--right ul.nav-master-class-search {
     float: none !important;
+  }
+
+  /* Bootstrap .navbar-nav > li > a { padding: 8px 3px } — tighten in right masthead rows */
+  #lr-header .logo-side-masthead--right .navbar {
+    min-height: 0;
+    margin-bottom: 0;
+  }
+  #lr-header .logo-side-masthead--right .navbar-nav > li > a,
+  #lr-header .logo-side-row2--right .navbar-nav > li > a {
+    padding: 1px 4px !important;
   }
 
   #lr-header .logo-side-col--left .label.date {

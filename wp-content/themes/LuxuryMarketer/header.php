@@ -271,7 +271,10 @@ if ( is_search() ) {
           <div class="col-lg-2 logo-side">
 
               <div class="logo-side-col logo-side-col--right">
-              <ul class="nav navbar-nav logo-side-auth-nav">
+              <div class="logo-side-masthead logo-side-masthead--right">
+              <div class="navbar logo-side-inline-nav logo-side-inline-nav--auth">
+
+                <ul class="nav navbar-nav logo-side-auth-nav">
                 
                 <li class="label subscribe">
 
@@ -286,6 +289,10 @@ if ( is_search() ) {
 
               </ul>
 
+              </div>
+              </div>
+
+              <div class="logo-side-row2 logo-side-row2--right">
                 <ul class="nav navbar-nav nav-master-class-search">
                 
                 <li class="label subscribe">
@@ -299,6 +306,8 @@ if ( is_search() ) {
                 </li>
 
               </ul>
+              </div>
+
               </div><!-- .logo-side-col--right -->
               
               
