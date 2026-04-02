@@ -3156,8 +3156,8 @@ ul.no-bullet {
 /* No Bootstrap #eee hover/focus “plate” on masthead or right logo-column links */
 #lr-header .logo-side-masthead .logo-side-masthead-nav > li > a:hover,
 #lr-header .logo-side-masthead .logo-side-masthead-nav > li > a:focus,
-#lr-header .logo-side > ul.nav.navbar-nav > li > a:hover,
-#lr-header .logo-side > ul.nav.navbar-nav > li > a:focus {
+#lr-header .logo-side-col--right ul.nav.navbar-nav > li > a:hover,
+#lr-header .logo-side-col--right ul.nav.navbar-nav > li > a:focus {
   background-color: transparent !important;
   box-shadow: none;
   outline: none;
@@ -3544,40 +3544,53 @@ ul.no-bullet {
   }
 
   /*
-   * Master Class row = vertical anchor (position unchanged). Move left masthead, center
-   * logo, and Log In/Subscribe down; cancel the same offset on the Master Class row.
+   * Masthead layout: header.php uses .logo-side-col--left / --right flex stacks with one
+   * --lm-masthead-row-gap (roundtable→date = log in→master class). Whole strip uses
+   * --lm-masthead-pad-top (no negative margins / per-ul nudge fights).
    */
   #lr-header {
-    --lm-masthead-nudge: 20px;
+    --lm-masthead-pad-top: 28px;
+    --lm-masthead-row-gap: 11px;
   }
 
-  #lr-header .logo-row > .col-lg-2.logo-side:first-child {
-    padding-top: var(--lm-masthead-nudge);
+  #lr-header .logo-row {
+    margin-top: 12px;
+    padding-top: var(--lm-masthead-pad-top);
   }
 
-  #lr-header .logo-row > .col-lg-8 {
-    padding-top: var(--lm-masthead-nudge);
+  #lr-header .logo-side-col--left,
+  #lr-header .logo-side-col--right {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  #lr-header .logo-row > .col-lg-2.logo-side:last-child > ul.nav.navbar-nav:not(.nav-master-class-search) {
-    margin-top: var(--lm-masthead-nudge);
+  #lr-header .logo-side-col--left {
+    align-items: flex-start;
+    gap: var(--lm-masthead-row-gap);
   }
 
-  #lr-header .logo-row > .col-lg-2.logo-side:last-child ul.nav-master-class-search {
-    margin-top: calc(-1 * var(--lm-masthead-nudge));
+  #lr-header .logo-side-col--right {
+    align-items: flex-end;
+    gap: var(--lm-masthead-row-gap);
+  }
+
+  #lr-header .logo-side-col--right > ul.nav.navbar-nav {
+    float: none !important;
+    margin: 0 !important;
+    width: auto;
+  }
+
+  #lr-header .logo-side-col--left .label.date {
+    padding-top: 0;
+    padding-bottom: 2px;
+    line-height: 1.25;
   }
 
   /* Tight gap between logo strip and category nav */
   #lr-header .navbar-header.menu-row {
     margin-top: -4px;
-  }
-
-  /* Left: masthead → date */
-  #lr-header .logo-row > .col-lg-2.logo-side:first-child .label.date {
-    display: block;
-    padding-top: 6px;
-    padding-bottom: 2px;
-    line-height: 1.25;
   }
 }
 

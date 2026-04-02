@@ -168,6 +168,7 @@ if ( is_search() ) {
         <div class="logo-row">
           <div class="col-lg-2 logo-side">
 
+              <div class="logo-side-col logo-side-col--left">
               <div class="logo-side-masthead">
               <a href="/" class="initials">
                 <img src="/wp-content/themes/LuxuryMarketer/img/lm-initials-50.png" alt="">
@@ -258,7 +259,7 @@ if ( is_search() ) {
                   </script>
 
               </div>
-            
+              </div><!-- .logo-side-col--left -->
 
           </div>
           <div class="col-lg-8">
@@ -269,7 +270,8 @@ if ( is_search() ) {
           </div>
           <div class="col-lg-2 logo-side">
 
-              <ul class="nav navbar-nav" style="float: right;">
+              <div class="logo-side-col logo-side-col--right">
+              <ul class="nav navbar-nav logo-side-auth-nav">
                 
                 <li class="label subscribe">
 
@@ -297,6 +299,7 @@ if ( is_search() ) {
                 </li>
 
               </ul>
+              </div><!-- .logo-side-col--right -->
               
               
           </div>
