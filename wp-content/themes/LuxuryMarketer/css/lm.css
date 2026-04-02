@@ -3519,46 +3519,47 @@ ul.no-bullet {
     display: initial;
   }
 
-  /* Match category bar width to logo row; align first nav link with left logo column content */
+  /* Category bar same max-width as logo strip (centered) */
   #lr-header .container-fluid.desktop-menu {
     max-width: 1434px;
     margin-left: auto;
     margin-right: auto;
   }
 
+  /*
+   * Keep category links on one row: previous flex-start + horizontal padding caused wrapping.
+   * Inline style uses display:flex; justify-content:center — preserve that, never wrap.
+   */
   #lr-header .navbar.menu .navbar-nav {
-    justify-content: flex-start;
-    padding-left: 30px;
-    padding-right: 30px;
+    justify-content: center !important;
+    flex-wrap: nowrap !important;
+    gap: 0.4rem !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
     box-sizing: border-box;
   }
 
-  /* Tighten logo strip ↔ category nav (sections sit just above menu; net header height ~unchanged) */
-  #lr-header .navbar-header.menu-row {
-    margin-top: -10px;
+  #lr-header .navbar.menu .navbar-nav > li > a {
+    white-space: nowrap;
   }
 
-  /* Left: date line spacing ≈ right column gap between rows */
+  /* Nudge masthead down equally on left and right (not only one column) */
+  #lr-header .logo-row > .col-lg-2.logo-side:first-child,
+  #lr-header .logo-row > .col-lg-2.logo-side:last-child {
+    padding-top: 10px;
+  }
+
+  /* Tight gap between logo strip and category nav */
+  #lr-header .navbar-header.menu-row {
+    margin-top: -4px;
+  }
+
+  /* Left: compact spacing masthead → date (no extra gap on right only) */
   #lr-header .logo-row > .col-lg-2.logo-side:first-child .label.date {
     display: block;
-    padding-top: 8px;
-    padding-bottom: 3px;
+    padding-top: 6px;
+    padding-bottom: 2px;
     line-height: 1.25;
-  }
-
-  /* Right: stack Log In / Subscribe and Master Class / search with same rhythm as left */
-  #lr-header .logo-row > .col-lg-2.logo-side:last-child {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: flex-end;
-    gap: 8px;
-  }
-
-  #lr-header .logo-row > .col-lg-2.logo-side:last-child > ul.nav.navbar-nav {
-    float: none !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
   }
 }
 
