@@ -3544,11 +3544,12 @@ ul.no-bullet {
   }
 
   /*
-   * Master Class row = vertical anchor (position unchanged). Move left masthead, center
-   * logo, and Log In/Subscribe down; cancel the same offset on the Master Class row.
+   * Lower left, center, and right masthead together (no negative margin — that pulled
+   * Master Class up). Log In → Master Class gap matches Luxury Roundtable → New York.
    */
   #lr-header {
-    --lm-masthead-nudge: 20px;
+    --lm-masthead-nudge: 36px;
+    --lm-masthead-row-gap: 12px;
   }
 
   #lr-header .logo-row > .col-lg-2.logo-side:first-child {
@@ -3559,12 +3560,13 @@ ul.no-bullet {
     padding-top: var(--lm-masthead-nudge);
   }
 
-  #lr-header .logo-row > .col-lg-2.logo-side:last-child > ul.nav.navbar-nav:not(.nav-master-class-search) {
-    margin-top: var(--lm-masthead-nudge);
+  #lr-header .logo-row > .col-lg-2.logo-side:last-child {
+    padding-top: var(--lm-masthead-nudge);
   }
 
   #lr-header .logo-row > .col-lg-2.logo-side:last-child ul.nav-master-class-search {
-    margin-top: calc(-1 * var(--lm-masthead-nudge));
+    margin-top: var(--lm-masthead-row-gap) !important;
+    clear: right;
   }
 
   /* Tight gap between logo strip and category nav */
@@ -3572,10 +3574,10 @@ ul.no-bullet {
     margin-top: -4px;
   }
 
-  /* Left: masthead → date */
+  /* Left: masthead → date (same vertical rhythm as Log In → Master Class) */
   #lr-header .logo-row > .col-lg-2.logo-side:first-child .label.date {
     display: block;
-    padding-top: 6px;
+    padding-top: var(--lm-masthead-row-gap);
     padding-bottom: 2px;
     line-height: 1.25;
   }
