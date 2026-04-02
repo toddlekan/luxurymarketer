@@ -3556,7 +3556,7 @@ ul.no-bullet {
    */
   #lr-header {
     --lm-masthead-pad-top: 28px;
-    --lm-masthead-row-gap: 12px;
+    --lm-masthead-row-gap: 10px;
   }
 
   #lr-header .logo-row {
