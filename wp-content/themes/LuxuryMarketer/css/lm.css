@@ -3527,34 +3527,22 @@ ul.no-bullet {
   }
 
   /*
-   * Keep category links on one row: previous flex-start + horizontal padding caused wrapping.
-   * Inline style uses display:flex; justify-content:center — preserve that, never wrap.
-   */
-  #lr-header .navbar.menu .navbar-nav {
-    justify-content: center !important;
-    flex-wrap: nowrap !important;
-    gap: 0.4rem !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    box-sizing: border-box;
-  }
-
-  #lr-header .navbar.menu .navbar-nav > li > a {
-    white-space: nowrap;
-  }
-
-  /*
-   * Masthead layout: header.php uses .logo-side-col--left / --right flex stacks with one
-   * --lm-masthead-row-gap (roundtable→date = log in→master class). Whole strip uses
-   * --lm-masthead-pad-top (no negative margins / per-ul nudge fights).
+   * Target masthead (not “state 1” anchor hacks, not “state 2” whole-column-only nudge):
+   * - Same row gap left & right (flex stacks + one token).
+   * - Lower masthead + pull category bar up so it sits just under the logo strip without
+   *   growing total #lr-header height (pad↑ on .logo-row, matching pull↑ on .menu-row).
+   * - Category nav left-aligned with logo-column content (same ~30px inset as BS fluid+col).
    */
   #lr-header {
-    --lm-masthead-pad-top: 28px;
-    --lm-masthead-row-gap: 11px;
+    --lm-masthead-pad-top: 26px;
+    --lm-masthead-row-gap: 12px;
+    --lm-logo-strip-to-menu: 14px;
+    --lm-nav-inset: 30px;
   }
 
   #lr-header .logo-row {
-    margin-top: 12px;
+    margin-top: 10px;
+    margin-bottom: 0;
     padding-top: var(--lm-masthead-pad-top);
   }
 
@@ -3588,9 +3576,28 @@ ul.no-bullet {
     line-height: 1.25;
   }
 
-  /* Tight gap between logo strip and category nav */
+  /* Sit category bar just under logo strip (overlap pull keeps fixed header height ~stable) */
   #lr-header .navbar-header.menu-row {
-    margin-top: -4px;
+    margin-top: calc(-1 * var(--lm-logo-strip-to-menu));
+  }
+
+  /* Left edge of “Fashion & …” lines up with left masthead text (container + col padding) */
+  #lr-header .navbar.menu .navbar-nav {
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    gap: 0.45rem !important;
+    padding-left: var(--lm-nav-inset) !important;
+    padding-right: 15px !important;
+    box-sizing: border-box;
+  }
+
+  #lr-header .navbar.menu .navbar-nav > li > a {
+    white-space: nowrap;
+  }
+
+  /* Align search icon with Master Class text (global .header-magnify has margin-top: 4px) */
+  #lr-header .logo-side-col--right .header-magnify {
+    margin-top: 0;
   }
 }
 
