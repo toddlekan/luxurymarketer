@@ -153,7 +153,7 @@ if ( is_search() ) {
 
 
 
-<div id="lr-header" class="navbar navbar-default navbar-fixed-top">
+<div id="lr-header" class="navbar navbar-default navbar-fixed-top<?php echo ( function_exists( 'ld16_logged_in' ) && ld16_logged_in() ) ? ' lm-subscriber-session' : ''; ?>">
 
 
 
@@ -276,15 +276,23 @@ if ( is_search() ) {
 
                 <ul class="nav navbar-nav logo-side-auth-nav">
                 
-                <li class="label subscribe">
+                <li class="label subscribe logo-side-auth-loggedout">
 
                   <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="/log-in" style="color: #000;">
                     Log In &nbsp;</a>
                 </li>
-                <li class="label subscribe">
+                <li class="label subscribe logo-side-auth-loggedout">
 
                   <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" style="">
                     SUBSCRIBE</a>
+                </li>
+                <li class="label subscribe logo-side-auth-loggedin">
+
+                  <a class="my pop-subscribe red bold" href="#" style="color: #000;">My Account</a>
+                </li>
+                <li class="label subscribe logo-side-auth-loggedin">
+
+                  <a class="logout-link pop-subscribe red bold" href="#" style="color: #000;">Log Out</a>
                 </li>
 
               </ul>
@@ -295,9 +303,9 @@ if ( is_search() ) {
               <div class="logo-side-row2 logo-side-row2--right">
                 <ul class="nav navbar-nav nav-master-class-search">
                 
-                <li class="label subscribe">
+                <li class="label subscribe logo-side-master-class-item">
 
-                  <a class="sign-in-subscribe loggedout pop-subscribe grey bold" href="/category/networking-and-events/master-class" style="">
+                  <a class="grey bold" href="/category/networking-and-events/master-class" style="">
                     Master Class</a>
                 </li>
                 <li>

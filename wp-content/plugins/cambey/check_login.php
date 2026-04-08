@@ -85,6 +85,14 @@ if (array_key_exists($cred_name, $_COOKIE) && $_COOKIE[$cred_name]) {
 		die();
 	} else {
 		debug('hashes match ' . "$check_hash == $hash");
+		// Enforce same 14-day limit as bake_cred() in shared.php (subscriber session).
+		$max_session = 60 * 60 * 24 * 14;
+		$issued      = is_numeric( $time ) ? (int) $time : 0;
+		if ( $issued <= 0 || ( $issued + $max_session ) < time() ) {
+			debug('subscriber session expired');
+			trash_cookies();
+			die();
+		}
 	}
 } else {
 	debug('no cred cookie');

@@ -3176,6 +3176,20 @@ ul.no-bullet {
   float: none;
 }
 
+/* Subscriber session: My Account / Log Out rows hidden until cookie + JS or .lm-subscriber-session */
+#lr-header .logo-side-auth-nav .logo-side-auth-loggedin {
+  display: none;
+}
+#lr-header.lm-subscriber-session .logo-side-auth-nav .logo-side-auth-loggedout {
+  display: none !important;
+}
+#lr-header.lm-subscriber-session .logo-side-auth-nav .logo-side-auth-loggedin {
+  display: list-item !important;
+}
+#lr-header.lm-subscriber-session .logo-side-master-class-item {
+  display: none !important;
+}
+
 /* No Bootstrap #eee hover/focus “plate” on masthead or right logo-column links */
 #lr-header .logo-side-masthead .logo-side-masthead-nav > li > a:hover,
 #lr-header .logo-side-masthead .logo-side-masthead-nav > li > a:focus,

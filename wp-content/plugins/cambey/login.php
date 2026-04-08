@@ -89,7 +89,8 @@ if ($fields['subscriber_email'] == '' || $fields['subscriber_pass'] == '') {
         'msg' => (string)$msg,
         'url' => (string)$url,
         'url_label' => (string)$url_label,
-        'acctno' => isset($acctno) ? $acctno : ""
+        'acctno' => isset($acctno) ? $acctno : "",
+        'success' => false,
     );
 
 	header( 'Content-Type: application/json; charset=utf-8' );
@@ -110,9 +111,13 @@ curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($curl, CURLOPT_POSTFIELDS, $fields_string);
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+curl_setopt($curl, CURLOPT_TIMEOUT, 45);
 
 $result = curl_exec($curl);
-
+$curl_errno = curl_errno($curl);
+$curl_error = $curl ? (string) curl_error($curl) : '';
+$curl_http_code = $curl ? (int) curl_getinfo($curl, CURLINFO_HTTP_CODE) : 0;
 //close connection
 curl_close($curl);
 
@@ -204,12 +209,27 @@ $result = "
 	*/
 
 if ($result === false || $result === '') {
+	if ( function_exists( 'error_log' ) && ( $curl_errno || $curl_error !== '' ) ) {
+		error_log( 'cambey login: empty curl response errno=' . $curl_errno . ' error=' . $curl_error . ' http=' . $curl_http_code );
+	} elseif ( function_exists( 'error_log' ) && $result === '' ) {
+		error_log( 'cambey login: empty HTTP body from GetSubscriberData http=' . $curl_http_code . ' (no curl error)' );
+	}
 	$arr = array(
 		'msg'         => 'Login service temporarily unavailable. Please try again.',
 		'url'         => '',
 		'url_label'   => '',
 		'acctno'      => '',
+		'success'     => false,
 	);
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		$arr['_debug'] = array(
+			'curl_errno'   => $curl_errno,
+			'curl_error'   => $curl_error,
+			'http_status'  => $curl_http_code,
+			'body_empty'   => ( $result === '' ),
+			'body_is_false'=> ( $result === false ),
+		);
+	}
 	header( 'Content-Type: application/json; charset=utf-8' );
 	print json_encode( $arr );
 	exit;
@@ -219,12 +239,27 @@ $payload = cambey_unwrap_asmx_response( $result );
 $xml     = @simplexml_load_string( $payload );
 
 if ( ! $xml ) {
+	if ( function_exists( 'error_log' ) ) {
+		error_log( 'cambey login: XML parse failed; payload length=' . strlen( $payload ) );
+	}
 	$arr = array(
 		'msg'       => 'Login service returned an unexpected response. Please try again.',
 		'url'       => '',
 		'url_label' => '',
 		'acctno'    => '',
+		'success'   => false,
 	);
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		$snippet = preg_replace( '/\s+/', ' ', $payload );
+		if ( strlen( $snippet ) > 400 ) {
+			$snippet = substr( $snippet, 0, 400 ) . '…';
+		}
+		$arr['_debug'] = array(
+			'phase'          => 'xml_parse',
+			'payload_length' => strlen( $payload ),
+			'payload_snippet'=> $snippet,
+		);
+	}
 	header( 'Content-Type: application/json; charset=utf-8' );
 	print json_encode( $arr );
 	exit;
@@ -238,6 +273,7 @@ if ( ! $data ) {
 		'url'       => '',
 		'url_label' => '',
 		'acctno'    => '',
+		'success'   => false,
 	);
 	header( 'Content-Type: application/json; charset=utf-8' );
 	print json_encode( $arr );
@@ -256,12 +292,14 @@ $has_ids   = ( $acctno !== '' || $cwrec_id !== '' );
 
 // Success when we have account identifiers and either <result> is true or there is no "friend" corrective action (legacy).
 // Fixes cases where friendcorrectiveaction is still populated but login succeeded (result + acctno present).
+$login_success = false;
 if ( $has_ids && ( $result_ok || $fc === '' ) ) {
 	bake_cred( $cwrec_id, $acctno );
 	bake_day_pass( $cwrec_id, $acctno );
 	$msg       = 'You have been logged in!';
 	$url       = '';
 	$url_label = '';
+	$login_success = true;
 } elseif ( $fc !== '' ) {
 	trash_cookies();
 } else {
@@ -275,7 +313,8 @@ $arr = array(
     'msg' => (string)$msg,
     'url' => (string)$url,
     'url_label' => (string)$url_label,
-    'acctno' => isset($acctno) ? $acctno : ""
+    'acctno' => isset($acctno) ? $acctno : "",
+    'success' => $login_success,
 );
 
 header( 'Content-Type: application/json; charset=utf-8' );

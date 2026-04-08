@@ -95,6 +95,10 @@ $(document).ready(function () {
           return;
         }
 
+        if (data._debug) {
+          console.warn("cambey login debug (WP_DEBUG)", data._debug);
+        }
+
         if (data.msg) {
           $(".msg").html(data.msg);
           $(".msg").show();
@@ -109,10 +113,13 @@ $(document).ready(function () {
           $(".action").show();
         } else {
           $(".action").hide();
-          if (redirect) {
-            location.href = redirect;
-          } else {
-            location.href = "/";
+          // Only redirect after a real login — errors also use empty url and must stay on the form.
+          if (data.success) {
+            if (redirect) {
+              location.href = redirect;
+            } else {
+              location.href = "/";
+            }
           }
         }
       })
@@ -258,6 +265,8 @@ $(document).ready(function () {
     var cookie = getCookie("_QAS3247adjl");
 
     if (cookie) {
+      $("#lr-header").addClass("lm-subscriber-session");
+
       $(".label.subscribe .sign-in").hide();
       $(".label.subscribe .sign-in-subscribe").hide();
       $(".forgot").hide();
@@ -272,11 +281,11 @@ $(document).ready(function () {
       if (!acctno) {
         acctno_href = "https://luxurymarketer.subsmediahub.com/LXM/?f=pa";
         $(".label.subscribe .my").html("Forgot Password");
+      } else {
+        $(".label.subscribe .my").html("My Account");
       }
 
       $(".label.subscribe .my").attr("href", acctno_href);
-      $(".label.subscribe .my").show();
-      $(".label.subscribe .logout-link").show();
 
       if ($(window).width() < 501) {
         $(".page-header.logo").css("border-bottom", "0px");
@@ -386,6 +395,9 @@ $(document).ready(function () {
         } else {
           notLoggedIn();
         }
+      })
+      .fail(function () {
+        notLoggedIn();
       });
     } else {
       notLoggedIn();
@@ -393,6 +405,8 @@ $(document).ready(function () {
   }
 
   function notLoggedIn() {
+    $("#lr-header").removeClass("lm-subscriber-session");
+
     $(".body").show();
 
     $(".promo").show();

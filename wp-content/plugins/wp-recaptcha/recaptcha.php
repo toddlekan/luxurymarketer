@@ -176,20 +176,23 @@ class ReCAPTCHAPlugin extends WPPlugin
     }
 
     function validate_options($input) {
+        if ( ! is_array( $input ) ) {
+            $input = array();
+        }
         // trim the spaces out of the key
-        $validated['site_key'] = trim($input['site_key']);
-        $validated['secret'] = trim($input['secret']);
+        $validated['site_key'] = trim( isset( $input['site_key'] ) ? $input['site_key'] : '' );
+        $validated['secret'] = trim( isset( $input['secret'] ) ? $input['secret'] : '' );
 
         $themes = array ('standard', 'light', 'dark');
         $validated['comments_theme'] = $this->validate_dropdown($themes,
-            'comments_theme', $input['comments_theme']);
-        $validated['recaptcha_language'] = $input['recaptcha_language'];
-        $validated['no_response_error'] = $input['no_response_error'];
+            'comments_theme', isset( $input['comments_theme'] ) ? $input['comments_theme'] : '' );
+        $validated['recaptcha_language'] = isset( $input['recaptcha_language'] ) ? $input['recaptcha_language'] : '';
+        $validated['no_response_error'] = isset( $input['no_response_error'] ) ? $input['no_response_error'] : '';
         return $validated;
     }
     // display recaptcha
     function show_recaptcha_in_registration($errors) {
-        $escaped_error = htmlentities($_GET['rerror'], ENT_QUOTES);
+        $escaped_error = htmlentities( isset( $_GET['rerror'] ) ? wp_unslash( $_GET['rerror'] ) : '', ENT_QUOTES );
 
         // if it's for wordpress mu, show the errors
         if ($this->is_multi_blog()) {
@@ -288,7 +291,7 @@ COMMENT_FORM;
 
         $use_ssl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on");
 
-        $escaped_error = htmlentities($_GET['rerror'], ENT_QUOTES);
+        $escaped_error = htmlentities( isset( $_GET['rerror'] ) ? wp_unslash( $_GET['rerror'] ) : '', ENT_QUOTES );
 
         echo $this->get_recaptcha_html() . $comment_string;
     }
@@ -345,8 +348,8 @@ JS;
     function saved_comment() {
         if (!is_single() && !is_page())
             return;
-        $comment_id = $_REQUEST['rcommentid'];
-        $comment_hash = $_REQUEST['rchash'];
+        $comment_id = isset( $_REQUEST['rcommentid'] ) ? wp_unslash( $_REQUEST['rcommentid'] ) : '';
+        $comment_hash = isset( $_REQUEST['rchash'] ) ? wp_unslash( $_REQUEST['rchash'] ) : '';
         if (empty($comment_id) || empty($comment_hash))
            return;
         if ($comment_hash == $this->hash_comment($comment_id)) {

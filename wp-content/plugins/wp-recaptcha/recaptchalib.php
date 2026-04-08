@@ -126,11 +126,17 @@ class ReCaptcha
         $answers = json_decode($getResponse, true);
         $recaptchaResponse = new ReCaptchaResponse();
 
-        if (trim($answers [success]) == true) {
+        if (! is_array($answers)) {
+            $recaptchaResponse->success = false;
+            $recaptchaResponse->errorCodes = 'invalid-json';
+            return $recaptchaResponse;
+        }
+
+        if (! empty($answers['success'])) {
             $recaptchaResponse->success = true;
         } else {
             $recaptchaResponse->success = false;
-            $recaptchaResponse->errorCodes = $answers [error-codes];
+            $recaptchaResponse->errorCodes = isset($answers['error-codes']) ? $answers['error-codes'] : 'verify-failed';
         }
 
         return $recaptchaResponse;
