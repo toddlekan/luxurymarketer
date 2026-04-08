@@ -288,11 +288,11 @@ if ( is_search() ) {
                 </li>
                 <li class="label subscribe logo-side-auth-loggedin">
 
-                  <a class="my pop-subscribe red bold" href="#" style="color: #000;">My Account</a>
+                  <a class="my pop-subscribe grey bold" href="#">My Account</a>
                 </li>
                 <li class="label subscribe logo-side-auth-loggedin">
 
-                  <a class="logout-link pop-subscribe red bold" href="#" style="color: #000;">Log Out</a>
+                  <a class="logout-link pop-subscribe grey bold" href="#">Log Out</a>
                 </li>
 
               </ul>
