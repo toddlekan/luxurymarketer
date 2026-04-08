@@ -313,14 +313,11 @@ if ( $has_ids && ( $result_ok || $fc === '' ) ) {
 	trash_cookies();
 }
 
-// Manage-account URL for the client: prefer SOAP <friendhttp> when it is a real URL, else build from acctno.
+// Manage-account URL: subs media hub customer registration / account portal (acctno from SOAP login).
 $account_url = '';
 if ( $login_success ) {
-	$fh = trim( (string) $data->friendhttp );
-	if ( $fh !== '' && preg_match( '#^https?://#i', $fh ) ) {
-		$account_url = $fh;
-	} elseif ( $acctno !== '' ) {
-		$account_url = 'https://www.cambeywest.com/LXM/?f=custcare&a=' . rawurlencode( $acctno );
+	if ( $acctno !== '' ) {
+		$account_url = 'https://luxurymarketer.subsmediahub.com/LXM/?f=custregpa&A=' . rawurlencode( $acctno );
 	} else {
 		$account_url = 'https://luxurymarketer.subsmediahub.com/LXM/?f=pa';
 	}

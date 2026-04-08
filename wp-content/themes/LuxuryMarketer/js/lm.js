@@ -313,7 +313,8 @@ $(document).ready(function () {
         $(".label.subscribe .my").html("My Account");
       } else if (acctno) {
         acctno_href =
-          "https://www.cambeywest.com/LXM/?f=custcare&a=" + acctno;
+          "https://luxurymarketer.subsmediahub.com/LXM/?f=custregpa&A=" +
+          encodeURIComponent(acctno);
         $(".label.subscribe .my").html("My Account");
       } else {
         acctno_href = "https://luxurymarketer.subsmediahub.com/LXM/?f=pa";
