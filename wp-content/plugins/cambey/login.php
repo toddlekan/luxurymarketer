@@ -91,6 +91,7 @@ if ($fields['subscriber_email'] == '' || $fields['subscriber_pass'] == '') {
         'url_label' => (string)$url_label,
         'acctno' => isset($acctno) ? $acctno : "",
         'success' => false,
+        'account_url' => '',
     );
 
 	header( 'Content-Type: application/json; charset=utf-8' );
@@ -220,6 +221,7 @@ if ($result === false || $result === '') {
 		'url_label'   => '',
 		'acctno'      => '',
 		'success'     => false,
+		'account_url' => '',
 	);
 	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 		$arr['_debug'] = array(
@@ -248,6 +250,7 @@ if ( ! $xml ) {
 		'url_label' => '',
 		'acctno'    => '',
 		'success'   => false,
+		'account_url' => '',
 	);
 	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 		$snippet = preg_replace( '/\s+/', ' ', $payload );
@@ -274,6 +277,7 @@ if ( ! $data ) {
 		'url_label' => '',
 		'acctno'    => '',
 		'success'   => false,
+		'account_url' => '',
 	);
 	header( 'Content-Type: application/json; charset=utf-8' );
 	print json_encode( $arr );
@@ -309,12 +313,26 @@ if ( $has_ids && ( $result_ok || $fc === '' ) ) {
 	trash_cookies();
 }
 
+// Manage-account URL for the client: prefer SOAP <friendhttp> when it is a real URL, else build from acctno.
+$account_url = '';
+if ( $login_success ) {
+	$fh = trim( (string) $data->friendhttp );
+	if ( $fh !== '' && preg_match( '#^https?://#i', $fh ) ) {
+		$account_url = $fh;
+	} elseif ( $acctno !== '' ) {
+		$account_url = 'https://www.cambeywest.com/LXM/?f=custcare&a=' . rawurlencode( $acctno );
+	} else {
+		$account_url = 'https://luxurymarketer.subsmediahub.com/LXM/?f=pa';
+	}
+}
+
 $arr = array(
     'msg' => (string)$msg,
     'url' => (string)$url,
     'url_label' => (string)$url_label,
     'acctno' => isset($acctno) ? $acctno : "",
     'success' => $login_success,
+    'account_url' => (string) $account_url,
 );
 
 header( 'Content-Type: application/json; charset=utf-8' );
