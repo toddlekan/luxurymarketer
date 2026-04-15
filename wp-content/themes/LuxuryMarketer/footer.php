@@ -58,7 +58,7 @@ $url_root = ld16_cdn(get_template_directory_uri());
 
 			<span class="heading">CUSTOMER SERVICE: </span> &nbsp;
 
-			<a class="reverse" href="mailto:help@napean.com">help@napean.com</a>
+			<a class="reverse" href="https://luxurymarketer.subsmediahub.com/LXM/?f=custserve">Please Click or Tap Here</a>
 
 		</div>
 

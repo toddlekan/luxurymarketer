@@ -62,7 +62,7 @@
 
             <span class="heading">CUSTOMER SERVICE: </span> &nbsp;
 
-            <a class="reverse" href="#">help@napean.com</a>
+            <a class="reverse" href="https://luxurymarketer.subsmediahub.com/LXM/?f=custserve">Please Click or Tap Here</a>
 
         </div>
 

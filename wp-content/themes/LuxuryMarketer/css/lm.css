@@ -3190,8 +3190,10 @@ ul.no-bullet {
 /* No Bootstrap #eee hover/focus “plate” on masthead or right logo-column links */
 #lr-header .logo-side-masthead .logo-side-masthead-nav > li > a:hover,
 #lr-header .logo-side-masthead .logo-side-masthead-nav > li > a:focus,
+#lr-header .logo-side-masthead .logo-side-masthead-nav > li > a:focus-visible,
 #lr-header .logo-side-col--right ul.nav.navbar-nav > li > a:hover,
-#lr-header .logo-side-col--right ul.nav.navbar-nav > li > a:focus {
+#lr-header .logo-side-col--right ul.nav.navbar-nav > li > a:focus,
+#lr-header .logo-side-col--right ul.nav.navbar-nav > li > a:focus-visible {
   background-color: transparent !important;
   box-shadow: none;
   outline: none;
@@ -3712,4 +3714,22 @@ a[href*="fullpage.js"],
 a[href*="fullPage.js"] {
   display: none !important;
   visibility: hidden !important;
+}
+
+/* Logo + category nav: drop browser :focus-visible ring (blue outline) on click/tap */
+#lr-header a.initials:focus,
+#lr-header a.initials:focus-visible,
+#lr-header a#logo:focus,
+#lr-header a#logo:focus-visible,
+.page-header.logo .navbar.menu .nav > li > a:focus,
+.page-header.logo .navbar.menu .nav > li > a:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+#lr-header.navbar-default .navbar-nav > li > a:focus,
+#lr-header.navbar-default .navbar-nav > li > a:focus-visible {
+  background-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
 }

@@ -288,7 +288,7 @@ if ( is_search() ) {
                 </li>
                 <li class="label subscribe logo-side-auth-loggedin">
 
-                  <a class="my pop-subscribe grey bold" href="#">My Account</a>
+                  <a class="my pop-subscribe grey bold" href="https://luxurymarketer.subsmediahub.com/LXM/?f=custcare">My Account</a>
                 </li>
                 <li class="label subscribe logo-side-auth-loggedin">
 

@@ -1,31 +1,5 @@
 var posting = false;
 var animating = false;
-/** Persists manage-account href from cambey login JSON (account_url) across redirect. */
-var LM_MANAGE_ACCOUNT_URL_KEY = "lm_manage_account_url";
-
-function lmGetManageAccountUrl() {
-  try {
-    return (sessionStorage.getItem(LM_MANAGE_ACCOUNT_URL_KEY) || "").trim();
-  } catch (e) {
-    return "";
-  }
-}
-
-function lmSetManageAccountUrl(url) {
-  try {
-    if (url && String(url).trim()) {
-      sessionStorage.setItem(LM_MANAGE_ACCOUNT_URL_KEY, String(url).trim());
-    } else {
-      sessionStorage.removeItem(LM_MANAGE_ACCOUNT_URL_KEY);
-    }
-  } catch (e) {}
-}
-
-function lmClearManageAccountUrl() {
-  try {
-    sessionStorage.removeItem(LM_MANAGE_ACCOUNT_URL_KEY);
-  } catch (e) {}
-}
 
 $(document).ready(function () {
   /*INIT*/
@@ -141,9 +115,6 @@ $(document).ready(function () {
           $(".action").hide();
           // Only redirect after a real login — errors also use empty url and must stay on the form.
           if (data.success) {
-            if (data.account_url) {
-              lmSetManageAccountUrl(data.account_url);
-            }
             if (redirect) {
               location.href = redirect;
             } else {
@@ -185,7 +156,6 @@ $(document).ready(function () {
     }).done(function (data) {
       $(".logout-link").hide();
       $(".logout-status").show();
-      lmClearManageAccountUrl();
       checkLogin();
       location.href = "/log-in";
     });
@@ -303,25 +273,12 @@ $(document).ready(function () {
 
       $(".free").removeClass("free");
 
-      // Manage-account href: prefer URL from last successful login response (sessionStorage), else API-shaped default from cookie.
-      var acctno = getCookie("luxurymarketer_acctno");
-      var fromLogin = lmGetManageAccountUrl();
-      var acctno_href;
-
-      if (fromLogin) {
-        acctno_href = fromLogin;
-        $(".label.subscribe .my").html("My Account");
-      } else if (acctno) {
-        acctno_href =
-          "https://luxurymarketer.subsmediahub.com/LXM/?f=custregpa&A=" +
-          encodeURIComponent(acctno);
-        $(".label.subscribe .my").html("My Account");
-      } else {
-        acctno_href = "https://luxurymarketer.subsmediahub.com/LXM/?f=pa";
-        $(".label.subscribe .my").html("Forgot Password");
-      }
-
-      $(".label.subscribe .my").attr("href", acctno_href);
+      $(".label.subscribe .my")
+        .html("My Account")
+        .attr(
+          "href",
+          "https://luxurymarketer.subsmediahub.com/LXM/?f=custcare"
+        );
 
       if ($(window).width() < 501) {
         $(".page-header.logo").css("border-bottom", "0px");
@@ -442,7 +399,6 @@ $(document).ready(function () {
 
   function notLoggedIn() {
     $("#lr-header").removeClass("lm-subscriber-session");
-    lmClearManageAccountUrl();
 
     $(".body").show();
 
