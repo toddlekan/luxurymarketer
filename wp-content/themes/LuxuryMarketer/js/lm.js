@@ -285,6 +285,10 @@ $(document).ready(function () {
 
       if (parsed && parsed._session_debug) {
         console.info("LM session debug", parsed._session_debug);
+      } else {
+        console.warn(
+          "LM session debug enabled, but _session_debug was not returned by check_login.php"
+        );
       }
     }
 
@@ -322,6 +326,9 @@ $(document).ready(function () {
         window.location.origin +
         "/wp-content/plugins/cambey/check_login.php?post_id=" +
         post_id;
+      if (lmIsSessionDebugEnabled()) {
+        url += "&lm_debug_session=1";
+      }
 
       $.ajax({
         url: url,
