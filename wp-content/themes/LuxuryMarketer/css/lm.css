@@ -3762,6 +3762,26 @@ a[href*="fullPage.js"] {
   box-shadow: none !important;
 }
 
+/* Guardrail: suppress any injected debug borders/outlines in right masthead blocks. */
+#lr-header .logo-side-col--right,
+#lr-header .logo-side-col--right .logo-side-masthead--right,
+#lr-header .logo-side-col--right .logo-side-row2--right,
+#lr-header .logo-side-col--right .navbar,
+#lr-header .logo-side-col--right ul.navbar-nav,
+#lr-header .logo-side-col--right li,
+#lr-header .logo-side-col--right a {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+#lr-header .logo-side-col--right,
+#lr-header .logo-side-col--right .logo-side-masthead--right,
+#lr-header .logo-side-col--right .logo-side-row2--right,
+#lr-header .logo-side-col--right .navbar,
+#lr-header .logo-side-col--right ul.navbar-nav {
+  border: 0 !important;
+}
+
 /* Sitewide link click/tap: suppress browser focus ring artifact (blue boundary). */
 a:focus-visible {
   outline: none !important;
