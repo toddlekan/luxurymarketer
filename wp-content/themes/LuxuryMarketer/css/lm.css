@@ -3812,6 +3812,25 @@ a[href*="fullPage.js"] {
   background-color: transparent !important;
 }
 
+#lr-header .logo-side-col--right li,
+#lr-header .logo-side-col--right li:hover,
+#lr-header .logo-side-col--right li:focus,
+#lr-header .logo-side-col--right li:focus-visible,
+#lr-header .logo-side-col--right li:active,
+#lr-header .logo-side-col--right .navbar,
+#lr-header .logo-side-col--right .navbar:hover,
+#lr-header .logo-side-col--right .navbar:focus,
+#lr-header .logo-side-col--right .navbar:focus-visible,
+#lr-header .logo-side-col--right .navbar:active,
+#lr-header .logo-side-col--right ul,
+#lr-header .logo-side-col--right ul:hover,
+#lr-header .logo-side-col--right ul:focus,
+#lr-header .logo-side-col--right ul:focus-visible,
+#lr-header .logo-side-col--right ul:active {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
 /* Sitewide link click/tap: suppress browser focus ring artifact (blue boundary). */
 a:focus-visible {
   outline: none !important;
