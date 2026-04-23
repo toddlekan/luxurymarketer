@@ -19,6 +19,7 @@ $hash = '';
 $cred_issued = 0;
 $max_session = 60 * 60 * 24 * 14;
 $debug_session = isset($_GET['lm_debug_session']) && $_GET['lm_debug_session'] === '1';
+$cred_issued = lm_read_cred_issued($cred_name, $cred_salt);
 
 
 //check day pass first
@@ -262,4 +263,35 @@ function lm_attach_session_debug($payload, $enabled, $issued, $max_session)
 	);
 
 	return $payload;
+}
+
+/**
+ * Read issued timestamp from subscriber credential cookie even when day-pass
+ * flow returns early, so debug output reflects the 14-day cookie window.
+ */
+function lm_read_cred_issued($cred_name, $cred_salt)
+{
+	if (!array_key_exists($cred_name, $_COOKIE) || !$_COOKIE[$cred_name]) {
+		return 0;
+	}
+
+	$base64 = $_COOKIE[$cred_name];
+	$json = base64_decode($base64);
+	$arr = json_decode($json, true);
+
+	if (!is_array($arr) || count($arr) < 4) {
+		return 0;
+	}
+
+	$cwrec_id = $arr[0];
+	$acctno = $arr[1];
+	$issued = $arr[2];
+	$hash = $arr[3];
+
+	$check_hash = md5($cwrec_id . $acctno . $cred_salt);
+	if ($check_hash !== $hash) {
+		return 0;
+	}
+
+	return is_numeric($issued) ? (int) $issued : 0;
 }
