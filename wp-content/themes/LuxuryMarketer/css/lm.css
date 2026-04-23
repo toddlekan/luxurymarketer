@@ -3782,6 +3782,17 @@ a[href*="fullPage.js"] {
   border: 0 !important;
 }
 
+/* Explicitly target reported node tree and all descendants/pseudo-elements. */
+#lr-header .logo-side-col--right,
+#lr-header .logo-side-col--right *,
+#lr-header .logo-side-col--right *::before,
+#lr-header .logo-side-col--right *::after {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+  border-style: none !important;
+}
+
 /* Sitewide link click/tap: suppress browser focus ring artifact (blue boundary). */
 a:focus-visible {
   outline: none !important;
