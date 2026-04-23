@@ -3791,6 +3791,25 @@ a[href*="fullPage.js"] {
   box-shadow: none !important;
   border-color: transparent !important;
   border-style: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+#lr-header .logo-side-col--right a,
+#lr-header .logo-side-col--right a:hover,
+#lr-header .logo-side-col--right a:focus,
+#lr-header .logo-side-col--right a:focus-visible,
+#lr-header .logo-side-col--right a:active,
+#lr-header .logo-side-col--right .nav > li > a,
+#lr-header .logo-side-col--right .nav > li > a:hover,
+#lr-header .logo-side-col--right .nav > li > a:focus,
+#lr-header .logo-side-col--right .nav > li > a:focus-visible,
+#lr-header .logo-side-col--right .nav > li > a:active,
+#lr-header .logo-side-col--right .navbar-default .navbar-nav > li > a,
+#lr-header .logo-side-col--right .navbar-default .navbar-nav > li > a:hover,
+#lr-header .logo-side-col--right .navbar-default .navbar-nav > li > a:focus,
+#lr-header .logo-side-col--right .navbar-default .navbar-nav > li > a:focus-visible,
+#lr-header .logo-side-col--right .navbar-default .navbar-nav > li > a:active {
+  background-color: transparent !important;
 }
 
 /* Sitewide link click/tap: suppress browser focus ring artifact (blue boundary). */
