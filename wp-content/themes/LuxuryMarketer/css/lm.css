@@ -3674,15 +3674,36 @@ a.desktop:hover .label.grey {
 }
 
 .newsbox .heading a:hover,
+.newsbox .heading a:focus,
+.newsbox .heading a:focus-visible,
 .features .row .heading a:hover,
+.features .row .heading a:focus,
+.features .row .heading a:focus-visible,
 .heading.sector a:hover,
+.heading.sector a:focus,
+.heading.sector a:focus-visible,
 .section.sectors .heading a:hover,
+.section.sectors .heading a:focus,
+.section.sectors .heading a:focus-visible,
 .newswell a:hover,
+.newswell a:focus,
+.newswell a:focus-visible,
 .lead-story .sector a:hover,
+.lead-story .sector a:focus,
+.lead-story .sector a:focus-visible,
 .headline-list h6 a:hover,
+.headline-list h6 a:focus,
+.headline-list h6 a:focus-visible,
 .more.reverse:hover,
-.more.reverse:hover .gt-label {
+.more.reverse:focus,
+.more.reverse:focus-visible,
+.more.reverse:hover .gt-label,
+.more.reverse:focus .gt-label,
+.more.reverse:focus-visible .gt-label {
   color: #f33626 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
 }
 
 .article .breadcrumb a:hover,
@@ -3695,8 +3716,15 @@ p.sector.category a:hover {
 }
 
 .article .body a:hover,
-.entry-content a:hover {
+.article .body a:focus,
+.article .body a:focus-visible,
+.entry-content a:hover,
+.entry-content a:focus,
+.entry-content a:focus-visible {
   color: #f33626 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
 }
 
 .newsbox .category-overlay a:hover,
@@ -3730,6 +3758,12 @@ a[href*="fullPage.js"] {
 #lr-header.navbar-default .navbar-nav > li > a:focus,
 #lr-header.navbar-default .navbar-nav > li > a:focus-visible {
   background-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Sitewide link click/tap: suppress browser focus ring artifact (blue boundary). */
+a:focus-visible {
   outline: none !important;
   box-shadow: none !important;
 }

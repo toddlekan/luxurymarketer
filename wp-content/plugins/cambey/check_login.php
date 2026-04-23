@@ -16,6 +16,9 @@ $acctno = '';
 $cwrec_id = '';
 $time = '';
 $hash = '';
+$cred_issued = 0;
+$max_session = 60 * 60 * 24 * 14;
+$debug_session = isset($_GET['lm_debug_session']) && $_GET['lm_debug_session'] === '1';
 
 
 //check day pass first
@@ -46,11 +49,11 @@ if (array_key_exists($day_pass_name, $_COOKIE) && $_COOKIE[$day_pass_name]) {
 
 			if ($acctno) {
 				debug("in by acct $acctno");
-				print json_encode(array('ac' => $acctno, 'day_pass' => 'true', 'token' => $token, 'token2' => $yesterday_token));
+				print json_encode(lm_attach_session_debug(array('ac' => $acctno, 'day_pass' => 'true', 'token' => $token, 'token2' => $yesterday_token), $debug_session, $cred_issued, $max_session));
 				die();
 			} elseif ($cwrec_id) {
 				debug("in by recid $cwrec_id");
-				print json_encode(array('cw' => $cwrec_id, 'day_pass' => 'true', 'token' => $token, 'token2' => $yesterday_token));
+				print json_encode(lm_attach_session_debug(array('cw' => $cwrec_id, 'day_pass' => 'true', 'token' => $token, 'token2' => $yesterday_token), $debug_session, $cred_issued, $max_session));
 				die();
 			} else {
 				debug("not going in");
@@ -74,6 +77,7 @@ if (array_key_exists($cred_name, $_COOKIE) && $_COOKIE[$cred_name]) {
 	$cwrec_id = $arr[0];
 	$acctno = $arr[1];
 	$time = $arr[2];
+	$cred_issued = is_numeric($time) ? (int) $time : 0;
 	$hash = $arr[3];
 
 	//$check_hash = md5($acctno.$cwrec_id.$time.$cred_salt);
@@ -86,8 +90,7 @@ if (array_key_exists($cred_name, $_COOKIE) && $_COOKIE[$cred_name]) {
 	} else {
 		debug('hashes match ' . "$check_hash == $hash");
 		// Enforce same 14-day limit as bake_cred() in shared.php (subscriber session).
-		$max_session = 60 * 60 * 24 * 14;
-		$issued      = is_numeric( $time ) ? (int) $time : 0;
+		$issued      = $cred_issued;
 		if ( $issued <= 0 || ( $issued + $max_session ) < time() ) {
 			debug('subscriber session expired');
 			trash_cookies();
@@ -112,8 +115,10 @@ if ($acctno) {
 
 		debug('ac exists');
 
+		// Keep subscriber sessions alive for 14 days from latest verified activity.
+		bake_cred($cwrec_id, $acctno);
 		bake_day_pass($cwrec_id, $acctno);
-		print json_encode(array('ac' => $acctno));
+		print json_encode(lm_attach_session_debug(array('ac' => $acctno), $debug_session, time(), $max_session));
 	} else {
 		debug('trash from acctno, does not exist');
 		trash_cookies();
@@ -135,7 +140,7 @@ if ($acctno) {
 		bake_cred($cwrec_id, $acctno);
 		bake_day_pass($cwrec_id, $acctno);
 
-		print json_encode($result);
+		print json_encode(lm_attach_session_debug($result, $debug_session, time(), $max_session));
 	} elseif (array_key_exists('cw', $result) && $result['cw']) {
 
 		debug('cw exists');
@@ -143,7 +148,7 @@ if ($acctno) {
 		$cwrec_id = $result['cw'];
 
 		bake_day_pass($cwrec_id, $acctno);
-		print json_encode($result);
+		print json_encode(lm_attach_session_debug($result, $debug_session, $cred_issued, $max_session));
 	} else {
 
 		debug('trash from cw');
@@ -226,4 +231,35 @@ function get_result($action, $arr)
 	}
 
 	return $result;
+}
+
+/**
+ * Temporary opt-in diagnostics for subscriber cookie lifetime.
+ * Enable with: /wp-content/plugins/cambey/check_login.php?...&lm_debug_session=1
+ */
+function lm_attach_session_debug($payload, $enabled, $issued, $max_session)
+{
+	if (!$enabled) {
+		return $payload;
+	}
+
+	$now = time();
+	$issued_ts = is_numeric($issued) ? (int) $issued : 0;
+	$expires_ts = $issued_ts > 0 ? $issued_ts + (int) $max_session : 0;
+	$remaining = $expires_ts > 0 ? max(0, $expires_ts - $now) : 0;
+
+	$payload['_session_debug'] = array(
+		'server_now_unix' => $now,
+		'server_now_iso' => gmdate('c', $now),
+		'cred_cookie_present' => !empty($_COOKIE['_QAS3247adjl']),
+		'cred_issued_unix' => $issued_ts,
+		'cred_issued_iso' => $issued_ts > 0 ? gmdate('c', $issued_ts) : null,
+		'cred_expires_unix' => $expires_ts,
+		'cred_expires_iso' => $expires_ts > 0 ? gmdate('c', $expires_ts) : null,
+		'seconds_remaining' => $remaining,
+		'days_remaining' => round($remaining / 86400, 4),
+		'max_session_seconds' => (int) $max_session,
+	);
+
+	return $payload;
 }

@@ -258,6 +258,36 @@ $(document).ready(function () {
   }
 
   function checkLogin() {
+    function lmIsSessionDebugEnabled() {
+      try {
+        return (
+          new URLSearchParams(window.location.search).get("lm_debug_session") ===
+          "1"
+        );
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function lmLogSessionDebugPayload(payload) {
+      if (!lmIsSessionDebugEnabled()) {
+        return;
+      }
+
+      var parsed = payload;
+      if (typeof payload === "string") {
+        try {
+          parsed = JSON.parse(payload);
+        } catch (e) {
+          return;
+        }
+      }
+
+      if (parsed && parsed._session_debug) {
+        console.info("LM session debug", parsed._session_debug);
+      }
+    }
+
     var body = $(".body.locked");
 
     var post_id = body.attr("post-id");
@@ -296,6 +326,7 @@ $(document).ready(function () {
       $.ajax({
         url: url,
       }).done(function (data) {
+        lmLogSessionDebugPayload(data);
         //logged in
         if (data) {
           $("#footer-login").attr(
