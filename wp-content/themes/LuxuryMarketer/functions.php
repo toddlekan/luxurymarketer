@@ -8,6 +8,14 @@ add_filter('acf/settings/remove_wp_meta_box', '__return_false');
 add_filter('wp_get_attachment_url', 'am19_url_change');
 update_option('image_default_size', 'full' );
 
+/**
+ * Keep users logged in for 14 days regardless of whether "Remember Me" was checked.
+ * WP defaults are 2 days without remember, 14 days with remember.
+ */
+add_filter( 'auth_cookie_expiration', static function ( $expiration, $user_id, $remember ) {
+	return 14 * DAY_IN_SECONDS;
+}, 99, 3 );
+
 /** Raise media upload cap to 50 MB (also set upload_max_filesize/post_max_size in php.ini if host allows). */
 add_filter(
 	'upload_size_limit',

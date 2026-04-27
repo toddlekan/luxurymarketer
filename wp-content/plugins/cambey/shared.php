@@ -16,6 +16,36 @@ $cred_name = "_QAS3247adjl";
 $day_pass_salt = '02398jlsdfa4893uOIEJ$(#(W*JLFEJadsf';
 $day_pass_name = '_oweLKJSDF97apl';
 
+/**
+ * Set a Cambey cookie with modern attributes so browsers don't cap its lifetime.
+ *
+ * Browsers (especially Safari ITP) shorten cookies that are missing SameSite or
+ * are set without Secure on HTTPS sites. Using SameSite=Lax + Secure preserves
+ * the intended 14-day expiration baked into bake_cred()/bake_cookie().
+ */
+function cambey_setcookie( $name, $value, $expires )
+{
+  if ( $name === '' ) {
+    return;
+  }
+
+  $is_https = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' )
+    || ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' );
+
+  if ( PHP_VERSION_ID >= 70300 ) {
+    setcookie( $name, $value, array(
+      'expires'  => (int) $expires,
+      'path'     => '/',
+      'domain'   => '.luxurymarketer.com',
+      'secure'   => (bool) $is_https,
+      'httponly' => false,
+      'samesite' => 'Lax',
+    ) );
+  } else {
+    setcookie( $name, $value, (int) $expires, '/; samesite=Lax', '.luxurymarketer.com', (bool) $is_https, false );
+  }
+}
+
 function bake_cred($cwrec_id, $acctno)
 {
 
@@ -23,7 +53,7 @@ function bake_cred($cwrec_id, $acctno)
 
   $expires = time() + 60 * 60 * 24 * 14;
 
-  setcookie("luxurymarketer_acctno", $acctno, $expires, "/", ".luxurymarketer.com", 0, false);
+  cambey_setcookie( "luxurymarketer_acctno", $acctno, $expires );
 
   bake_cookie($cwrec_id, $acctno, $cred_salt, $cred_name, $expires);
 }
@@ -55,7 +85,7 @@ function bake_cookie($cwrec_id, $acctno, $salt, $name, $expires)
 
   $cookie = base64_encode($cookie);
 
-  setcookie($name, $cookie, $expires, "/", ".luxurymarketer.com", 0, false);
+  cambey_setcookie( $name, $cookie, $expires );
 }
 
 function read_cookie($name)
@@ -75,10 +105,11 @@ function trash_cookies()
 
   global $cred_name, $day_pass_name;
 
-  setcookie($cred_name, '', time() - 3600, "/", ".luxurymarketer.com", 0, false);
-  setcookie($day_pass_name, '', time() - 3600, "/", ".luxurymarketer.com", 0, false);
-  setcookie('luxurymarketer_login', '',  time() - 3600, "/", ".luxurymarketercom", 0, false);
-  setcookie('luxurymarketer_acctno', '',  time() - 3600, "/", ".luxurymarketer.com", 0, false);
+  $past = time() - 3600;
+  cambey_setcookie( $cred_name, '', $past );
+  cambey_setcookie( $day_pass_name, '', $past );
+  cambey_setcookie( 'luxurymarketer_login', '', $past );
+  cambey_setcookie( 'luxurymarketer_acctno', '', $past );
 }
 
 function get_token($id, $yesterday = false)

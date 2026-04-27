@@ -174,7 +174,10 @@ function cambey_login() {
 
 		$value = base64_encode($data->email);
 
-		setcookie("luxurymarketer_login", $value, time() + 60 * 60 * 24 * 14, "/", ".luxurymarketer.com", 0, false);
+		if ( ! function_exists( 'cambey_setcookie' ) ) {
+			require_once dirname( __FILE__ ) . '/shared.php';
+		}
+		cambey_setcookie( "luxurymarketer_login", $value, time() + 60 * 60 * 24 * 14 );
 
 		print "COOKIE SET $value";
 	} else {

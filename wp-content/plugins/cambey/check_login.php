@@ -48,6 +48,15 @@ if (array_key_exists($day_pass_name, $_COOKIE) && $_COOKIE[$day_pass_name]) {
 
 			debug('hashes match');
 
+			// Slide the 14-day credential window forward on each verified visit so users
+			// who keep visiting within the day-pass window don't get logged out at day 14
+			// from initial login. Also re-bake the day_pass so its HTTP expiry stays fresh.
+			if ($acctno || $cwrec_id) {
+				bake_cred($cwrec_id, $acctno);
+				bake_day_pass($cwrec_id, $acctno);
+				$cred_issued = time();
+			}
+
 			if ($acctno) {
 				debug("in by acct $acctno");
 				print json_encode(lm_attach_session_debug(array('ac' => $acctno, 'day_pass' => 'true', 'token' => $token, 'token2' => $yesterday_token), $debug_session, $cred_issued, $max_session));
