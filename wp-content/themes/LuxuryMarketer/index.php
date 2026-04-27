@@ -263,6 +263,7 @@ if (have_posts()) {
 		<?php $post_id += 1; ?>
 
 		<!-- section: Research (above Columns) -->
+		<!-- LM-RESEARCH-V2 -->
 		<section id=<?= "hero-section-" . $post_id ?> class="section clearfix categories ">
 
 			<div class="row">
@@ -278,24 +279,31 @@ if (have_posts()) {
 					</div>
 
 					<?php
-					$opinion_args = array(
-						'posts_per_page' => 3,
-						'tax_query'        => array(
+					$research_query = new WP_Query( array(
+						'posts_per_page'      => 3,
+						'post_type'           => 'post',
+						'post_status'         => 'publish',
+						'orderby'             => 'date',
+						'order'               => 'DESC',
+						'ignore_sticky_posts' => true,
+						'no_found_rows'       => true,
+						'tax_query'           => array(
 							array(
-								'taxonomy' => 'category',
-								'field'    => 'slug',
-								'terms'    => 'research-news',
+								'taxonomy'         => 'category',
+								'field'            => 'slug',
+								'terms'            => array( 'research-news' ),
+								'include_children' => false,
+								'operator'         => 'IN',
 							),
 						),
-					);
-					query_posts( $opinion_args );
+					) );
 
-					while (have_posts()) : the_post();
-
-						get_template_part('template-parts/content', 'section-3');
-
-					endwhile;
-					wp_reset_query();
+					if ( $research_query->have_posts() ) :
+						while ( $research_query->have_posts() ) : $research_query->the_post();
+							get_template_part( 'template-parts/content', 'section-3' );
+						endwhile;
+					endif;
+					wp_reset_postdata();
 					?>
 					</div>
 
@@ -390,6 +398,7 @@ if (have_posts()) {
 
 		<?php $post_id += 1; ?>
 		<!-- section 5 -->
+		<!-- LM-EVENTS-V2 -->
 		<section id=<?= "hero-section-" . $post_id ?> class="section clearfix categories ">
 
 			<div class="row">
@@ -405,18 +414,31 @@ if (have_posts()) {
 					</div>
 
 					<?php
-					$opinion_args = array(
-						'posts_per_page' => 3,
-						'category_name'  => 'networking-and-events',
-					);
-					query_posts( $opinion_args );
+					$events_query = new WP_Query( array(
+						'posts_per_page'      => 3,
+						'post_type'           => 'post',
+						'post_status'         => 'publish',
+						'orderby'             => 'date',
+						'order'               => 'DESC',
+						'ignore_sticky_posts' => true,
+						'no_found_rows'       => true,
+						'tax_query'           => array(
+							array(
+								'taxonomy'         => 'category',
+								'field'            => 'slug',
+								'terms'            => array( 'networking-and-events' ),
+								'include_children' => true,
+								'operator'         => 'IN',
+							),
+						),
+					) );
 
-					while (have_posts()) : the_post();
-
-						get_template_part('template-parts/content', 'section-3');
-
-					endwhile;//opinion
-					wp_reset_query();
+					if ( $events_query->have_posts() ) :
+						while ( $events_query->have_posts() ) : $events_query->the_post();
+							get_template_part( 'template-parts/content', 'section-3' );
+						endwhile;
+					endif;
+					wp_reset_postdata();
 					?>
 					</div>
 
