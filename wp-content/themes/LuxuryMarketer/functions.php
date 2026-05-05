@@ -121,10 +121,52 @@ function feedContentFilter($content)
 }
 
 
+/**
+ * Run a publish_post / publish_page / future_post hook callback inside a
+ * try/catch so a fatal in one callback doesn't break the admin save flow
+ * (which produces the WordPress "There has been a critical error on this
+ * website" page right after Save). Errors are routed to the same log used by
+ * the cambey login flow (wp-content/uploads/cambey-debug.log) via lm_log().
+ */
+function lm_safe_post_hook( $callable, $label, $id ) {
+	try {
+		call_user_func( $callable, $id );
+	} catch ( \Throwable $e ) {
+		// Route through cambey's lm_log() so post-save errors land in the same
+		// debug file as login errors. shared.php defines lm_log; require it
+		// lazily so we don't pay the cost on normal page loads.
+		if ( ! function_exists( 'lm_log' ) ) {
+			$shared = WP_PLUGIN_DIR . '/cambey/shared.php';
+			if ( file_exists( $shared ) ) {
+				require_once $shared;
+			}
+		}
+
+		if ( function_exists( 'lm_log' ) ) {
+			lm_log( 'post_hook.exception', array(
+				'hook'    => (string) $label,
+				'post_id' => (int) $id,
+				'message' => $e->getMessage(),
+				'file'    => $e->getFile(),
+				'line'    => (int) $e->getLine(),
+				'trace'   => array_slice( explode( "\n", $e->getTraceAsString() ), 0, 12 ),
+			) );
+		} elseif ( function_exists( 'error_log' ) ) {
+			// Fallback if shared.php couldn't be loaded.
+			error_log(
+				'[lm_safe_post_hook] ' . $label . ' failed for post ' . (int) $id
+				. ': ' . $e->getMessage()
+				. ' @ ' . $e->getFile() . ':' . $e->getLine()
+				. "\n" . $e->getTraceAsString()
+			);
+		}
+	}
+}
+
 //flag videos on save
-add_action('future_post', 'scrape_media');
-add_action('publish_page', 'scrape_media');
-add_action('publish_post', 'scrape_media');
+add_action( 'future_post',  function ( $id ) { lm_safe_post_hook( 'scrape_media', 'scrape_media', $id ); } );
+add_action( 'publish_page', function ( $id ) { lm_safe_post_hook( 'scrape_media', 'scrape_media', $id ); } );
+add_action( 'publish_post', function ( $id ) { lm_safe_post_hook( 'scrape_media', 'scrape_media', $id ); } );
 function scrape_media($id)
 {
 	global $wpdb;
@@ -429,8 +471,8 @@ function scrape_media($id)
 	}
 }
 
-add_action('future_post', 'ld16_gen_pdf');
-add_action('publish_post', 'ld16_gen_pdf');
+add_action( 'future_post',  function ( $id ) { lm_safe_post_hook( 'ld16_gen_pdf', 'ld16_gen_pdf', $id ); } );
+add_action( 'publish_post', function ( $id ) { lm_safe_post_hook( 'ld16_gen_pdf', 'ld16_gen_pdf', $id ); } );
 
 function ld16_gen_pdf($id = 0)
 {
@@ -1699,7 +1741,7 @@ function sub_cat_for_alert($data)
 	}
 }
 
-add_action('publish_post', 'send_push_notification');
+add_action( 'publish_post', function ( $id ) { lm_safe_post_hook( 'send_push_notification', 'send_push_notification', $id ); } );
 function send_push_notification($data)
 {
 	try {

@@ -82,6 +82,9 @@ $fields = array(
 );
 
 if ($fields['subscriber_email'] == '' || $fields['subscriber_pass'] == '') {
+    if ( function_exists( 'lm_log' ) ) {
+        lm_log( 'login.empty_credentials' );
+    }
     $msg = "Either email or password is blank.";
     $url = "https:\/\/luxurymarketer.subsmediahub.com\/LXM\/?f=paid";
     $url_label = "Subscribe";
@@ -232,9 +235,25 @@ if ($result === false || $result === '') {
 			'body_is_false'=> ( $result === false ),
 		);
 	}
+	if ( function_exists( 'lm_log' ) ) {
+		lm_log( 'login.curl_empty', array(
+			'curl_errno'  => $curl_errno,
+			'curl_error'  => $curl_error,
+			'http_status' => $curl_http_code,
+		) );
+	}
 	header( 'Content-Type: application/json; charset=utf-8' );
 	print json_encode( $arr );
 	exit;
+}
+
+if ( function_exists( 'lm_log' ) ) {
+	lm_log( 'login.http', array(
+		'http_code'  => $curl_http_code,
+		'curl_errno' => $curl_errno,
+		'curl_error' => $curl_error,
+		'body_len'   => strlen( (string) $result ),
+	) );
 }
 
 $payload = cambey_unwrap_asmx_response( $result );
@@ -243,6 +262,9 @@ $xml     = @simplexml_load_string( $payload );
 if ( ! $xml ) {
 	if ( function_exists( 'error_log' ) ) {
 		error_log( 'cambey login: XML parse failed; payload length=' . strlen( $payload ) );
+	}
+	if ( function_exists( 'lm_log' ) ) {
+		lm_log( 'login.xml_parse_fail', array( 'payload_len' => strlen( $payload ) ) );
 	}
 	$arr = array(
 		'msg'       => 'Login service returned an unexpected response. Please try again.',
@@ -271,6 +293,9 @@ if ( ! $xml ) {
 $data = cambey_pick_subscriber_data( $xml );
 
 if ( ! $data ) {
+	if ( function_exists( 'lm_log' ) ) {
+		lm_log( 'login.no_subscriber_data' );
+	}
 	$arr = array(
 		'msg'       => 'Login service returned incomplete data. Please try again.',
 		'url'       => '',
@@ -304,9 +329,29 @@ if ( $has_ids && ( $result_ok || $fc === '' ) ) {
 	$url       = '';
 	$url_label = '';
 	$login_success = true;
+	if ( function_exists( 'lm_log' ) ) {
+		lm_log( 'login.success', array(
+			'acctno'   => $acctno,
+			'cwrec_id' => $cwrec_id,
+			'email'    => isset( $fields['subscriber_email'] ) ? $fields['subscriber_email'] : '',
+		) );
+	}
 } elseif ( $fc !== '' ) {
+	if ( function_exists( 'lm_log' ) ) {
+		lm_log( 'login.fail_friend_corrective', array(
+			'fc'       => $fc,
+			'acctno'   => $acctno,
+			'cwrec_id' => $cwrec_id,
+			'email'    => isset( $fields['subscriber_email'] ) ? $fields['subscriber_email'] : '',
+		) );
+	}
 	trash_cookies();
 } else {
+	if ( function_exists( 'lm_log' ) ) {
+		lm_log( 'login.fail_not_found', array(
+			'email' => isset( $fields['subscriber_email'] ) ? $fields['subscriber_email'] : '',
+		) );
+	}
 	$msg       = 'Your account information was not found. Please try again or click the link below to start a subscription.';
 	$url       = 'https://join.luxurymarketer.com/LXR/?f=paid';
 	$url_label = 'Subscribe';
