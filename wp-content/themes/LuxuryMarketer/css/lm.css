@@ -534,8 +534,14 @@ ul.nav li.dropdown:hover>ul.dropdown-menu {
   margin-left: 30px;
 }
 
-.ad.large.rectangle.ad-2, .ad.large.rectangle.ad-3 {
+.ad.large.rectangle.ad-2 {
     margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.ad.large.rectangle.ad-3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 @media (max-width: 500px) {
