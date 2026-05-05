@@ -188,7 +188,7 @@ if (have_posts()) {
 			
 						<div id='large-rectangle-1-home' style='height:280px; width:336px;'>
 
-						<?php $banners = get_banner_posts();
+						<?php $banners = get_banner_posts(1);
 
 						if ($banners && count($banners) > 0) {
 						?>
@@ -216,15 +216,15 @@ if (have_posts()) {
 					
 					<div class="ad large rectangle ad-2">
 			
-						<div id='large-rectangle-1-home' style='height:280px; width:336px;'>
+						<div id='large-rectangle-2-home' style='height:280px; width:336px;'>
 		
 						
-						<?php $banners = get_banner_posts();
+						<?php $banners = get_banner_posts(2);
 
-						if ($banners && count($banners) > 1) {
+						if ($banners && count($banners) > 0) {
 						?>
-							<a href="<?= get_field('hyperlink', $banners[1]->ID) ?: "#" ?>" target="_blank" alt="<?= $banners[1]->post_title ?: "" ?>">
-								<img src=<?= $banners[1]->guid ?> style="object-fit: cover; width: 100%; height: 100%;">
+							<a href="<?= get_field('hyperlink', $banners[0]->ID) ?: "#" ?>" target="_blank" alt="<?= $banners[0]->post_title ?: "" ?>">
+								<img src=<?= $banners[0]->guid ?> style="object-fit: cover; width: 100%; height: 100%;">
 							</a>
 						<?php }
 
@@ -237,14 +237,14 @@ if (have_posts()) {
 	
 					<div class="ad large rectangle ad-3">
 			
-						<div id='large-rectangle-1-home' style='height:280px; width:336px;'>
+						<div id='large-rectangle-3-home' style='height:280px; width:336px;'>
 
-						<?php $banners = get_banner_posts();
+						<?php $banners = get_banner_posts(3);
 
-						if ($banners && count($banners) > 2) {
+						if ($banners && count($banners) > 0) {
 						?>
-							<a href="<?= get_field('hyperlink', $banners[2]->ID) ?: "#" ?>" target="_blank" alt="<?= $banners[2]->post_title ?: "" ?>">
-								<img src=<?= $banners[2]->guid ?> style="object-fit: cover; width: 100%; height: 100%;">
+							<a href="<?= get_field('hyperlink', $banners[0]->ID) ?: "#" ?>" target="_blank" alt="<?= $banners[0]->post_title ?: "" ?>">
+								<img src=<?= $banners[0]->guid ?> style="object-fit: cover; width: 100%; height: 100%;">
 							</a>
 						<?php }
 
