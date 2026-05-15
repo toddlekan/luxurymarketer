@@ -86,7 +86,7 @@ if ($fields['subscriber_email'] == '' || $fields['subscriber_pass'] == '') {
         lm_log( 'login.empty_credentials' );
     }
     $msg = "Either email or password is blank.";
-    $url = "https:\/\/luxurymarketer.subsmediahub.com\/LXM\/?f=paid";
+    $url = "https:\/\/luxurymarketer.subsmediahub.com\/LXM\/?f=subscribe";
     $url_label = "Subscribe";
     $arr = array(
         'msg' => (string)$msg,
@@ -353,7 +353,7 @@ if ( $has_ids && ( $result_ok || $fc === '' ) ) {
 		) );
 	}
 	$msg       = 'Your account information was not found. Please try again or click the link below to start a subscription.';
-	$url       = 'https://join.luxurymarketer.com/LXR/?f=paid';
+	$url       = 'https://luxurymarketer.subsmediahub.com/LXM/?f=subscribe';
 	$url_label = 'Subscribe';
 	trash_cookies();
 }

@@ -134,7 +134,7 @@ $url_root = ld16_cdn(get_template_directory_uri());
 				<li>
 					<a href="/contact-us">Contact Us</a>
 				</li>
-				<li><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">Subscribe</a></li>
+				<li><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=subscribe">Subscribe</a></li>
 			</ul>
 
 		</div>

@@ -605,7 +605,7 @@ if (array_key_exists('date', $_GET)) {
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/subscription-form/">Free Newsletter</a> |
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/category/luxury-class">Luxury Class</a> |
                           <a style="text-decoration:none;" target="_blank" href="https://www.luxurymarketer.com/partners/">Partners</a> |
-                          <a style="text-decoration:none;" target="_blank" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">SUBSCRIBE</a> |
+                          <a style="text-decoration:none;" target="_blank" href="https://luxurymarketer.subsmediahub.com/LXM/?f=subscribe">SUBSCRIBE</a> |
                         </p>
 
 

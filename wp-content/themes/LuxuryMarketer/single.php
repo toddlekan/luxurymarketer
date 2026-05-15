@@ -143,7 +143,7 @@ if (have_posts()) :
 									<div class="col-lg-12">
 
 										<center>
-											This content is accessible only to subscribers of Luxury Marketer. We would love for you to become a subscriber and enjoy the many benefits soon after. <a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" target="_blank">Please click here to enroll as a subscriber of Luxury Marketer.</a> Already a subscriber? 
+											This content is accessible only to subscribers of Luxury Marketer. We would love for you to become a subscriber and enjoy the many benefits soon after. <a href="https://luxurymarketer.subsmediahub.com/LXM/?f=subscribe" target="_blank">Please click here to enroll as a subscriber of Luxury Marketer.</a> Already a subscriber? 
 											<a href="/log-in?redirect=<?= get_the_permalink() ?>" class="pop-login">Please log in.</a>
 
 										</center>

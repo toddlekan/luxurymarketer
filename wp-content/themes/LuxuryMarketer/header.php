@@ -233,7 +233,7 @@ if ( is_search() ) {
                       <li class="reverse"><a href="/contact-us" class="grey">Contact Us</a></li>
                       <li class="reverse"><a href="/category/networking-and-events/master-class" class="grey">Master Class</a></li>
                       
-                      <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" class="grey">Subscribe</a></li>
+                      <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=subscribe" class="grey">Subscribe</a></li>
 
               
                     </ul>
@@ -283,7 +283,7 @@ if ( is_search() ) {
                 </li>
                 <li class="label subscribe logo-side-auth-loggedout">
 
-                  <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" style="">
+                  <a class="sign-in-subscribe loggedout pop-subscribe red bold" href="https://luxurymarketer.subsmediahub.com/LXM/?f=subscribe" style="">
                     SUBSCRIBE</a>
                 </li>
                 <li class="label subscribe logo-side-auth-loggedin">
@@ -453,7 +453,7 @@ if ( is_search() ) {
           <li class="reverse"><a href="/category/news/research-news">Research</a></li>
           <li class="reverse"><a href="/category/news/columns">Columns</a></li>
           <li><a href="/category/networking-and-events">Events</a></li>
-          <li><a class="reverse join" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid">Subscribe</a></li>
+          <li><a class="reverse join" href="https://luxurymarketer.subsmediahub.com/LXM/?f=subscribe">Subscribe</a></li>
         </ul>
       </li>
     </ul>
@@ -512,7 +512,7 @@ if ( is_search() ) {
                   <li class="reverse"><a href="/contact-us" class="grey">Contact Us</a></li>
                   <li class="reverse"><a href="/category/networking-and-events/master-class" class="grey">Master Class</a></li>
                   
-                  <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" class="grey">Subscribe</a></li>
+                  <li class="reverse"><a href="https://luxurymarketer.subsmediahub.com/LXM/?f=subscribe" class="grey">Subscribe</a></li>
 
 
                   </ul>
@@ -530,7 +530,7 @@ if ( is_search() ) {
 
 
       <span class="sign-in-subscribe pop-subscribe loggedout" 
-      style="display: none;" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" 
+      style="display: none;" href="https://luxurymarketer.subsmediahub.com/LXM/?f=subscribe" 
         id="subscribe-mobile">
           <script>
               var options = {
@@ -555,7 +555,7 @@ if ( is_search() ) {
       <span style="color: #ccc;"> &nbsp; &nbsp; </span>
 
       <a class="sign-in-subscribe pop-subscribe loggedout" 
-        style="display: none;" href="https://luxurymarketer.subsmediahub.com/LXM/?f=paid" 
+        style="display: none;" href="https://luxurymarketer.subsmediahub.com/LXM/?f=subscribe" 
         id="subscribe-mobile">
         Subscribe
       </a>
